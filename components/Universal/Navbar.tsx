@@ -29,14 +29,14 @@ const Navbar = () => {
     >
       {active ? (
         <Image
-          src={"/nav-close-icon.svg"}
+          src={"/close.png"}
           width={39}
           height={39}
           alt="Toggle Icon"
         />
       ) : (
         <Image
-          src={"/mobile-toggle-icon.svg"}
+          src={"/open.png"}
           width={39}
           height={39}
           alt="Toggle Icon"
@@ -55,6 +55,7 @@ const Navbar = () => {
         {renderNavLink("/about", "About")}
         {renderNavLink("/features", "Features")}
         {renderNavLink("/how", "How It Works")}
+        {renderNavLink("/contact", "Contact Us")}
         {renderNavLink("/faq", "FAQs")}
         {renderApplyNowButton()}
       </div>
@@ -66,12 +67,10 @@ const Navbar = () => {
       <Link
         href={href}
         className={`
-        lg:inline-flex lg:w-auto w-[160px] px-4 py-2 ${
-          active ? "text-[#121212]" : "text-[#121212]"
-        } font-regular flex items-center lg:justify-center  mt-6 lg:mt-0 xl:mr-6 text-[16px]
+        lg:inline-flex lg:w-auto w-[160px] px-4 py-2 text-[#121212] font-regular flex items-center lg:justify-center  mt-6 lg:mt-0 xl:mr-6 text-[16px]
         ${
-          (router.asPath === href || router.asPath.includes('/service/') && href === ("/service"))
-            ? "  lg:border-b-2 border-b-2 border-transparent lg:border-nav-link-color border-black"
+          (router.asPath === href )
+            ? "  lg:border-b-2 border-b-2 border-black"
             : "text-tertiary-8 "
         }
         `}
@@ -102,7 +101,7 @@ const Navbar = () => {
             : "bg-white"
         } `}
       >
-        <nav className="flex items-center justify-between flex-wrap py-1 px-4 sm:px-20 sm:py-4">
+        <nav className="flex items-center justify-between flex-wrap py-1 px-4 sm:px-10 xl:px-20 sm:py-4">
           {renderLogo()}
           {renderToggleButton()}
           {renderNavLinks()}
