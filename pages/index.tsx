@@ -7,12 +7,14 @@ import WhyChooseUs from "@/components/Homepage/WhyChooseUs";
 import BestPlatform from "@/components/Homepage/BestPlatform";
 import PlatformFeatures from "@/components/Homepage/PlatformFeatures";
 import Testimonials from "@/components/Homepage/Testimonials";
+import Head from "next/head";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   return (
   <div className="">
+    <Head><title>Homepage</title></Head>
     {/* <Navbar/> */}
     <HeroSection />
     <BlessedPatients />

@@ -54,6 +54,7 @@ const Navbar = () => {
       <div className="lg:inline-flex lg:flex-row lg:ml-auto lg:w-auto w-full lg:items-center flex flex-col lg:h-auto">
         {renderNavLink("/about", "About")}
         {renderNavLink("/features", "Features")}
+        {renderNavLink("/how", "How It Works")}
         {renderNavLink("/faq", "FAQs")}
         {renderApplyNowButton()}
       </div>

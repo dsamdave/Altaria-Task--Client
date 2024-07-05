@@ -1,5 +1,7 @@
 import Image from "next/image";
+import { useRouter } from "next/router";
 import React from "react";
+
 
 const WhyChooseUs = () => {
   const whyData = [
@@ -61,6 +63,9 @@ const WhyChooseUs = () => {
         "Ut sociis habitant lorem tortor faucibus et sit tellus nulla. Justo consequat dignissim massa convallis ",
     },
   ];
+
+  const router = useRouter();
+
   return (
     <div>
       <div className="bg-white px-4 lg:px-20 py-10 lg:py-40 ">
@@ -95,7 +100,7 @@ const WhyChooseUs = () => {
       </div>
 
       {/* Other reasons */}
-      <div className="bg-[#F0F2F8] w-full py-10 lg:py-20 px-4 lg:px-20">
+      <div className={`bg-[#F0F2F8] w-full py-10 lg:py-20 px-4 lg:px-20 ${router.asPath.includes('/about') ? 'hidden' : 'block' }`}>
         <div className="flex items-center justify-center flex-wrap gap-5 mt-8">
           {whyData2.map((data, index) => (
             <div key={index} className="w-full sm:w-[373px] mt-4 bg-white p-8 ">
