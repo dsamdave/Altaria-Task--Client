@@ -74,19 +74,19 @@ const Footer = () => {
         <h1 className="text-xl text-white font-normal">Links</h1>
         <ul className="flex flex-col">
           <Link
-            href={"#"}
+            href={"/about"}
             className="mt-8 text-sm text-white font-normal cursor-pointer"
           >
             About
           </Link>
           <Link
-            href={"#"}
+            href={"/features"}
             className="mt-8 text-sm text-white font-normal cursor-pointer"
           >
             Features
           </Link>
           <Link
-            href={"#"}
+            href={"/faq"}
             className="mt-8 text-sm text-white font-normal cursor-pointer"
           >
             FAQ
