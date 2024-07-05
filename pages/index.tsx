@@ -1,6 +1,4 @@
-import Image from "next/image";
 import { Inter } from "next/font/google";
-import Navbar from "@/components/Universal/Navbar";
 import HeroSection from "@/components/Homepage/HeroSection";
 import BlessedPatients from "@/components/Homepage/BlessedPatients";
 import WhyChooseUs from "@/components/Homepage/WhyChooseUs";
@@ -15,7 +13,7 @@ export default function Home() {
   return (
   <div className="">
     <Head><title>Homepage</title></Head>
-    {/* <Navbar/> */}
+   
     <HeroSection />
     <BlessedPatients />
     <WhyChooseUs />

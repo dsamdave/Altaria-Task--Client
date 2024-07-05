@@ -10,6 +10,7 @@ const ContactUs = () => {
   return (
     <div className="bg-white px-4 py-10 sm:py-20 lg:py-40">
       <div className="flex items-start justify-center gap-4 lg:gap-10 flex-wrap-reverse sm:flex-wrap lg:flex-wrap-reverse xl:flex-wrap">
+        
         {/* Form Area */}
         <div className=" lg:w-[688px]">
           <form action="">

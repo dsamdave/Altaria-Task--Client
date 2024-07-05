@@ -1,5 +1,5 @@
 import Footer from "./Universal/Footer";
-import Navbar from "./Universal/Navbar";
+
 
 
 type LayoutProp = {
@@ -8,7 +8,7 @@ type LayoutProp = {
 const Layout = (prop:LayoutProp) => {
     return ( 
         <div>
-            {/* <Navbar /> */}
+            
             {prop.children}
             <Footer />
         </div>
