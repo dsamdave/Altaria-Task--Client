@@ -18,7 +18,7 @@ const HeroSection = () => {
 //     </div> 
 //  </div>
 
-<div className="w-full bg-[url('/m-hero-bg.png')] lg:bg-no-repeat lg:bg-top lg:bg-cover h-[600px] lg:h-[700px] z-50">
+<div className="w-full bg-[url('/m-hero-bg.png')] lg:bg-no-repeat lg:bg-top lg:bg-cover h-[600px] lg:h-[655px] z-50">
   <Navbar />
   <div className="px-4 lg:px-20 pt-10 lg:pt-20 flex items-center justify-center lg:justify-start">
     <div className="w-full sm:w-[500px]">
