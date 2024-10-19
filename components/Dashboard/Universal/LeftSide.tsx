@@ -66,11 +66,11 @@ const LeftSide: React.FC<leftSideProp> = ({
           MAIN MENU
         </h1> */}
 
-        <div className="mb-4 mt-8">
+        <div className="mb-2 mt-8">
           {/* Dashboard */}
           <Link
             href={"/dashboard/hospitaldb/homedb"}
-            className={`shrink mb-4 flex items-center gap-2 cursor-pointer px-4 py-3 ${
+            className={`shrink mb-2 flex items-center gap-2 cursor-pointer px-4 py-3 ${
               router.pathname.includes("/dashboard/hospitaldb/homedb")
                 ? " bg-white rounded-[5px]"
                 : ""
@@ -106,7 +106,7 @@ const LeftSide: React.FC<leftSideProp> = ({
           </Link>
 
           {/* Doctors */}
-          <div className={`my-0 shrink mb-4`}>
+          <div className={`my-0 shrink mb-2`}>
             <Link
               href={"/dashboard/hospitaldb/doctors"}
               className={`flex items-center gap-2 cursor-pointer px-4 py-3 ${
@@ -145,7 +145,7 @@ const LeftSide: React.FC<leftSideProp> = ({
           </div>
 
           {/* Patients */}
-          <div className={`my-0 shrink mb-4`}>
+          <div className={`my-0 shrink mb-2`}>
             <Link
               href={"/dashboard/hospitaldb/patients"}
               className={`flex items-center gap-2 cursor-pointer px-4 py-3 ${
@@ -185,7 +185,7 @@ const LeftSide: React.FC<leftSideProp> = ({
           </div>
 
           {/* Messages/Chat */}
-          <div className={`my-0 shrink mb-4`}>
+          <div className={`my-0 shrink mb-2`}>
             <Link
               href={"/dashboard/hospitaldb/messages"}
               className={`flex items-center gap-2 cursor-pointer px-4 py-3 ${
@@ -225,7 +225,7 @@ const LeftSide: React.FC<leftSideProp> = ({
           </div>
 
           {/* Medications */}
-          <div className={`my-0 shrink mb-4`}>
+          <div className={`my-0 shrink mb-2`}>
             <Link
               href={"/dashboard/hospitaldb/medications"}
               className={`flex items-center gap-2 cursor-pointer px-4 py-3 ${
@@ -265,7 +265,7 @@ const LeftSide: React.FC<leftSideProp> = ({
           </div>
 
           {/* Documents */}
-          <div className={`my-0 shrink mb-4`}>
+          <div className={`my-0 shrink mb-2`}>
             <Link
               href={"/dashboard/hospitaldb/documents"}
               className={`flex items-center gap-2 cursor-pointer px-4 py-3 ${
@@ -305,7 +305,7 @@ const LeftSide: React.FC<leftSideProp> = ({
           </div>
 
           {/* Free Health Care */}
-          <div className={`my-0 shrink mb-4`}>
+          <div className={`my-0 shrink mb-2`}>
             <Link
               href={"/dashboard/hospitaldb/freeHealthCare"}
               className={`flex items-center gap-2 cursor-pointer px-4 py-3 ${
@@ -349,7 +349,7 @@ const LeftSide: React.FC<leftSideProp> = ({
           </div>
 
           {/* WaitList Users */}
-          <div className={`my-0 shrink mb-4`}>
+          <div className={`my-0 shrink mb-2`}>
             <Link
               href={"/dashboard/hospitaldb/waitlist"}
               className={`flex items-center gap-2 cursor-pointer px-4 py-3 ${

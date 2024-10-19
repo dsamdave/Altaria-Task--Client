@@ -21,7 +21,7 @@ const index = () => {
         <div className="flex items-center justify-between gap-5"
         >
           <div className="bg-white mt-10 rounded-xl flex-1">
-            <div className="flex items-center justify-between px-10 py-5 ">
+            <div className="flex items-center justify-between px-5 py-3 ">
               <h1 className="text-base text-black font-semibold">
                 Appointment request
               </h1>
@@ -37,7 +37,7 @@ const index = () => {
             <DashboardAppointmentRequest />
           </div>
           <div className="bg-white mt-10 rounded-xl flex-1">
-            <div className="flex items-center justify-between px-10 py-5 ">
+            <div className="flex items-center justify-between px-5 py-3 ">
               <h1 className="text-base text-black font-semibold">
                 Recent Patients
               </h1>

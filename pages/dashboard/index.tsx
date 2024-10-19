@@ -8,7 +8,7 @@ import { useRouter } from "next/router";
 import { useApiMutation } from "@/lib/useApi";
 import Spinner from "@/components/Universal/Spinner";
 import Toast from "@/components/Universal/Toast";
-import { useAppDispatch } from "@/redux/store";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { addCurrentUser } from "@/redux/slices/authSlice";
 import { IUser } from "@/utilities/typings";
 import { validateUserLogin } from "@/utilities/validations/authValids";
@@ -33,6 +33,10 @@ export interface ILoginVariables {
 const Index = () => {
   const router = useRouter();
   const dispatch = useAppDispatch()
+
+  const { currentUser } = useAppSelector((state) => state.auth);
+
+
   const login = useApiMutation<ILoginResponse, ILoginVariables>("/login");
 
   const [formValues, setFormValues] = useState({
@@ -64,6 +68,14 @@ const Index = () => {
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  useEffect(() => {
+    const { accessToken } = currentUser || {};
+
+    if (accessToken) {
+      router.push("/dashboard/hospitaldb/homedb");
+    }
+  }, [currentUser, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
