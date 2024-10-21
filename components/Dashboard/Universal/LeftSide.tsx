@@ -10,6 +10,8 @@ import MailFillIcon from "remixicon-react/MailFillIcon";
 import ArticleFillIcon from "remixicon-react/ArticleFillIcon";
 import LogoutModal from "../LogoutModal";
 import LogoutBoxFillIcon from "remixicon-react/LogoutBoxFillIcon";
+import { useAppDispatch } from "@/redux/store";
+import { clearCurrentUser } from "@/redux/slices/authSlice";
 
 interface leftSideProp {
   toggleSidebar: () => void;
@@ -23,6 +25,8 @@ const LeftSide: React.FC<leftSideProp> = ({
   setShowSidebar,
 }) => {
   const router = useRouter();
+  const dispatch = useAppDispatch()
+
 
   useEffect(() => {
     // Close sidebar when a route is visited
@@ -34,6 +38,14 @@ const LeftSide: React.FC<leftSideProp> = ({
   const handleLogOutModal = () => {
     setLogOut(!logOut);
   };
+
+  const handleLogOut = async ()=>{
+
+    dispatch(
+      clearCurrentUser()
+    ); 
+
+  }
   return (
     <div className="h-full">
       <div
@@ -70,7 +82,7 @@ const LeftSide: React.FC<leftSideProp> = ({
           {/* Dashboard */}
           <Link
             href={"/dashboard/hospitaldb/homedb"}
-            className={`shrink mb-2 flex items-center gap-2 cursor-pointer px-4 py-3 ${
+            className={`shrink mb-2 flex items-center gap-2 cursor-pointer px-4 py-2 ${
               router.pathname.includes("/dashboard/hospitaldb/homedb")
                 ? " bg-white rounded-[5px]"
                 : ""
@@ -109,7 +121,7 @@ const LeftSide: React.FC<leftSideProp> = ({
           <div className={`my-0 shrink mb-2`}>
             <Link
               href={"/dashboard/hospitaldb/doctors"}
-              className={`flex items-center gap-2 cursor-pointer px-4 py-3 ${
+              className={`flex items-center gap-2 cursor-pointer px-4 py-2 ${
                 router.pathname.includes("/dashboard/hospitaldb/doctors")
                   ? "bg-white rounded-[5px]"
                   : ""
@@ -148,7 +160,7 @@ const LeftSide: React.FC<leftSideProp> = ({
           <div className={`my-0 shrink mb-2`}>
             <Link
               href={"/dashboard/hospitaldb/patients"}
-              className={`flex items-center gap-2 cursor-pointer px-4 py-3 ${
+              className={`flex items-center gap-2 cursor-pointer px-4 py-2 ${
                 router.pathname.includes("/dashboard/hospitaldb/patients")
                   ? "bg-white rounded-[5px]"
                   : ""
@@ -184,11 +196,51 @@ const LeftSide: React.FC<leftSideProp> = ({
             </Link>
           </div>
 
+          {/* Appointments */}
+          <div className={`my-0 shrink mb-2`}>
+            <Link
+              href={"/dashboard/hospitaldb/appointments"}
+              className={`flex items-center gap-2 cursor-pointer px-4 py-2 ${
+                router.pathname.includes("/dashboard/hospitaldb/appointments")
+                  ? "bg-white rounded-[5px]"
+                  : ""
+              }`}
+              //   onClick={() => router.route"/_dashboard/_userdashboard/application"}
+            >
+              {router.pathname.includes("/dashboard/hospitaldb/appointments") ? (
+                  <Image
+                  src={"/ddocuments1.png"}
+                  width={24}
+                  height={24}
+                  alt="d"
+                  className=""
+                />
+              ) : (
+                <Image
+                  src={"/ddocument2.png"}
+                  width={24}
+                  height={24}
+                  alt="d"
+                  className=""
+                />
+              )}
+              <h1
+                className={`text-sm ${
+                  router.pathname.includes("/dashboard/hospitaldb/appointments")
+                    ? "text-[#1E2230] font-medium"
+                    : "font-normal text-white"
+                }`}
+              >
+                Appointments
+              </h1>
+            </Link>
+          </div>
+
           {/* Messages/Chat */}
           <div className={`my-0 shrink mb-2`}>
             <Link
               href={"/dashboard/hospitaldb/messages"}
-              className={`flex items-center gap-2 cursor-pointer px-4 py-3 ${
+              className={`flex items-center gap-2 cursor-pointer px-4 py-2 ${
                 router.pathname.includes("/dashboard/hospitaldb/messages")
                   ? "bg-white rounded-[5px]"
                   : ""
@@ -228,7 +280,7 @@ const LeftSide: React.FC<leftSideProp> = ({
           <div className={`my-0 shrink mb-2`}>
             <Link
               href={"/dashboard/hospitaldb/medications"}
-              className={`flex items-center gap-2 cursor-pointer px-4 py-3 ${
+              className={`flex items-center gap-2 cursor-pointer px-4 py-2 ${
                 router.pathname.includes("/dashboard/hospitaldb/medications")
                   ? "bg-white rounded-[5px]"
                   : ""
@@ -268,7 +320,7 @@ const LeftSide: React.FC<leftSideProp> = ({
           <div className={`my-0 shrink mb-2`}>
             <Link
               href={"/dashboard/hospitaldb/documents"}
-              className={`flex items-center gap-2 cursor-pointer px-4 py-3 ${
+              className={`flex items-center gap-2 cursor-pointer px-4 py-2 ${
                 router.pathname.includes("/dashboard/hospitaldb/documents")
                   ? "bg-white rounded-[5px]"
                   : ""
@@ -308,7 +360,7 @@ const LeftSide: React.FC<leftSideProp> = ({
           <div className={`my-0 shrink mb-2`}>
             <Link
               href={"/dashboard/hospitaldb/freeHealthCare"}
-              className={`flex items-center gap-2 cursor-pointer px-4 py-3 ${
+              className={`flex items-center gap-2 cursor-pointer px-4 py-2 ${
                 router.pathname.includes("/dashboard/hospitaldb/freeHealthCare")
                   ? "bg-white rounded-[5px]"
                   : ""
@@ -352,7 +404,7 @@ const LeftSide: React.FC<leftSideProp> = ({
           <div className={`my-0 shrink mb-2`}>
             <Link
               href={"/dashboard/hospitaldb/waitlist"}
-              className={`flex items-center gap-2 cursor-pointer px-4 py-3 ${
+              className={`flex items-center gap-2 cursor-pointer px-4 py-2 ${
                 router.pathname.includes("/dashboard/hospitaldb/waitlist")
                   ? "bg-white rounded-[5px]"
                   : ""
@@ -393,7 +445,7 @@ const LeftSide: React.FC<leftSideProp> = ({
           <div className={`my-0 shrink`}>
             <Link
               href={"/dashboard/hospitaldb/settings"}
-              className={`flex items-center gap-2 cursor-pointer px-4 py-3 ${
+              className={`flex items-center gap-2 cursor-pointer px-4 py-2 ${
                 router.pathname.includes("/dashboard/hospitaldb/settings")
                   ? "bg-white rounded-[5px]"
                   : ""
@@ -448,7 +500,7 @@ const LeftSide: React.FC<leftSideProp> = ({
           </div>
         </div>
       </div>
-      {logOut && <LogoutModal onClose={handleLogOutModal} />}
+      {logOut && <LogoutModal onClose={handleLogOutModal} handleLogOut={handleLogOut} />}
     </div>
   );
 };

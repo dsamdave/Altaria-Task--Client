@@ -5,12 +5,12 @@ import { useRouter } from "next/router";
 import CloseFillIcon from "remixicon-react/CloseFillIcon";
 import CustomButton from "@/components/Universal/CustomButton";
 
-interface LogoutModalProps {
+interface AppointmentSmallModalProps {
   onClose: () => void;
-  handleLogOut: () => void;
+  onProceed: () => void;
 }
-const LogoutModal: React.FC<LogoutModalProps> = ({ onClose, handleLogOut }) => {
-  const router = useRouter();
+const AppointmentSmallModal: React.FC<AppointmentSmallModalProps> = ({ onClose, onProceed }) => {
+//   const router = useRouter();
 
   return (
     <div className="relative z-50">
@@ -28,7 +28,7 @@ const LogoutModal: React.FC<LogoutModalProps> = ({ onClose, handleLogOut }) => {
             btnText={"Yes"}
             greenBorder={false}
             whiteBorder={false}
-            onclick={handleLogOut}
+            onclick={onProceed}
           />
           <CustomButton
             className={`rounded-[5px] p-[10px] text-center 
@@ -46,4 +46,4 @@ const LogoutModal: React.FC<LogoutModalProps> = ({ onClose, handleLogOut }) => {
   );
 };
 
-export default LogoutModal;
+export default AppointmentSmallModal;

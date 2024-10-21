@@ -38,3 +38,65 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+
+
+<!-- Fix Hydration Error -->
+
+<!-- const [isClient, setIsClient] = useState(false);
+
+useEffect(() => {
+  setIsClient(true);
+}, []);
+
+return (
+  <button>
+    {isClient && currentUser ? (
+      <Image
+        src={currentUser.avatar || "/avatar.png"}
+        width={32}
+        height={32}
+        alt="Profile Image"
+        className="rounded-full w-10 shrink"
+      />
+    ) : (
+      <Image
+        src="/avatar.png"
+        width={32}
+        height={32}
+        alt="Placeholder Image"
+        className="rounded-full w-10 shrink"
+      />
+    )}
+  </button>
+); -->
+
+
+
+<!-- 
+   Example of query
+
+   const { data, error, isLoading } = useApiQuery(
+     ['users'],  
+     '/users',   
+   );
+
+ or
+
+ const { data: userData } = useApiQuery(['user', userId], `/users/${userId}`);
+
+
+
+ const mutation = useApiMutation('/users');
+
+ const handleCreateUser = async () => {
+   mutation.mutate({ name: 'New User' }, {
+     onSuccess: () => {
+       console.log('User created successfully');
+     },
+     onError: (error) => {
+       console.error('Error creating user:', error);
+     },
+   });
+ }; -->
+

@@ -70,9 +70,9 @@ const Index = () => {
   }, []);
 
   useEffect(() => {
-    const { accessToken } = currentUser || {};
+    const { accessToken, role } = currentUser || {};
 
-    if (accessToken) {
+    if (accessToken && role === "admin") {
       router.push("/dashboard/hospitaldb/homedb");
     }
   }, [currentUser, router]);
@@ -104,8 +104,14 @@ const Index = () => {
             ...data?.user,
             accessToken: data?.accessToken,     
           })
-        );        
-        router.push("/dashboard/hospitaldb/homedb");
+        ); 
+        if(data?.user?.role !== "admin"){
+
+          router.push("/");
+        } else {
+
+          router.push("/dashboard/hospitaldb/homedb");
+        }      
         
         setFormValues({
           email: "",

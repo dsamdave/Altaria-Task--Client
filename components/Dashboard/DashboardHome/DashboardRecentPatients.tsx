@@ -1,35 +1,38 @@
 import Image from "next/image";
 import React, { useState } from "react";
 import AppointmentDetailsModal from "./AppointmentRequest/AppointmentDetailsModal";
+import { IUser } from "@/utilities/typings";
+import { capitalizeEachWord } from "@/utilities";
+import { useRouter } from "next/router";
 
-const DashboardRecentPatients = () => {
+interface IPatient {
+  patients: IUser[] | undefined;
+}
+
+const DashboardRecentPatients: React.FC<IPatient> = ({ patients }) => {
+
+  const router = useRouter();
+
+
   const tableHeadData = [
     {
-      header: "Name",
+      header: "Full Name",
     },
-    {
-      header: "Category",
-    },
-    {
-      header: "Name-Category ",
-    },
-    {
-      header: "Reasons",
-    },
+
     {
       header: "Patient ID",
     },
     {
-      header: "Date-Time",
+      header: "Phone Number",
+    },
+    // {
+    //   header: "Email",
+    // },
+    {
+      header: "Country",
     },
     {
-      header: "Location",
-    },
-    {
-      header: "Type",
-    },
-    {
-      header: "Action",
+      header: "Reg Date",
     },
   ];
 
@@ -87,15 +90,13 @@ const DashboardRecentPatients = () => {
   return (
     <div className="h-full">
       <div className="bg-white rounded-xl shadow-xl p-2 max-w-[560px] overflow-x-scroll">
-        
-
         <div className="flex items-center justify-around mt-5">
           <table className="">
             <thead>
               <tr className="">
                 {tableHeadData.map((item, index) => (
                   <th
-                    className="text-sm text-[#747678] font-medium  px-4"
+                    className="text-sm text-[#747678] font-medium px-4 whitespace-nowrap"
                     key={index}
                   >
                     {item.header}
@@ -104,88 +105,51 @@ const DashboardRecentPatients = () => {
               </tr>
             </thead>
 
-            <tbody>
-              {tableData.map((data, index) => (
-                <tr
-                  key={index}
-                  className=" cursor-pointer"
-                >
-                  <td className=" p-3 text-center">
-                    <div className="flex items-center gap-3">
-                      <Image
-                        src={data.Img}
-                        width={24}
-                        height={24}
-                        alt="User img"
-                      />
-                      <p className="text-xs text-[#35384D] font-semibold">
-                        {data.name}
-                      </p>
-                    </div>
-                  </td>
-                  <td
-                    className={`${data.categoryColor} text-xs font-medium  p-3 text-center`}
+            <tbody className="">
+              {patients &&
+                patients.map((data, index) => (
+                  <tr
+                    key={index}
+                    className="cursor-pointer border-b border-gray-100 hover:bg-gray-100"
+                    onClick={()=> router.push("/dashboard/hospitaldb/patients")}
                   >
-                    {data.category}
-                  </td>
-                  <td className=" text-[#35384D] text-xs font-medium  p-3 text-center">
-                    {data.nameCategory}
-                  </td>
-                  <td className=" text-[#35384D] text-xs font-medium  p-3 text-center">
-                    {data.reasons}
-                  </td>
-                  <td className=" text-[#35384D] text-xs font-medium  p-3 text-center">
-                    {data.patientId}
-                  </td>
-                  <td className=" text-[#35384D] text-xs font-medium  p-3 text-center">
-                    {data.dateTime}
-                  </td>
-                  <td className=" text-[#35384D] text-xs font-medium  p-3 text-center">
-                    {data.location}
-                  </td>
-                  <td className=" text-[#35384D] text-xs font-medium  p-3 text-center ">
-                    {data.type}
-                  </td>
-                  <td className=" p-3 text-center flex items-center gap-2">
-                    <button>
-                      <Image
-                        src={"/confirm.png"}
-                        width={20}
-                        height={20}
-                        alt="Confirm icon"
-                      />
-                    </button>
-                    <button>
-                      <Image
-                        src={"/delete.png"}
-                        width={20}
-                        height={20}
-                        alt="Delete icon"
-                      />
-                    </button>
-                  </td>
-                </tr>
-              ))}
+                    <td className="p-3 w-full">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full overflow-hidden">
+                          <Image
+                            src={data?.avatar}
+                            alt="User img"
+                            width={32} 
+                            height={32}
+                            className="object-cover w-full h-full"
+                          />
+                        </div>
+                        <p className="text-xs text-[#35384D] font-semibold whitespace-nowrap">
+                          {capitalizeEachWord(data.firstName)}{" "}
+                          {capitalizeEachWord(data.lastName)}
+                        </p>
+                      </div>
+                    </td>
+
+                    <td className="text-[#35384D] text-xs font-medium p-3 whitespace-nowrap">
+                      {data.patientID}
+                    </td>
+                    <td className="text-[#35384D] text-xs font-medium p-3 whitespace-nowrap">
+                      {data.phoneNumber}
+                    </td>
+
+                    <td className="text-[#35384D] text-xs font-medium p-3 whitespace-nowrap">
+                      {data.country}
+                    </td>
+                    <td className="text-[#35384D] text-xs font-medium p-3 whitespace-nowrap">
+                      {new Date(data?.createdAt).toLocaleDateString()}
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
-          {/* {tableHeadData.map((data, index)=>(
-                    <h1 key={index} className='text-sm text-[#747678] font-medium'>{data.header}</h1>
-                ))} */}
         </div>
-
-        {/* Table Content */}
-        {/* <div className="flex items-center justify-between">
-      
-
-
-          
-
-          <div>
-        
-          </div>
-        </div> */}
       </div>
-    
     </div>
   );
 };

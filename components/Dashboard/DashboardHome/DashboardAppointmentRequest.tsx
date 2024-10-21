@@ -1,17 +1,29 @@
+import { IAppointment } from "@/pages/dashboard/hospitaldb/homedb";
+import { capitalizeEachWord } from "@/utilities";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
-import AppointmentDetailsModal from "./AppointmentRequest/AppointmentDetailsModal";
 
-const DashboardAppointmentRequest = () => {
+interface IAppointmentProp {
+  appointments: IAppointment[] | undefined;
+}
+
+const DashboardAppointmentRequest: React.FC<IAppointmentProp> = ({
+  appointments,
+}) => {
+
+  const router = useRouter();
+
+
   const tableHeadData = [
     {
-      header: "Name",
+      header: "Booking User",
     },
     {
       header: "Category",
     },
     {
-      header: "Name-Category ",
+      header: "Patient Name",
     },
     {
       header: "Reasons",
@@ -27,9 +39,6 @@ const DashboardAppointmentRequest = () => {
     },
     {
       header: "Type",
-    },
-    {
-      header: "Action",
     },
   ];
 
@@ -84,20 +93,18 @@ const DashboardAppointmentRequest = () => {
     },
   ];
 
-
+  console.log({ appointments });
 
   return (
     <div className="h-full">
       <div className="bg-white rounded-xl shadow-xl p-2 max-w-[560px] overflow-x-scroll">
-        
-
         <div className="flex items-center justify-around mt-5">
           <table className="">
             <thead>
               <tr className="">
                 {tableHeadData.map((item, index) => (
                   <th
-                    className="text-sm text-[#747678] font-medium  px-4"
+                    className="text-sm text-[#747678] font-medium  px-4 whitespace-nowrap"
                     key={index}
                   >
                     {item.header}
@@ -107,48 +114,63 @@ const DashboardAppointmentRequest = () => {
             </thead>
 
             <tbody>
-              {tableData.map((data, index) => (
-                <tr
-                  key={index}
-                  className=" cursor-pointer"
-                >
-                  <td className=" p-3 text-center">
-                    <div className="flex items-center gap-3">
-                      <Image
-                        src={data.Img}
-                        width={24}
-                        height={24}
-                        alt="User img"
-                      />
-                      <p className="text-xs text-[#35384D] font-semibold">
-                        {data.name}
-                      </p>
-                    </div>
-                  </td>
-                  <td
-                    className={`${data.categoryColor} text-xs font-medium  p-3 text-center`}
+              {appointments &&
+                appointments?.slice(0, 4).map((data, index) => (
+                  <tr key={index} 
+                  className="hover:bg-gray-100 cursor-pointer whitespace-nowrap"
+                  onClick={()=> router.push("/dashboard/hospitaldb/appointments")}
                   >
-                    {data.category}
-                  </td>
-                  <td className=" text-[#35384D] text-xs font-medium  p-3 text-center">
-                    {data.nameCategory}
-                  </td>
-                  <td className=" text-[#35384D] text-xs font-medium  p-3 text-center">
-                    {data.reasons}
-                  </td>
-                  <td className=" text-[#35384D] text-xs font-medium  p-3 text-center">
-                    {data.patientId}
-                  </td>
-                  <td className=" text-[#35384D] text-xs font-medium  p-3 text-center">
-                    {data.dateTime}
-                  </td>
-                  <td className=" text-[#35384D] text-xs font-medium  p-3 text-center">
-                    {data.location}
-                  </td>
-                  <td className=" text-[#35384D] text-xs font-medium  p-3 text-center ">
-                    {data.type}
-                  </td>
-                  <td className=" p-3 text-center flex items-center gap-2">
+                    <td className=" p-3 text-center ">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full overflow-hidden">
+                          <Image
+                            src={data?.user?.avatar}
+                            alt="User img"
+                            width={32} // Slightly larger to ensure quality
+                            height={32}
+                            className="object-cover w-full h-full"
+                          />
+                        </div>
+                        <p className="text-xs text-[#35384D] font-semibold">
+                          {capitalizeEachWord(data?.user?.firstName)}{" "}
+                          {capitalizeEachWord(data?.user?.lastName)}
+                        </p>
+                      </div>
+                    </td>
+                    {/* ${data.categoryColor} personal */}
+                    <td
+                      className={` ${
+                        data.category === "someone"
+                          ? "text-[#F17105]"
+                          : "text-[#0075D9]"
+                      }
+                      text-xs font-medium  p-3 text-center`}
+                    >
+                      {data?.category}
+                    </td>
+                    <td className=" text-[#35384D] text-xs font-medium  p-3 text-center">
+                      {
+                        data.category === "someone"
+                        ? `${capitalizeEachWord(data?.someOneDetails.firstName)} ${capitalizeEachWord(data?.someOneDetails.lastName)}`
+                        : "-"
+                      }
+                    </td>
+                    <td className=" text-[#35384D] text-xs font-medium  p-3 text-center">
+                      {data?.reason}
+                    </td>
+                    <td className=" text-[#35384D] text-xs font-medium  p-3 text-center">
+                      {data?.patientID}
+                    </td>
+                    <td className=" text-[#35384D] text-xs font-medium  p-3 text-center">
+                      {new Date(data?.date).toLocaleDateString()} - {data?.time}
+                    </td>
+                    <td className=" text-[#35384D] text-xs font-medium  p-3 text-center">
+                      {data?.user?.country}
+                    </td>
+                    <td className=" text-[#35384D] text-xs font-medium  p-3 text-center ">
+                      {data?.patientType}
+                    </td>
+                    {/* <td className=" p-3 text-center flex items-center gap-2">
                     <button>
                       <Image
                         src={"/confirm.png"}
@@ -165,9 +187,9 @@ const DashboardAppointmentRequest = () => {
                         alt="Delete icon"
                       />
                     </button>
-                  </td>
-                </tr>
-              ))}
+                  </td> */}
+                  </tr>
+                ))}
             </tbody>
           </table>
           {/* {tableHeadData.map((data, index)=>(

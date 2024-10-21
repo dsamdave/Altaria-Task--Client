@@ -11,29 +11,36 @@ const Auth = () => {
   const { currentUser } = useAppSelector((state) => state.auth);
   const router = useRouter();
 
-  useEffect(() => {
-    const { accessToken } = currentUser || {};
 
-    if (!accessToken) {
-      toast.error("Please Login!");
+  useEffect(() => {
+    const { accessToken, role } = currentUser || {};
+  
+    if (!accessToken || role !== "admin") {
+      toast.error("Please log in as admin!");
       router.push('/dashboard');
     }
+  
+    console.log({ role });
+  
   }, [currentUser, router]);
+  
 
 
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth <= MOBILE_SCREEN_WIDTH) {
-        toast.error('Please open this dashboard on a computer for a better experience.');
-        router.push('/');
-      }
-    };
 
-    handleResize(); // Check size on initial render
-    window.addEventListener('resize', handleResize);
 
-    return () => window.removeEventListener('resize', handleResize);
-  }, [router]);
+  // useEffect(() => {
+  //   const handleResize = () => {
+  //     if (window.innerWidth <= MOBILE_SCREEN_WIDTH) {
+  //       toast.error('Please open this dashboard on a computer for a better experience.');
+  //       router.push('/');
+  //     }
+  //   };
+
+  //   handleResize(); // Check size on initial render
+  //   window.addEventListener('resize', handleResize);
+
+  //   return () => window.removeEventListener('resize', handleResize);
+  // }, [router]);
 
 
 //   Example of query

@@ -2,202 +2,118 @@ import Image from "next/image";
 import React, { useState } from "react";
 import PatientsDetailsModal from "./PatientsDetailModal";
 import DeleteModal from "./DeletModal";
+import { IUser } from "@/utilities/typings";
+import { capitalizeEachWord, getPageNumbers } from "@/utilities";
+import { useApiQuery } from "@/lib/useApi";
+import { PatientResponse } from "@/pages/dashboard/hospitaldb/patients";
 
-const Patients = () => {
+interface IPatient {
+  patients: IUser[] | undefined;
+  currentPage: number;
+  setCurrentPage: (currentPage: number) => void;
+  totalItems: number | undefined;
+}
+
+const Patients: React.FC<IPatient> = ({
+  patients,
+  currentPage,
+  setCurrentPage,
+  totalItems,
+}) => {
+
+  // const { data, error, isLoading } = useApiQuery<PatientResponse>(
+  //   ["patients-list"],
+  //   "/patients"
+  // );
+
+
   const tableHeadData = [
     {
-      header: "Name",
+      header: "S/N",
     },
     {
-      header: "Reasons",
+      header: "Full Name",
     },
+
     {
       header: "Patient ID",
     },
     {
-      header: "Signup Date",
+      header: "Phone Number",
     },
     {
-      header: "Location",
+      header: "Email",
     },
     {
-      header: "Status",
+      header: "Country",
     },
     {
-      header: "Last Seen",
-    },
-  ];
-
-  const tableData = [
-    {
-      Img: "/avatar.png",
-      name: " Daniel Smith",
-      reasons: "Headache ",
-      patientId: "152-660-5591",
-      signUpDate: "04/03/2020 ",
-      location: "Johannesburg",
-      status: "Active",
-      lastSeen: "04/03/2020 ",
-      statusColor: "text-[#17935C]",
-    },
-    {
-      Img: "/avatar.png",
-      name: " Daniel Smith",
-      reasons: "Headache ",
-      patientId: "152-660-5591",
-      signUpDate: "04/03/2020 ",
-      location: "Johannesburg",
-      status: "Inactive",
-      lastSeen: "04/03/2020 ",
-      statusColor: "text-[#F60707]",
-    },
-    {
-      Img: "/avatar.png",
-      name: " Daniel Smith",
-      reasons: "Headache ",
-      patientId: "152-660-5591",
-      signUpDate: "04/03/2020 ",
-      location: "Johannesburg",
-      status: "Active",
-      lastSeen: "04/03/2020 ",
-      statusColor: "text-[#17935C]",
-    },
-    {
-      Img: "/avatar.png",
-      name: " Daniel Smith",
-      reasons: "Headache ",
-      patientId: "152-660-5591",
-      signUpDate: "04/03/2020 ",
-      location: "Johannesburg",
-      status: "Inactive",
-      lastSeen: "04/03/2020 ",
-      statusColor: "text-[#F60707]",
-    },
-    {
-      Img: "/avatar.png",
-      name: " Daniel Smith",
-      reasons: "Headache ",
-      patientId: "152-660-5591",
-      signUpDate: "04/03/2020 ",
-      location: "Johannesburg",
-      status: "Active",
-      lastSeen: "04/03/2020 ",
-      statusColor: "text-[#17935C]",
-    },
-    {
-      Img: "/avatar.png",
-      name: " Daniel Smith",
-      reasons: "Headache ",
-      patientId: "152-660-5591",
-      signUpDate: "04/03/2020 ",
-      location: "Johannesburg",
-      status: "Inactive",
-      lastSeen: "04/03/2020 ",
-      statusColor: "text-[#F60707]",
-    },
-    {
-      Img: "/avatar.png",
-      name: " Daniel Smith",
-      reasons: "Headache ",
-      patientId: "152-660-5591",
-      signUpDate: "04/03/2020 ",
-      location: "Johannesburg",
-      status: "Active",
-      lastSeen: "04/03/2020 ",
-      statusColor: "text-[#17935C]",
-    },
-    {
-      Img: "/avatar.png",
-      name: " Daniel Smith",
-      reasons: "Headache ",
-      patientId: "152-660-5591",
-      signUpDate: "04/03/2020 ",
-      location: "Johannesburg",
-      status: "Inactive",
-      lastSeen: "04/03/2020 ",
-      statusColor: "text-[#F60707]",
+      header: "Reg Date",
     },
   ];
 
   // State for patients details and delete modal
   const [patientsDetails, setPatientsDetails] = useState(false);
+  const [patientsDetail, setPatientsDetail] = useState<IUser | undefined >();
   const [isDelete, setIsDelete] = useState(false);
 
   const handlePatientsDetailsModal = () => {
     setPatientsDetails(!patientsDetails);
   };
 
-  const handleDelete = ()=>{
-    setIsDelete(!isDelete)
-    setPatientsDetails(!patientsDetails)
-  }
-
-
-
-  // State and functions for pagination
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const productPerPage = 5;
-  const totalPages = Math.ceil(tableData.length / productPerPage);
-
-  // Pagination range logic with ellipsis
-  const paginationRange = () => {
-    const range: (number | string)[] = [];
-    const showEllipsis = 1;
-    if (totalPages <= showEllipsis + 2) {
-      // Show all pages if total pages is less than or equal to 6
-      for (let i = 1; i <= totalPages; i++) {
-        range.push(i);
-      }
-    } else if (currentPage <= showEllipsis) {
-      // Show the first few pages, an ellipsis, and the last page
-      for (let i = 1; i <= showEllipsis; i++) {
-        range.push(i);
-      }
-      range.push("...");
-      range.push(totalPages);
-    } else if (currentPage > totalPages - showEllipsis) {
-      // Show the first page, an ellipsis, and the last few pages
-      range.push(1);
-      range.push("...");
-      for (let i = totalPages - showEllipsis + 1; i <= totalPages; i++) {
-        range.push(i);
-      }
-    } else {
-      // Show the first page, an ellipsis, a few pages around the current page, an ellipsis, and the last page
-      range.push(1);
-      range.push("...");
-      for (let i = currentPage - 1; i <= currentPage + 1; i++) {
-        range.push(i);
-      }
-      range.push("...");
-      range.push(totalPages);
-    }
-    return range;
+  const handleDelete = () => {
+    setIsDelete(!isDelete);
+    setPatientsDetails(!patientsDetails);
   };
 
-  // Sliced data for current page
-  const allPatients = tableData.slice(
-    (currentPage - 1) * productPerPage,
-    currentPage * productPerPage
+  const itemsPerPage = 10;
+  const totalPages = Math.ceil(
+    totalItems ? totalItems / itemsPerPage : 0 / itemsPerPage
   );
 
-  // Handle page change
-  const handlePageChange = (page: number | string) => {
-    if (typeof page === "number") {
-      setCurrentPage(page);
+  const handlePageClick = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
     }
   };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+  const pageNumbers = getPageNumbers(currentPage, totalPages);
+
+
+  
+  const returnClickedPatient = (id: string) => {
+    if (!patients) return;  
+  
+    const filteredPatients = patients.filter((each) => each.id === id);
+  
+    if (filteredPatients.length > 0) {
+      setPatientsDetail(filteredPatients[0]);
+    } else {
+      console.error("Patient not found");
+    }
+  };
+
+console.log({patientsDetail})
+
 
   return (
     <div className="h-full ">
       <div className="bg-white rounded-xl shadow-xl p-2 ">
-        <h1 className="text-xl text-[#1B1B29] font-semibold pt-2">Patients</h1>
+        <h1 className="text-xl text-[#1B1B29] font-semibold pt-2 px-5">All Patients</h1>
 
         <div className=" mt-5">
           <table className="w-full">
             <thead>
-              <tr className="">
+              <tr className="border-b border-gray-100">
                 {tableHeadData.map((item, index) => (
                   <th
                     className="text-sm text-[#747678] font-medium  px-4"
@@ -210,47 +126,68 @@ const Patients = () => {
             </thead>
 
             <tbody>
-              {allPatients.map((data, index) => (
-                <tr
-                  key={index}
-                  onClick={handlePatientsDetailsModal}
-                  className=" cursor-pointer"
-                >
-                  <td className=" p-3 text-center">
-                    <div className="flex items-center gap-3">
-                      <Image
-                        src={data.Img}
+              {patients &&
+                patients.map((data, index) => (
+                  <tr
+                    key={index}
+                    onClick={()=> {
+                      handlePatientsDetailsModal()
+                      returnClickedPatient(data?.id)
+                    }}
+                    className=" cursor-pointer border-b border-gray-100 hover:bg-gray-100"
+                  >
+                    <td className="flex items-center text-[#35384D] text-xs font-medium  p-3">
+                      {(currentPage - 1) * itemsPerPage + (index + 1)}.
+                    </td>
+                    <td className="p-3 text-center">
+                      <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full overflow-hidden">
+                          <Image
+                            src={data?.avatar}
+                            alt="User img"
+                            width={32} 
+                            height={32}
+                            className="object-cover w-full h-full"
+                          />
+                        </div>
+                        <p className="text-xs text-[#35384D] font-semibold">
+                          {capitalizeEachWord(data.firstName)}{" "}
+                          {capitalizeEachWord(data.lastName)}
+                        </p>
+                      </div>
+                    </td>
+
+                    {/* <td className="flex items-center gap-3 text-[#35384D] text-xs font-medium  ">
+                  <Image
+                        src={data.avatar}
                         width={24}
                         height={24}
                         alt="User img"
                       />
-                      <p className="text-xs text-[#35384D] font-semibold">
-                        {data.name}
-                      </p>
-                    </div>
+
+                  {capitalizeEachWord(data.firstName)}  {capitalizeEachWord(data.lastName)}
+                  </td> */}
+                    <td className=" text-[#35384D] text-xs font-medium  p-3 ">
+                      {data.patientID}
+                    </td>
+                    <td className=" text-[#35384D] text-xs font-medium  p-3 ">
+                      {data.phoneNumber}
+                    </td>
+                    <td className=" text-[#35384D] text-xs font-medium  p-3 ">
+                      {data.email}
+                    </td>
+                    {/* <td className=" text-[#35384D] text-xs font-medium  p-3 ">
+                    {getUserCity(data.latitude, data.longitude)} 
+                  </td> */}
+
+                    <td className=" text-[#35384D] text-xs font-medium  p-3 ">
+                      {data.country}
+                    </td>
+                    <td className=" text-[#35384D] text-xs font-medium  p-3 ">
+                    {new Date(data?.createdAt).toLocaleDateString()}
                   </td>
-                  <td className=" text-[#35384D] text-xs font-medium  p-3 text-center">
-                    {data.reasons}
-                  </td>
-                  <td className=" text-[#35384D] text-xs font-medium  p-3 text-center">
-                    {data.patientId}
-                  </td>
-                  <td className=" text-[#35384D] text-xs font-medium  p-3 text-center">
-                    {data.signUpDate}
-                  </td>
-                  <td className=" text-[#35384D] text-xs font-medium  p-3 text-center">
-                    {data.location}
-                  </td>
-                  <td
-                    className={`${data.statusColor} text-xs font-medium  p-3 text-center`}
-                  >
-                    {data.status}
-                  </td>
-                  <td className=" text-[#35384D] text-xs font-medium  p-3 text-center">
-                    {data.lastSeen}
-                  </td>
-                </tr>
-              ))}
+                  </tr>
+                ))}
             </tbody>
           </table>
           {/* {tableHeadData.map((data, index)=>(
@@ -260,39 +197,41 @@ const Patients = () => {
 
         {/* Pagination */}
         <div className="flex items-center justify-center px-7 py-3 gap-3">
-          {/* <div className='text-gray-500 text-sm font-bold'>
-            Page {currentPage} of {totalPages}
-          </div> */}
-
           <button
             disabled={currentPage === 1}
-            className="px-1 py-2.5 text-sm text-[#778CA2] font-normal "
-            onClick={() => handlePageChange(currentPage - 1)}
+            onClick={handlePrevPage}
+            className="shrink px-1 py-2.5 text-sm text-[#778CA2] font-normal"
           >
             {"<"} Prev
           </button>
 
           <div className="flex gap-2">
-            {paginationRange().map((page, index) => (
-              <button
-                key={index}
-                className={`w-12 p-2.5 rounded-lg text-white ${
-                  currentPage === page
-                    ? "bg-[#1E2230] text-sm font-medium "
-                    : "   text-sm font-medium text-black"
-                }`}
-                onClick={() => handlePageChange(page)}
-              >
-                {page}
-              </button>
-            ))}
+            {pageNumbers.map((page, index) =>
+              typeof page === "string" ? ( // Check if the page is a string (i.e., "...")
+                <span key={index} className="text-sm font-medium text-gray-500">
+                  ...
+                </span>
+              ) : (
+                <button
+                  key={index}
+                  onClick={() => handlePageClick(page)} // Only use the button if page is a number
+                  className={`shrink w-12 p-2.5 rounded-lg ${
+                    currentPage === page
+                      ? "bg-[#1E2230] text-sm font-medium text-white"
+                      : "text-sm font-medium text-gray-500"
+                  }`}
+                >
+                  {page}
+                </button>
+              )
+            )}
           </div>
 
-          <div className="flex items-center gap-4 py-4">
+          <div className="shrink flex items-center gap-4 py-4">
             <button
               disabled={currentPage === totalPages}
-              className="px-1 py-2.5 text-sm text-[#778CA2] font-normal "
-              onClick={() => handlePageChange(currentPage + 1)}
+              onClick={handleNextPage}
+              className="px-1 py-2.5 text-sm text-[#778CA2] font-normal"
             >
               Next {">"}
             </button>
@@ -301,10 +240,19 @@ const Patients = () => {
         {/* Pagination ends here */}
       </div>
       {patientsDetails && (
-        <PatientsDetailsModal onClose={handlePatientsDetailsModal} onDelete={handleDelete} />
+        <PatientsDetailsModal
+          onClose={handlePatientsDetailsModal}
+          onDelete={handleDelete}
+          patientDetail={patientsDetail}
+        />
       )}
 
-      {isDelete && <DeleteModal onClose={handleDelete} onDone={()=> setPatientsDetails(false)} />}
+      {isDelete && (
+        <DeleteModal
+          onClose={handleDelete}
+          onDone={() => setPatientsDetails(false)}
+        />
+      )}
     </div>
   );
 };

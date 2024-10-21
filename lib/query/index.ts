@@ -3,9 +3,13 @@ import { store } from '@/redux/store';
 import { QueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 
+  // const export baseURL = process.env.NEXT_PUBLIC_API_URL || 'https://med-tele-healthcare-server-12dfae60da9e.herokuapp.com/api'
+  export const baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8082/api'
+  export const SocketBaseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8082'
+
 
 const apiClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'https://med-tele-healthcare-server-12dfae60da9e.herokuapp.com/api',
+  baseURL
 });
 
 

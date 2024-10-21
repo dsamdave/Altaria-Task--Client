@@ -4,7 +4,10 @@ import Spinner from "@/components/Universal/Spinner";
 import { useApiQuery } from "@/lib/useApi";
 import { IUser } from "@/utilities/typings";
 import React, { useState } from "react";
-import NoPatientData from "./NoPatientData";
+import NoAppointmentData from "./NoAppointments";
+import Appointments from "./Appointments";
+import { IAppointmentsResponse } from "../homedb";
+// import NoPatientData from "./NoPatientData";
 
 export interface PatientResponse {
   count: number;
@@ -15,24 +18,26 @@ export interface PatientResponse {
 }
 
 const Index = () => {
-
   const [currentPage, setCurrentPage] = useState(1);
 
-
-  const { data, error, isLoading } = useApiQuery<PatientResponse>(
-    ["patients-list", currentPage],
-    `/patients?page=${currentPage}`,  
+  const { data, error, isLoading } = useApiQuery<IAppointmentsResponse>(
+    ["admin-appointments-next", currentPage],
+    `/appointments?page=${currentPage}`
   );
 
-  console.log({ data });
+  // console.log({ data });
 
   return (
     <div className="p-5 bg-[#ECF0FF] h-full" style={{ height: "100vh" }}>
-      {data?.patients && data?.patients.length < 1 ? (
-        <NoPatientData />
+      {data?.appointments && data?.appointments.length < 1 ? (
+        <NoAppointmentData />
       ) : (
-        <Patients patients={data?.patients}           currentPage={currentPage}
-        setCurrentPage={setCurrentPage} totalItems={data?.totalItems} />
+        <Appointments
+          appointments={data?.appointments}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          totalItems={data?.totalItems}
+        />
       )}
 
       <Auth />
