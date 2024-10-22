@@ -71,21 +71,21 @@ const Conversation = () => {
           {/* Chat content here */}
           <UserMessage
             attached={""}
-            userName="Princewill Iroka"
+            // userName="Princewill Iroka"
             time="04:12 am"
-            messages={["Hello, Dr. Nicholas! 👋🏼"]}
+            // messages={["Hello, Dr. Nicholas! 👋🏼"]}
           />
           <UserMessage
             attached={""}
-            userName="Princewill Iroka"
+            // userName="Princewill Iroka"
             time="04:13 am"
-            messages={[
-              "I have some strange redness on the fingers 😱, could you check?",
-            ]}
+            // messages={[
+            //   "I have some strange redness on the fingers 😱, could you check?",
+            // ]}
           />
           <UserMessage
             attached={"/attach.png"}
-            userName="Princewill Iroka"
+            // userName="Princewill Iroka"
             time="04:17 am"
           />
 

@@ -106,10 +106,10 @@ const Index = () => {
           })
         ); 
         if(data?.user?.role !== "admin"){
-
+          toast.error("Please log in as admin!");
           router.push("/");
         } else {
-
+          
           router.push("/dashboard/hospitaldb/homedb");
         }      
         

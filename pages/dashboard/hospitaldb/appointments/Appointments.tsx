@@ -1,15 +1,31 @@
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { IUser } from "@/utilities/typings";
 import { capitalizeEachWord, getPageNumbers } from "@/utilities";
-import { useApiQuery } from "@/lib/useApi";
+import { useApiMutation, useApiQuery } from "@/lib/useApi";
 import { PatientResponse } from "@/pages/dashboard/hospitaldb/patients";
 import { IAppointment } from "../homedb";
 import AppointmentDetailsModal from "@/components/Dashboard/DashboardHome/AppointmentRequest/AppointmentDetailsModal";
 import AppointmentsDetailsModal from "./AppointmentDetailsModal";
 import dayjs from "dayjs";
 import AppointmentSmallModal from "./SmallModal";
+import { useRouter } from "next/router";
+import { useAppSelector } from "@/redux/store";
+import { toast } from "react-toastify";
+import Toast from "@/components/Universal/Toast";
+import Spinner from "@/components/Universal/Spinner";
+import io from "socket.io-client";
+import { SocketBaseURL } from "@/lib/query";
+import { useQueryClient } from "@tanstack/react-query";
+
+interface IChangeAppointmentResponse {
+  message: string;
+}
+
+interface IChangeAPPointmentStatusPayload {
+  status: string;
+}
 
 interface IPatient {
   appointments: IAppointment[] | undefined;
@@ -24,6 +40,9 @@ const Appointments: React.FC<IPatient> = ({
   setCurrentPage,
   totalItems,
 }) => {
+  const router = useRouter();
+  const { currentUser } = useAppSelector((state) => state.auth);
+
   const tableHeadData = [
     {
       header: "S/N",
@@ -54,16 +73,28 @@ const Appointments: React.FC<IPatient> = ({
       header: "Date of Booking",
     },
     {
+      header: "Status",
+    },
+    {
       header: "Actions",
     },
   ];
 
+  const [socket, setSocket] = useState<any>(null);
+
+  const [loading, setLoading] = useState(false);
   const [appointmentDetails, setAppointmentDetails] = useState(false);
   const [openSmallModal, setOpenSMallModal] = useState(false);
   const [appointmentDetail, setAppointmentsDetail] = useState<
     IAppointment | undefined
   >();
+  const [actionIndex, setActionIndex] = useState(0);
   const [isDelete, setIsDelete] = useState(false);
+
+  const concludeAppointment = useApiMutation<
+    IChangeAppointmentResponse,
+    IChangeAPPointmentStatusPayload
+  >(`/update-appointments-status/${appointmentDetail?.id}`);
 
   const handleOpenSMallsModal = () => {
     setOpenSMallModal(!openSmallModal);
@@ -111,6 +142,86 @@ const Appointments: React.FC<IPatient> = ({
       console.error("Booking not found");
     }
   };
+
+  const handleJoinChat = async () => {
+    if (!currentUser?.id) return;
+    setLoading(true);
+
+    socket.emit("chatMessage", {
+      patientID: appointmentDetail?.user?.id,
+      doctorID: currentUser?.id,
+      message: `Hello, thank you for reaching out. This is Dr. ${currentUser?.lastName}. How can I assist you today?`,
+      attachments: [],
+      links: "",
+      sender: currentUser?.id,
+      recipient: appointmentDetail?.user?.id,
+    });
+
+    toast.success("Greeting message sent!");
+
+    setLoading(false);
+    router.push("/dashboard/hospitaldb/messages");
+  };
+
+  const handleJoinCall = async () => {
+    console.log("Joining Call...");
+
+    // joinChat.mutate({identifier: "", password: ""}, {
+    //   onSuccess: (data: ILoginResponse) => {
+
+    //     // toast.success("Login successful!");
+    //       // router.push("/");
+
+    //   },
+    //   onError: (error: any) => {
+    //     // toast.error(() => <Toast title="Login failed:" body={error?.response?.data?.message || "Unknown error"} />);
+    //   },
+    // });
+  };
+
+  const queryClient = useQueryClient();
+  const handleCloseAppointment = async (status: string) => {
+    if (!appointmentDetail?.id) return;
+
+    concludeAppointment.mutate(
+      { status },
+      {
+        onSuccess: (data: IChangeAppointmentResponse) => {
+          if (data?.message === "Successful") {
+            toast.success("Appointment Concluded!");
+            
+            // Invalidate the 'admin-appointments-next' query to trigger a refetch
+            queryClient.invalidateQueries({ queryKey: ["admin-appointments-next"] });
+
+            handleAppointmentDetailsModal();
+            handleOpenSMallsModal();
+          } else {
+            handleAppointmentDetailsModal();
+            handleOpenSMallsModal();
+          }
+        },
+        onError: (error: any) => {
+          toast.error(() => (
+            <Toast
+              title="Failed:"
+              body={error?.response?.data?.message || "Unknown error"}
+            />
+          ));
+        },
+      }
+    );
+  };
+
+  // console.log({appointmentDetail})
+
+  useEffect(() => {
+    const socketInstance = io(SocketBaseURL, {
+      transports: ["websocket"],
+      reconnectionAttempts: 5,
+      timeout: 10000,
+    });
+    setSocket(socketInstance);
+  }, [currentUser?.id]);
 
   return (
     <div className="h-full ">
@@ -204,11 +315,32 @@ const Appointments: React.FC<IPatient> = ({
                     <td className=" text-[#35384D] text-xs font-medium  p-3 text-center ">
                       {data?.patientType}
                     </td>
+
                     <td className=" text-[#35384D] text-xs font-medium  p-3 text-center">
                       {new Date(data?.updatedAt).toLocaleDateString()}
                     </td>
+                    <td
+                      className={`text-xs font-medium p-3 text-center ${
+                        data?.status === "Concluded"
+                          ? "text-green-500"
+                          : data?.status === "Declined"
+                          ? "text-red-500"
+                          : data?.status === "Pending"
+                          ? "text-yellow-500"
+                          : data?.status === "Accepted"
+                          ? "text-blue-500"
+                          : "text-[#35384D]"
+                      }`}
+                    >
+                      {data?.status}
+                    </td>
                     <td className=" p-3 text-center flex items-center gap-2">
-                      <button className="shrink">
+                      <button className="shrink"
+                      onClick={() => {
+                        handleOpenSMallsModal()
+                        setActionIndex(4)
+                      } }
+                      >
                         <Image
                           src={"/confirm.png"}
                           width={20}
@@ -216,7 +348,12 @@ const Appointments: React.FC<IPatient> = ({
                           alt="Confirm icon"
                         />
                       </button>
-                      <button className="shrink">
+                      <button className="shrink"
+                       onClick={() => {
+                        handleOpenSMallsModal()
+                        setActionIndex(5)
+                      } }
+                      >
                         <Image
                           src={"/delete.png"}
                           width={20}
@@ -239,7 +376,7 @@ const Appointments: React.FC<IPatient> = ({
           <button
             disabled={currentPage === 1}
             onClick={handlePrevPage}
-            className="shrink px-1 py-2.5 text-sm text-[#778CA2] font-normal"
+            className="shrink px-1 py-2.5 text-sm text-[#778CA2] font-normal hover:text-[#35384D]"
           >
             {"<"} Prev
           </button>
@@ -257,7 +394,7 @@ const Appointments: React.FC<IPatient> = ({
                   className={`shrink w-12 p-2.5 rounded-lg ${
                     currentPage === page
                       ? "bg-[#1E2230] text-sm font-medium text-white"
-                      : "text-sm font-medium text-gray-500"
+                      : "text-sm font-medium text-gray-500 hover:text-[#35384D]"
                   }`}
                 >
                   {page}
@@ -270,7 +407,7 @@ const Appointments: React.FC<IPatient> = ({
             <button
               disabled={currentPage === totalPages}
               onClick={handleNextPage}
-              className="px-1 py-2.5 text-sm text-[#778CA2] font-normal"
+              className="px-1 py-2.5 text-sm text-[#778CA2] font-normal hover:text-[#35384D]"
             >
               Next {">"}
             </button>
@@ -278,25 +415,28 @@ const Appointments: React.FC<IPatient> = ({
         </div>
         {/* Pagination ends here */}
       </div>
+
       {appointmentDetails && (
         <AppointmentsDetailsModal
           onClose={handleAppointmentDetailsModal}
           onDelete={handleDelete}
           appointmentDetail={appointmentDetail}
           onSmallModal={handleOpenSMallsModal}
+          setActionIndex={setActionIndex}
         />
       )}
 
       {openSmallModal && (
-        <AppointmentSmallModal onClose={handleOpenSMallsModal} onProceed={handleOpenSMallsModal} />
+        <AppointmentSmallModal
+          onClose={handleOpenSMallsModal}
+          actionIndex={actionIndex}
+          handleJoinChat={handleJoinChat}
+          handleJoinCall={handleJoinCall}
+          handleCloseAppointment={handleCloseAppointment}
+        />
       )}
 
-      {/* {isDelete && (
-        <DeleteModal
-          onClose={handleDelete}
-          onDone={() => setPatientsDetails(false)}
-        />
-      )} */}
+      {loading || (concludeAppointment.isPending && <Spinner />)}
     </div>
   );
 };

@@ -1,11 +1,40 @@
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import DeclineSessionModal from "./DeclineSessionModal";
+import { IQuestion } from "@/pages/dashboard/hospitaldb/freeHealthCare";
+import { capitalizeEachWord, getPageNumbers } from "@/utilities";
+import FreeHealthQuesDetailsModal from "@/pages/dashboard/hospitaldb/freeHealthCare/freeQuesDetailModal";
+import FreeQuesSmallModal from "@/pages/dashboard/hospitaldb/freeHealthCare/FreeQuesSmallModal";
+import { SocketBaseURL } from "@/lib/query";
+import { useAppSelector } from "@/redux/store";
+import { toast } from "react-toastify";
+import io from "socket.io-client";
+import Spinner from "@/components/Universal/Spinner";
 
-const FreeHealthCare = () => {
+
+
+interface IQuesProp {
+  questions: IQuestion[] | undefined;
+  currentPage: number;
+  setCurrentPage: (currentPage: number) => void;
+  totalItems: number | undefined;
+}
+
+const FreeHealthCare: React.FC<IQuesProp> = ({
+  questions,
+  currentPage,
+  setCurrentPage,
+  totalItems,
+}) => {
   const router = useRouter();
+  const { currentUser } = useAppSelector((state) => state.auth);
+
+
+  console.log({ questions });
   const tableHeadData = [
+    {
+      header: "S/N",
+    },
     {
       header: "Name",
     },
@@ -13,169 +42,139 @@ const FreeHealthCare = () => {
       header: "Category",
     },
     {
-      header: "Name-Category ",
+      header: "Patient Name",
     },
-    {
-      header: "Reasons",
-    },
+
     {
       header: "Patient ID",
     },
     {
-      header: "Date-Time",
+      header: "Previously Diagnosed",
+    },
+
+    {
+      header: "Medications",
     },
     {
-      header: "Location",
+      header: "Allergies",
     },
+    // {
+    //   header: "Country",
+    // },
     {
-      header: "Action",
+      header: "Date of Submission",
     },
+    // {
+    //   header: "Action",
+    // },
   ];
 
-  const tableData = [
-    {
-      Img: "/avatar.png",
-      name: " Daniel Smith",
-      category: "Personal",
-      nameCategory: "-",
-      reasons: "Headache ",
-      patientId: "152-660-5591",
-      dateTime: "04/03/2020 - 10 AM",
-      location: "Johannesburg",
-      categoryColor: "text-[#0075D9]",
-    },
-    {
-      Img: "/avatar.png",
-      name: " Daniel Smith",
-      category: "Someone",
-      nameCategory: "Eunice Smith (Wife)",
-      reasons: "Headache ",
-      patientId: "152-660-5591",
-      dateTime: "04/03/2020 - 10 AM",
-      location: "Johannesburg",
-      categoryColor: "text-[#F17105]",
-    },
-    {
-      Img: "/avatar.png",
-      name: " Daniel Smith",
-      category: "Someone",
-      nameCategory: "Eunice Smith (Wife)",
-      reasons: "Headache ",
-      patientId: "152-660-5591",
-      dateTime: "04/03/2020 - 10 AM",
-      location: "Johannesburg",
-      categoryColor: "text-[#F17105]",
-    },
-    {
-      Img: "/avatar.png",
-      name: " Daniel Smith",
-      category: "Someone",
-      nameCategory: "Eunice Smith (Wife)",
-      reasons: "Headache ",
-      patientId: "152-660-5591",
-      dateTime: "04/03/2020 - 10 AM",
-      location: "Johannesburg",
-      categoryColor: "text-[#F17105]",
-    },
-    {
-      Img: "/avatar.png",
-      name: " Daniel Smith",
-      category: "Someone",
-      nameCategory: "Eunice Smith (Wife)",
-      reasons: "Headache ",
-      patientId: "152-660-5591",
-      dateTime: "04/03/2020 - 10 AM",
-      location: "Johannesburg",
-      categoryColor: "text-[#F17105]",
-    },
-    {
-      Img: "/avatar.png",
-      name: " Daniel Smith",
-      category: "Someone",
-      nameCategory: "Eunice Smith (Wife)",
-      reasons: "Headache ",
-      patientId: "152-660-5591",
-      dateTime: "04/03/2020 - 10 AM",
-      location: "Johannesburg",
-      categoryColor: "text-[#F17105]",
-    },
-    {
-      Img: "/avatar.png",
-      name: " Daniel Smith",
-      category: "Someone",
-      nameCategory: "Eunice Smith (Wife)",
-      reasons: "Headache ",
-      patientId: "152-660-5591",
-      dateTime: "04/03/2020 - 10 AM",
-      location: "Johannesburg",
-      categoryColor: "text-[#F17105]",
-    },
-  ];
 
+
+  const [socket, setSocket] = useState<any>(null);
+
+  const [loading, setLoading] = useState(false);
   const [declineSession, setDeclineSession] = useState(false);
+  const [freeQuesDetails, setFreeQuesDetails] = useState(false);
+  const [openSmallModal, setOpenSMallModal] = useState(false);
+  const [freeQuesDetail, setFreeQuesDetail] = useState<
+  IQuestion | undefined
+>();
 
-  const handleDeclineSessionModal = () => {
-    setDeclineSession(!declineSession);
+
+
+
+
+  const handleOpenSMallsModal = () => {
+    setOpenSMallModal(!openSmallModal);
   };
 
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const productPerPage = 5;
-  const totalPages = Math.ceil(tableData.length / productPerPage);
-
-  // Pagination range logic with ellipsis
-  const paginationRange = () => {
-    const range: (number | string)[] = [];
-    const showEllipsis = 1;
-    if (totalPages <= showEllipsis + 2) {
-      // Show all pages if total pages is less than or equal to 6
-      for (let i = 1; i <= totalPages; i++) {
-        range.push(i);
-      }
-    } else if (currentPage <= showEllipsis) {
-      // Show the first few pages, an ellipsis, and the last page
-      for (let i = 1; i <= showEllipsis; i++) {
-        range.push(i);
-      }
-      range.push("...");
-      range.push(totalPages);
-    } else if (currentPage > totalPages - showEllipsis) {
-      // Show the first page, an ellipsis, and the last few pages
-      range.push(1);
-      range.push("...");
-      for (let i = totalPages - showEllipsis + 1; i <= totalPages; i++) {
-        range.push(i);
-      }
-    } else {
-      // Show the first page, an ellipsis, a few pages around the current page, an ellipsis, and the last page
-      range.push(1);
-      range.push("...");
-      for (let i = currentPage - 1; i <= currentPage + 1; i++) {
-        range.push(i);
-      }
-      range.push("...");
-      range.push(totalPages);
-    }
-    return range;
+  const handleFreeQuesDetailsModal = () => {
+    setFreeQuesDetails(!freeQuesDetails);
   };
 
-  // Sliced data for current page
-  const allPatients = tableData.slice(
-    (currentPage - 1) * productPerPage,
-    currentPage * productPerPage
+  const itemsPerPage = 10;
+  const totalPages = Math.ceil(
+    totalItems ? totalItems / itemsPerPage : 0 / itemsPerPage
   );
 
-  // Handle page change
-  const handlePageChange = (page: number | string) => {
-    if (typeof page === "number") {
-      setCurrentPage(page);
+  const handlePageClick = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
     }
   };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+  const pageNumbers = getPageNumbers(currentPage, totalPages);
+
+
+  const returnClickedQuestion= (id: string) => {
+    if (!questions) return;
+
+    const filteredQues = questions.filter((each) => each.id === id);
+
+    if (filteredQues.length > 0) {
+      setFreeQuesDetail(filteredQues[0]);
+    } else {
+      console.error("Question not found");
+    }
+  };
+
+
+  const handleJoinChat = async () => {
+    if (!currentUser?.id) return;
+    setLoading(true);
+
+    // Patient's Message
+    socket.emit("chatMessage", {
+      patientID: freeQuesDetail?.user?.id,
+      doctorID: currentUser?.id,
+      message: freeQuesDetail?.question,
+      attachments: [],
+      links: "",
+      sender: freeQuesDetail?.user?.id,
+      recipient: currentUser?.id,
+    });
+
+    // Doctor's Message
+    socket.emit("chatMessage", {
+      patientID: freeQuesDetail?.user?.id,
+      doctorID: currentUser?.id,
+      message: `Hi, I'm Dr. ${currentUser?.lastName}. Thank you for reaching out. I'll take a moment to review your question and respond with the best guidance.`,
+      attachments: [],
+      links: "",
+      sender: currentUser?.id,
+      recipient: freeQuesDetail?.user?.id,
+    });
+
+    toast.success("Greeting message sent!");
+
+    setLoading(false);
+    router.push("/dashboard/hospitaldb/messages");
+  };
+
+
+  useEffect(() => {
+    const socketInstance = io(SocketBaseURL, {
+      transports: ["websocket"],
+      reconnectionAttempts: 5,
+      timeout: 10000,
+    });
+    setSocket(socketInstance);
+  }, [currentUser?.id]);
 
   return (
     <div className="h-full ">
       <div className="bg-white rounded-xl shadow-xl p-2 ">
-        <h1 className="text-xl text-[#1B1B29] font-semibold pt-2">
+        <h1 className="text-xl text-[#1B1B29] font-semibold pt-2 ml-5">
           Free Health Care
         </h1>
 
@@ -185,7 +184,7 @@ const FreeHealthCare = () => {
               <tr className="">
                 {tableHeadData.map((item, index) => (
                   <th
-                    className="text-sm text-[#747678] font-medium  px-4"
+                    className="text-sm text-[#747678] font-medium whitespace-nowrap  px-4"
                     key={index}
                   >
                     {item.header}
@@ -195,50 +194,95 @@ const FreeHealthCare = () => {
             </thead>
 
             <tbody>
-              {allPatients.map((data, index) => (
-                <tr key={index} >
-                  <td
-                    className=" p-3 text-center cursor-pointer"
-                    onClick={() =>
-                      router.push(
-                        "/dashboard/hospitaldb/freeHealthCare/conversation"
-                      )
-                    }
+              {questions &&
+                questions.map((data, index) => (
+                  <tr
+                    key={index}
+                    className="cursor-pointer whitespace-nowrap hover:bg-gray-100"
+                    onClick={() => {
+                      handleFreeQuesDetailsModal();
+                      returnClickedQuestion(data?.id);
+                    }}
                   >
-                    <div className="flex items-center gap-3">
-                      <Image
-                        src={data.Img}
-                        width={24}
-                        height={24}
-                        alt="User img"
-                      />
-                      <p className="text-xs text-[#35384D] font-semibold">
-                        {data.name}
-                      </p>
-                    </div>
-                  </td>
-                  <td
-                    className={`${data.categoryColor} text-xs font-medium  p-3 text-center`}
-                  >
-                    {data.category}
-                  </td>
-                  <td className=" text-[#35384D] text-xs font-medium  p-3 text-center">
-                    {data.nameCategory}
-                  </td>
-                  <td className=" text-[#35384D] text-xs font-medium  p-3 text-center">
-                    {data.reasons}
-                  </td>
-                  <td className=" text-[#35384D] text-xs font-medium  p-3 text-center">
-                    {data.patientId}
-                  </td>
-                  <td className=" text-[#35384D] text-xs font-medium  p-3 text-center">
-                    {data.dateTime}
-                  </td>
-                  <td className=" text-[#35384D] text-xs font-medium  p-3 text-center">
-                    {data.location}
-                  </td>
+                    <td className="flex items-center text-[#35384D] text-xs font-medium  p-3">
+                      {(currentPage - 1) * itemsPerPage + (index + 1)}.
+                    </td>
+                    <td
+                      className=" p-3 text-center cursor-pointer "
+                      // onClick={() =>
+                      //   router.push(
+                      //     "/dashboard/hospitaldb/freeHealthCare/conversation"
+                      //   )
+                      // }
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full overflow-hidden">
+                          <Image
+                            src={data?.user?.avatar}
+                            alt="User img"
+                            width={32} 
+                            height={32}
+                            className="object-cover w-full h-full"
+                          />
+                        </div>
+                        <p className="text-xs text-[#35384D] font-semibold">
+                          {capitalizeEachWord(data?.user?.firstName)}{" "}
+                          {capitalizeEachWord(data?.user?.lastName)}
+                        </p>
+                      </div>
+                    </td>
+                    <td
+                      className={`${
+                        data.someoneElse?.relationship === "myself"
+                          ? "text-[#0075D9]"
+                          : "text-[#F17105]"
+                      } text-xs font-medium  p-3 text-center`}
+                    >
+                      {data.someoneElse?.relationship === "myself"
+                        ? "Personal"
+                        : "Someone"}
+                    </td>
+                    <td
+                      className={`text-[#35384D] text-xs font-medium  p-3 text-center`}
+                    >
+                      {data.someoneElse?.firstName
+                        ? `${data?.someoneElse?.firstName} ${data?.someoneElse?.lastName}`
+                        : "-"}
+                    </td>
+                    <td className=" text-[#35384D] text-xs font-medium  p-3 text-center">
+                      {data?.user?.patientID}
+                    </td>
+                    <td className={` text-[#35384D] text-xs font-medium  p-3 text-center ${
+                        data?.previouslyDiagnosed === "true"
+                          ? "text-red-500"
+                          : "text-green-500"
+                      }`}>
+                      {data?.previouslyDiagnosed === "true" ? "Yes" : "No"}
+                    </td>
+                    <td
+                      className={`text-xs font-medium p-3 text-center ${
+                        data?.medications === "true"
+                          ? "text-red-500"
+                          : "text-green-500"
+                      }`}
+                    >
+                      {data?.medications === "true" ? "Yes" : "No"}
+                    </td>
+                    <td className={`text-[#35384D] text-xs font-medium  p-3 text-center ${
+                        data?.allergies === "true"
+                          ? "text-red-500"
+                          : "text-green-500"
+                      }`}>
+                      {data?.allergies === "true" ? "Yes" : "No"}
+                    </td>
+                    {/* <td className=" text-[#35384D] text-xs font-medium  p-3 text-center">
+                    {data?.user?.country}
+                  </td> */}
+                    <td className=" text-[#35384D] text-xs font-medium  p-3 text-center">
+                      {new Date(data?.createdAt).toLocaleDateString()}
+                    </td>
 
-                  <td className=" p-3 text-center flex items-center gap-2">
+                    {/* <td className=" p-3 text-center flex items-center gap-2">
                     <button className=" w-[83px] rounded py-2 text-center text-sm text-white bg-[#00AA5A]">
                       Accept
                     </button>
@@ -248,9 +292,9 @@ const FreeHealthCare = () => {
                     >
                       Decline
                     </button>
-                  </td>
-                </tr>
-              ))}
+                  </td> */}
+                  </tr>
+                ))}
             </tbody>
           </table>
           {/* {tableHeadData.map((data, index)=>(
@@ -260,37 +304,41 @@ const FreeHealthCare = () => {
 
         {/* Pagination */}
         <div className="flex items-center justify-center px-7 py-3 gap-3">
-          {/* <div className='text-gray-500 text-sm font-bold'>
-            Page {currentPage} of {totalPages}
-          </div> */}
-
           <button
             disabled={currentPage === 1}
-            className="px-1 py-2.5 text-sm text-[#778CA2] font-normal "
-            onClick={() => handlePageChange(currentPage - 1)}
+            onClick={handlePrevPage}
+            className="shrink px-1 py-2.5 text-sm text-[#778CA2] font-normal hover:text-[#35384D]"
           >
             {"<"} Prev
           </button>
 
           <div className="flex gap-2">
-            {paginationRange().map((page, index) => (
-              <button
-                key={index}
-                className={`w-12 p-2.5 rounded-lg  text-sm font-medium text-black ${
-                  currentPage === page ? "bg-[#1E2230]  text-white" : " "
-                }`}
-                onClick={() => handlePageChange(page)}
-              >
-                {page}
-              </button>
-            ))}
+            {pageNumbers.map((page, index) =>
+              typeof page === "string" ? (
+                <span key={index} className="text-sm font-medium text-gray-500">
+                  ...
+                </span>
+              ) : (
+                <button
+                  key={index}
+                  onClick={() => handlePageClick(page)}
+                  className={`shrink w-12 p-2.5 rounded-lg ${
+                    currentPage === page
+                      ? "bg-[#1E2230] text-sm font-medium text-white"
+                      : "text-sm font-medium text-gray-500 hover:text-[#35384D]"
+                  }`}
+                >
+                  {page}
+                </button>
+              )
+            )}
           </div>
 
-          <div className="flex items-center gap-4 py-4">
+          <div className="shrink flex items-center gap-4 py-4">
             <button
               disabled={currentPage === totalPages}
-              className="px-1 py-2.5 text-sm text-[#778CA2] font-normal "
-              onClick={() => handlePageChange(currentPage + 1)}
+              onClick={handleNextPage}
+              className="px-1 py-2.5 text-sm text-[#778CA2] font-normal hover:text-[#35384D]"
             >
               Next {">"}
             </button>
@@ -298,9 +346,26 @@ const FreeHealthCare = () => {
         </div>
         {/* Pagination ends here */}
       </div>
-      {declineSession && (
+      {/* {declineSession && (
         <DeclineSessionModal onClose={handleDeclineSessionModal} />
+      )} */}
+
+      { freeQuesDetails && (
+        <FreeHealthQuesDetailsModal 
+          onClose={handleFreeQuesDetailsModal}
+          freeQuesDetail={freeQuesDetail}
+          onSmallModal={handleOpenSMallsModal}
+        />
       )}
+
+      {openSmallModal && (
+        <FreeQuesSmallModal 
+          onClose={handleOpenSMallsModal}
+          handleJoinChat={handleJoinChat}
+        />
+      )}
+
+      {loading && <Spinner />}
     </div>
   );
 };

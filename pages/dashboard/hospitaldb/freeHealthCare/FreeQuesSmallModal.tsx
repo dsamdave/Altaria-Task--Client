@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 import CustomButton from "@/components/Universal/CustomButton";
 
-interface AppointmentSmallModalProps {
+interface FreeQuesSmallModalProps {
   onClose: () => void;
-  actionIndex: number
+//   actionIndex: number
   handleJoinChat: () => void;
-  handleJoinCall: () => void;
-  handleCloseAppointment: (status: string) => void;
+//   handleJoinCall: () => void;
+//   handleCloseAppointment: (status: string) => void;
 }
-const AppointmentSmallModal: React.FC<AppointmentSmallModalProps> = ({ 
+const FreeQuesSmallModal: React.FC<FreeQuesSmallModalProps> = ({ 
   onClose, 
-  actionIndex,
   handleJoinChat,
-  handleJoinCall,
-  handleCloseAppointment,
+//   actionIndex,
+//   handleJoinCall,
+//   handleCloseAppointment,
 }) => {
 
   
@@ -25,35 +25,22 @@ const AppointmentSmallModal: React.FC<AppointmentSmallModalProps> = ({
           <p className="text-base text-[#383838] font-normal mt-8 text-center">
             Are you sure you want to <br /> 
             <span className="font-bold">
-              {
+            respond to this question?
+              {/* {
                 actionIndex === 1 ? "start a chat?" :
                 actionIndex === 2 ? "join a call?" :
                 actionIndex === 3 ? "conclude this appoinment?" :
                 actionIndex === 4 ? "accept this appoinment?" : 
                 actionIndex === 5 ? "decline this appoinment?" : ""
-              }
+              } */}
             </span>
           </p>
           <CustomButton
-            className={`rounded-[5px] p-[10px] text-center 
-              ${
-                actionIndex === 1 ? "bg-yellow-600" :
-                actionIndex === 2 ? "bg-green-600" :
-                actionIndex === 3 ? "bg-blue-600" :
-                actionIndex === 4 ? "bg-green-600" :
-                actionIndex === 5 ? "bg-red-600" : ""
-              } w-full border-0 text-lg font-bold text-white shrink border-transparent mt-8`}
+            className={`rounded-[5px] p-[10px] text-center bg-yellow-600 w-full border-0 text-lg font-bold text-white shrink border-transparent mt-8`}
             btnText={"Yes"}
             greenBorder={false}
             whiteBorder={false}
-            onclick={
-              actionIndex === 1 ? handleJoinChat :
-                actionIndex === 2 ? handleJoinCall :
-                actionIndex === 3 ? () => handleCloseAppointment("Concluded") : 
-                actionIndex === 4 ? () => handleCloseAppointment("Accepted") : 
-                actionIndex === 5 ? () => handleCloseAppointment("Declined") : onClose
-              
-            }
+            onclick={handleJoinChat}
           />
           <CustomButton
             className={`rounded-[5px] p-[10px] text-center 
@@ -71,4 +58,4 @@ const AppointmentSmallModal: React.FC<AppointmentSmallModalProps> = ({
   );
 };
 
-export default AppointmentSmallModal;
+export default FreeQuesSmallModal;

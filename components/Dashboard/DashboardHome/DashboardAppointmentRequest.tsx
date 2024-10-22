@@ -1,5 +1,6 @@
 import { IAppointment } from "@/pages/dashboard/hospitaldb/homedb";
 import { capitalizeEachWord } from "@/utilities";
+import dayjs from "dayjs";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
@@ -25,9 +26,9 @@ const DashboardAppointmentRequest: React.FC<IAppointmentProp> = ({
     {
       header: "Patient Name",
     },
-    {
-      header: "Reasons",
-    },
+    // {
+    //   header: "Reasons",
+    // },
     {
       header: "Patient ID",
     },
@@ -39,6 +40,9 @@ const DashboardAppointmentRequest: React.FC<IAppointmentProp> = ({
     },
     {
       header: "Type",
+    },
+    {
+      header: "Status",
     },
   ];
 
@@ -155,13 +159,19 @@ const DashboardAppointmentRequest: React.FC<IAppointmentProp> = ({
                         : "-"
                       }
                     </td>
-                    <td className=" text-[#35384D] text-xs font-medium  p-3 text-center">
+                    {/* <td className=" text-[#35384D] text-xs font-medium  p-3 text-center">
                       {data?.reason}
-                    </td>
+                    </td> */}
                     <td className=" text-[#35384D] text-xs font-medium  p-3 text-center">
                       {data?.patientID}
                     </td>
-                    <td className=" text-[#35384D] text-xs font-medium  p-3 text-center">
+                    <td
+                      className={`text-[#35384D] text-xs font-medium  p-3 text-center ${
+                        dayjs().isAfter(dayjs(data?.date))
+                          ? "text-[#FF3333]"
+                          : "text-[#10B981]"
+                      }`}
+                    >
                       {new Date(data?.date).toLocaleDateString()} - {data?.time}
                     </td>
                     <td className=" text-[#35384D] text-xs font-medium  p-3 text-center">
@@ -169,6 +179,21 @@ const DashboardAppointmentRequest: React.FC<IAppointmentProp> = ({
                     </td>
                     <td className=" text-[#35384D] text-xs font-medium  p-3 text-center ">
                       {data?.patientType}
+                    </td>
+                    <td
+                      className={`text-xs font-medium p-3 text-center ${
+                        data?.status === "Concluded"
+                          ? "text-green-500"
+                          : data?.status === "Declined"
+                          ? "text-red-500"
+                          : data?.status === "Pending"
+                          ? "text-yellow-500"
+                          : data?.status === "Accepted"
+                          ? "text-blue-500"
+                          : "text-[#35384D]"
+                      }`}
+                    >
+                      {data?.status}
                     </td>
                     {/* <td className=" p-3 text-center flex items-center gap-2">
                     <button>

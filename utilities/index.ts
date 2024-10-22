@@ -1,5 +1,9 @@
 import axios from "axios";
-
+import dayjs from "dayjs";
+import isToday from "dayjs/plugin/isToday";
+import isYesterday from "dayjs/plugin/isYesterday";
+dayjs.extend(isToday);
+dayjs.extend(isYesterday);
 export const capitalizeEachWord = (str?: string): string =>{
     if (typeof str !== 'string') {
       return '';
@@ -60,4 +64,15 @@ export const capitalizeEachWord = (str?: string): string =>{
     if (endPage < totalPages) pages.push(totalPages); // Always show the last page
 
     return pages;
+  };
+
+
+  export const formatTime = (date: string): string => {
+    return dayjs(date).format("hh:mm A"); // e.g., 10:18 AM
+  };
+
+  export   const formatDateLabel = (date: dayjs.Dayjs): string => {
+    if (dayjs(date).isToday()) return "Today";
+    if (dayjs(date).isYesterday()) return "Yesterday";
+    return dayjs(date).format("MMMM D, YYYY"); // e.g., October 21, 2024
   };

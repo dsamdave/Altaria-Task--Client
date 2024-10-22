@@ -6,6 +6,8 @@ import { SocketBaseURL } from "@/lib/query";
 import { useSelector } from "react-redux";
 import { useAppSelector } from "@/redux/store";
 import io from "socket.io-client";
+import { formatDateLabel, formatTime } from "@/utilities";
+import dayjs from "dayjs";
 
 interface IMsgProp {
   consultations: IConsultation[];
@@ -114,6 +116,9 @@ const Messages: React.FC<IMsgProp> = ({ consultations }) => {
     { iconSrc: "/video.svg" },
   ];
 
+  let lastDateLabel: string | null = null;
+  const divRef = useRef<HTMLDivElement | null>(null);
+
   const [activeChat, setActiveChat] = useState<number>(0);
   const [attach, setAttach] = useState(false);
   const [selectedChatID, setSelectedChatID] = useState("");
@@ -135,6 +140,12 @@ const Messages: React.FC<IMsgProp> = ({ consultations }) => {
   const [isTyping, setIsTyping] = useState(false);
 
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const scrollToBottom = () => {
+    if (divRef.current) {
+      divRef.current.scrollTop = divRef.current.scrollHeight;
+    }
+  };
 
   const handleChange = (e: any) => {
     setMsg(e.target.value);
@@ -269,6 +280,10 @@ const Messages: React.FC<IMsgProp> = ({ consultations }) => {
   }, [selectedChatID]);
 
   console.log({ messages });
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   return (
     <div
@@ -444,63 +459,82 @@ const Messages: React.FC<IMsgProp> = ({ consultations }) => {
             <div
               className="max-h-[418px] overflow-y-auto px-4 py-2.5 lg:max-h-[500px] xl:max-h-[570px]"
               style={{ paddingBottom: "100px" }}
+              ref={divRef}
             >
-              {/* Chat period/date */}
+              
+
+              <>
+      {messages &&
+        messages.map((data, idx) => {
+          const messageDate = dayjs(data.createdAt);
+          const currentLabel = formatDateLabel(messageDate);
+
+          const shouldDisplayLabel = lastDateLabel !== currentLabel;
+          lastDateLabel = currentLabel;
+
+          return (
+            <div key={idx}>
+              {/* Display date label when it changes */}
+              {shouldDisplayLabel && (
+                // <>
+                //   <hr className="my-4" />
+                //   <p className="text-center text-red-600 text-sm font-semibold">{currentLabel}</p>
+                // </>
+
               <div className="flex items-center gap-1">
-                <div className=" border-b w-5 h-1 border-dashed border-[#A2C0D4]" />
-                <p className="text-[10px] text-[#414D55] font-bold">TODAY</p>
-                <div className=" border-b flex-1 h-1 border-dashed border-[#A2C0D4]" />
-              </div>
-              {/* Chat content here */}
+              <div className=" border-b w-5 h-1 border-dashed border-[#A2C0D4]" />
+              <p className="text-[10px] text-[#414D55] font-bold">{currentLabel}</p>
+              <div className=" border-b flex-1 h-1 border-dashed border-[#A2C0D4]" />
+            </div>
+                
+              )}
 
-              {messages &&
-                messages.map((data, idx) =>
-                  data?.doctorID === userID ? (
-                    <div>
-                      <ResponseMessage
-                        key={idx}
-                        time="10:18 am"
-                        message={data?.message}
-                        attached=""
-                        userName="Me"
-                      />
-                      {
-                        data.attachments[0]?.url && data?.attachments?.map((item, idx) => (
-
-                          <UserMessage attached={`/${item}`} time="04:17 am" />
-                        )) 
-                          
-                         
-                      }
-                    </div>
-                  ) : (
-                    <div>
+              {data.doctorID === userID ? (
+                <div>
+                  <ResponseMessage
+                    time={formatTime(data.createdAt)} 
+                    message={data.message}
+                    attached=""
+                    userName="Me"
+                  />
+                  {data.attachments[0]?.url && data.attachments.length > 0 &&
+                    data.attachments.map((item, idx) => (
                       <UserMessage
                         key={idx}
-                        attached=""
-                        // userName={messageData[activeChat].userName}
-                        time="04:12 am"
-                        message={data?.message}
+                        attached={`/${item.url}`}
+                        time={formatTime(data.createdAt)}
                       />
+                    ))}
+                </div>
+              ) : (
+                <div>
+                  <UserMessage
+                    key={idx}
+                    attached=""
+                    time={formatTime(data.createdAt)}
+                    message={data.message}
+                  />
 
-                      {
-                        data.attachments[0]?.url && data?.attachments?.map((item, idx) => (
-
-                          <UserMessage attached={`/${item}`} time="04:17 am" />
-                        )) 
-                          
-                         
-                      }
-
-                    </div>
-                  )
-                )}
+                  {data.attachments[0]?.url && data.attachments.length > 0 &&
+                    data.attachments.map((item, idx) => (
+                      <UserMessage
+                        key={idx}
+                        attached={`/${item.url}`}
+                        time={formatTime(data.createdAt)}
+                      />
+                    ))}
+                </div>
+              )}
+            </div>
+          );
+        })}
+    </>
 
               {/*  CHAT CONTENTS ENDS */}
             </div>
             {/* Message input area */}
+
             <div className="flex items-start gap-2 border-t border-[#F1F5F8] w-full p-3 mt-4 absolute bottom-0">
-              {/* Attach options */}
               {attach && (
                 <div className="flex flex-col gap-1 items-center justify-center w-[44px] rounded-[22px] z-50 absolute right-5 -top-36 shadow-xl">
                   {attachOptions.map((options, index) => (
@@ -517,13 +551,12 @@ const Messages: React.FC<IMsgProp> = ({ consultations }) => {
                 </div>
               )}
 
-              {/* Attach options ends here */}
               <textarea
                 name="msg"
                 id="msg"
                 cols={30}
                 rows={4}
-                className="flex-1 p-2 text-black"
+                className="flex-1 text-black placeholder:text-center p-4"
                 placeholder="Start typing here"
                 value={msg}
                 onChange={handleChange}

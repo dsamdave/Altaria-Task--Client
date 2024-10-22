@@ -8,20 +8,20 @@ import { IUser } from "@/utilities/typings";
 import { capitalizeEachWord, getCityFromCoordinates } from "@/utilities";
 import { IAppointment } from "../homedb";
 import dayjs from "dayjs";
+import { IQuestion } from ".";
 
-interface AppointmentsDetailsModalProps {
+interface FreeHealthQuesDetailsModalProps {
   onClose: () => void;
-  onDelete: () => void;
-  appointmentDetail: IAppointment | undefined;
-  onSmallModal: () => void;
-  setActionIndex: (actionIndex: number) => void;
+  freeQuesDetail: IQuestion | undefined;
+    onSmallModal: () => void;
+  //   setActionIndex: (actionIndex: number) => void;
 }
-const AppointmentsDetailsModal: React.FC<AppointmentsDetailsModalProps> = ({
+const FreeHealthQuesDetailsModal: React.FC<FreeHealthQuesDetailsModalProps> = ({
   onClose,
-  onDelete,
-  appointmentDetail,
+  freeQuesDetail,
   onSmallModal,
-  setActionIndex,
+  //   appointmentDetail,
+  //   setActionIndex,
 }) => {
   const router = useRouter();
 
@@ -29,23 +29,25 @@ const AppointmentsDetailsModal: React.FC<AppointmentsDetailsModalProps> = ({
 
   // console.log({ appointmentDetail });
 
-  useEffect(() => {
-    const getUserCity = async () => {
-      if (
-        !appointmentDetail?.user?.latitude &&
-        !appointmentDetail?.user?.longitude
-      ) {
-        return;
-      }
-      const citi = await getCityFromCoordinates(
-        appointmentDetail?.user?.latitude,
-        appointmentDetail?.user?.longitude
-      );
-      setCity(citi);
-    };
+  //   useEffect(() => {
+  //     const getUserCity = async () => {
+  //       if (
+  //         !appointmentDetail?.user?.latitude &&
+  //         !appointmentDetail?.user?.longitude
+  //       ) {
+  //         return;
+  //       }
+  //       const citi = await getCityFromCoordinates(
+  //         appointmentDetail?.user?.latitude,
+  //         appointmentDetail?.user?.longitude
+  //       );
+  //       setCity(citi);
+  //     };
 
-    getUserCity();
-  }, [appointmentDetail]);
+  //     getUserCity();
+  //   }, [appointmentDetail]);
+
+  console.log({ freeQuesDetail });
 
   return (
     <div className="relative z-30 ">
@@ -58,7 +60,7 @@ const AppointmentsDetailsModal: React.FC<AppointmentsDetailsModalProps> = ({
             <div className="w-full sm:w-[550px] lg:w-full py-10 h-auto px-3 lg:pl-12 ">
               <div className="mb-5 flex items-center justify-between">
                 <h1 className="text-lg lg:text-xl text-black font-bold">
-                  Appointment Details
+                  Free Health Question Details
                 </h1>
 
                 <CloseFillIcon
@@ -83,7 +85,7 @@ const AppointmentsDetailsModal: React.FC<AppointmentsDetailsModalProps> = ({
                       type="text"
                       value=""
                       className={`w-[220px] block w-auto rounded bg-white px-3 py-2.5 text-[16px] font-normal text-[#565656] outline-none transition-colors placeholder:text-[#333333]`}
-                      placeholder={appointmentDetail?.user?.firstName}
+                      placeholder={freeQuesDetail?.user?.firstName}
                       defaultValue=""
                     />
                   </div>
@@ -99,7 +101,7 @@ const AppointmentsDetailsModal: React.FC<AppointmentsDetailsModalProps> = ({
                       type="text"
                       value=""
                       className={`w-[220px] block w-auto rounded bg-white px-3 py-2.5 text-[16px] font-normal text-[#565656] outline-none transition-colors placeholder:text-[#333333]`}
-                      placeholder={appointmentDetail?.user?.lastName}
+                      placeholder={freeQuesDetail?.user?.lastName}
                       defaultValue=""
                     />
                   </div>
@@ -115,23 +117,7 @@ const AppointmentsDetailsModal: React.FC<AppointmentsDetailsModalProps> = ({
                       type="text"
                       value=""
                       className={`w-[220px] block w-auto rounded bg-white px-3 py-2.5 text-[16px] font-normal text-[#565656] outline-none transition-colors placeholder:text-[#333333]`}
-                      placeholder={appointmentDetail?.patientID}
-                      defaultValue=""
-                    />
-                  </div>
-                </div>
-
-                <div className="">
-                  <label className="block text-sm font-medium text-gray-700">
-                    Patient Type
-                  </label>
-                  <div className="relative mt-1 rounded-[3px] border border-[#CED4DA]">
-                    <input
-                      readOnly
-                      type="text"
-                      value=""
-                      className={`w-[220px] block w-auto rounded bg-white px-3 py-2.5 text-[16px] font-normal text-[#565656] outline-none transition-colors placeholder:text-[#333333]`}
-                      placeholder={appointmentDetail?.patientType}
+                      placeholder={freeQuesDetail?.user?.patientID}
                       defaultValue=""
                     />
                   </div>
@@ -140,12 +126,12 @@ const AppointmentsDetailsModal: React.FC<AppointmentsDetailsModalProps> = ({
 
               {/* Bio Data */}
 
-              <h6 className="mt-10 mb-3 text-black">Bio Data</h6>
+              <h6 className="mt-10 mb-3 text-black">Patient Details</h6>
 
               <div className="flex items-center  gap-3 flex-wrap ">
                 <div className="">
                   <label className="block text-sm font-medium text-gray-700">
-                    Gender
+                    First name
                   </label>
                   <div className="relative mt-1 rounded-[3px] border border-[#CED4DA]">
                     <input
@@ -153,10 +139,7 @@ const AppointmentsDetailsModal: React.FC<AppointmentsDetailsModalProps> = ({
                       type="text"
                       value=""
                       className={`w-[220px] block w-auto rounded bg-white px-3 py-2.5 text-[16px] font-normal text-[#565656] outline-none transition-colors placeholder:text-[#333333]`}
-                      placeholder={
-                        appointmentDetail?.user?.patientInfo?.basicInformation
-                          ?.gender
-                      }
+                      placeholder={freeQuesDetail?.someoneElse?.firstName}
                       defaultValue=""
                     />
                   </div>
@@ -164,7 +147,7 @@ const AppointmentsDetailsModal: React.FC<AppointmentsDetailsModalProps> = ({
 
                 <div className="">
                   <label className="block text-sm font-medium text-gray-700">
-                    Date of birth
+                    Last Name
                   </label>
                   <div className="relative mt-1 rounded-[3px] border border-[#CED4DA]">
                     <input
@@ -172,10 +155,7 @@ const AppointmentsDetailsModal: React.FC<AppointmentsDetailsModalProps> = ({
                       type="text"
                       value=""
                       className={`w-[220px] block w-auto rounded bg-white px-3 py-2.5 text-[16px] font-normal text-[#565656] outline-none transition-colors placeholder:text-[#333333]`}
-                      placeholder={
-                        appointmentDetail?.user?.patientInfo?.basicInformation
-                          ?.dateOfBirth
-                      }
+                      placeholder={freeQuesDetail?.someoneElse?.lastName}
                       defaultValue=""
                     />
                   </div>
@@ -183,7 +163,7 @@ const AppointmentsDetailsModal: React.FC<AppointmentsDetailsModalProps> = ({
 
                 <div className="">
                   <label className="block text-sm font-medium text-gray-700">
-                    Email
+                    Date of Birth
                   </label>
                   <div className="relative mt-1 rounded-[3px] border border-[#CED4DA]">
                     <input
@@ -191,7 +171,7 @@ const AppointmentsDetailsModal: React.FC<AppointmentsDetailsModalProps> = ({
                       type="text"
                       value=""
                       className={`w-[220px] block w-auto rounded bg-white px-3 py-2.5 text-[16px] font-normal text-[#565656] outline-none transition-colors placeholder:text-[#333333]`}
-                      placeholder={appointmentDetail?.user?.email}
+                      placeholder={freeQuesDetail?.someoneElse?.dateOfBirth}
                       defaultValue=""
                     />
                   </div>
@@ -199,76 +179,14 @@ const AppointmentsDetailsModal: React.FC<AppointmentsDetailsModalProps> = ({
 
                 <div className="">
                   <label className="block text-sm font-medium text-gray-700">
-                    Phone Number
+                    Relationship
                   </label>
                   <div className="relative mt-1 rounded-[3px] border border-[#CED4DA]">
                     <input
                       readOnly
                       type="text"
                       className={`w-[220px] block w-auto rounded bg-white px-3 py-2.5 text-[16px] font-normal text-[#565656] outline-none transition-colors placeholder:text-[#333333]`}
-                      placeholder={appointmentDetail?.user?.phoneNumber}
-                    />
-                  </div>
-                </div>
-
-                <div className="">
-                  <label className="block text-sm font-medium text-gray-700">
-                    Country Code
-                  </label>
-                  <div className="relative mt-1 rounded-[3px] border border-[#CED4DA]">
-                    <input
-                      readOnly
-                      type="text"
-                      className={`w-[220px] block w-auto rounded bg-white px-3 py-2.5 text-[16px] font-normal text-[#565656] outline-none transition-colors placeholder:text-[#333333]`}
-                      placeholder={
-                        appointmentDetail?.user?.patientInfo?.basicInformation
-                          ?.contactInfo?.zipCode
-                      }
-                    />
-                  </div>
-                </div>
-
-                <div className="">
-                  <label className="block text-sm font-medium text-gray-700">
-                    City
-                  </label>
-                  <div className="relative mt-1 rounded-[3px] border border-[#CED4DA]">
-                    <input
-                      readOnly
-                      type="text"
-                      className={`w-[220px] block w-auto rounded bg-white px-3 py-2.5 text-[16px] font-normal text-[#565656] outline-none transition-colors placeholder:text-[#333333]`}
-                      placeholder={city}
-                    />
-                  </div>
-                </div>
-
-                <div className="">
-                  <label className="block text-sm font-medium text-gray-700">
-                    Country
-                  </label>
-                  <div className="relative mt-1 rounded-[3px] border border-[#CED4DA]">
-                    <input
-                      readOnly
-                      type="text"
-                      className={`w-[220px] block w-auto rounded bg-white px-3 py-2.5 text-[16px] font-normal text-[#565656] outline-none transition-colors placeholder:text-[#333333]`}
-                      placeholder={appointmentDetail?.user?.country}
-                    />
-                  </div>
-                </div>
-
-                <div className="">
-                  <label className="block text-sm font-medium text-gray-700">
-                    Languages
-                  </label>
-                  <div className=" w-[700px] relative mt-1 rounded-[3px] border border-[#CED4DA]">
-                    <input
-                      readOnly
-                      type="text"
-                      onChange={() => {}}
-                      className={`w-[220px] block w-auto rounded bg-white px-3 py-2.5 text-[16px] font-normal text-[#565656] outline-none transition-colors placeholder:text-[#333333]`}
-                      placeholder={appointmentDetail?.user?.patientInfo?.basicInformation?.languages.join(
-                        ", "
-                      )}
+                      placeholder={freeQuesDetail?.someoneElse?.relationship}
                     />
                   </div>
                 </div>
@@ -278,13 +196,13 @@ const AppointmentsDetailsModal: React.FC<AppointmentsDetailsModalProps> = ({
 
               <div className="mt-10 mb-3">
                 <label className="block text-sm font-medium text-gray-700 mt-2">
-                  Appointment Details
+                  Health Details
                 </label>
 
-                <div className="flex items-center  gap-3 flex-wrap ">
+                <div className="flex items-center  gap-3 flex-wrap mt-3">
                   <div className="">
                     <label className="block text-sm font-medium text-gray-700">
-                      Category
+                      Allergies
                     </label>
                     <div className=" relative mt-1 rounded-[3px] border border-[#CED4DA]">
                       <input
@@ -293,7 +211,7 @@ const AppointmentsDetailsModal: React.FC<AppointmentsDetailsModalProps> = ({
                         onChange={() => {}}
                         className={`w-[220px] block w-auto rounded bg-white px-3 py-2.5 text-[16px] font-normal text-[#565656] outline-none transition-colors placeholder:text-[#333333]`}
                         placeholder={capitalizeEachWord(
-                          appointmentDetail?.category
+                          freeQuesDetail?.allergies === "true" ? "Yes" : "No"
                         )}
                       />
                     </div>
@@ -301,7 +219,7 @@ const AppointmentsDetailsModal: React.FC<AppointmentsDetailsModalProps> = ({
 
                   <div className="">
                     <label className="block text-sm font-medium text-gray-700">
-                      Appointment Type
+                      Medications
                     </label>
                     <div className=" relative mt-1 rounded-[3px] border border-[#CED4DA]">
                       <input
@@ -309,48 +227,8 @@ const AppointmentsDetailsModal: React.FC<AppointmentsDetailsModalProps> = ({
                         type="text"
                         onChange={() => {}}
                         className={`w-[220px] block w-auto rounded bg-white px-3 py-2.5 text-[16px] font-normal text-[#565656] outline-none transition-colors placeholder:text-[#333333]`}
-                        placeholder={appointmentDetail?.appointMentType}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="">
-                    <label className="block text-sm font-medium text-gray-700">
-                      Appointment Nature
-                    </label>
-                    <div className=" relative mt-1 rounded-[3px] border border-[#CED4DA]">
-                      <input
-                        readOnly
-                        type="text"
-                        onChange={() => {}}
-                        className={`w-[220px] block w-auto rounded bg-white px-3 py-2.5 text-[16px] font-normal text-[#565656] outline-none transition-colors placeholder:text-[#333333]`}
-                        placeholder={appointmentDetail?.appointMentNature}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="">
-                    <label className="block text-sm font-medium text-gray-700">
-                      Date
-                    </label>
-                    <div className=" relative mt-1 rounded-[3px] border border-[#CED4DA]">
-                      <input
-                        readOnly
-                        type="text"
-                        onChange={() => {}}
-                        className={`w-[220px] block w-auto rounded bg-white px-3 py-2.5 text-[16px] font-normal  outline-none transition-colors 
-                            ${
-                              dayjs().isAfter(dayjs(appointmentDetail?.date))
-                                ? "placeholder:text-[#FF3333]"
-                                : "placeholder:text-[#10B981]"
-                            }
-                            `}
                         placeholder={
-                          appointmentDetail?.date
-                            ? new Date(
-                                appointmentDetail?.date
-                              ).toLocaleDateString()
-                            : ""
+                          freeQuesDetail?.medications === "true" ? "Yes" : "No"
                         }
                       />
                     </div>
@@ -358,53 +236,118 @@ const AppointmentsDetailsModal: React.FC<AppointmentsDetailsModalProps> = ({
 
                   <div className="">
                     <label className="block text-sm font-medium text-gray-700">
-                      Time Slot
+                      Previously Diagnozised
                     </label>
                     <div className=" relative mt-1 rounded-[3px] border border-[#CED4DA]">
                       <input
                         readOnly
                         type="text"
                         onChange={() => {}}
-                        className={`w-[220px] block w-auto rounded bg-white px-3 py-2.5 text-[16px] font-normal  outline-none transition-colors 
-                            ${
-                              dayjs().isAfter(dayjs(appointmentDetail?.date))
-                                ? "placeholder:text-[#FF3333]"
-                                : "placeholder:text-[#10B981]"
+                        className={`w-[220px] block w-auto rounded bg-white px-3 py-2.5 text-[16px] font-normal text-[#565656] outline-none transition-colors placeholder:text-[#333333]`}
+                        placeholder={
+                          freeQuesDetail?.previouslyDiagnosed === "true"
+                            ? "Yes"
+                            : "No"
+                        }
+                      />
+                    </div>
+                  </div>
+
+                  {freeQuesDetail?.previouslyDiagnosed === "true" && (
+                    <>
+                      <div className="">
+                        <label className="block text-sm font-medium text-gray-700">
+                          Condition Name
+                        </label>
+                        <div className=" relative mt-1 rounded-[3px] border border-[#CED4DA]">
+                          <input
+                            readOnly
+                            type="text"
+                            onChange={() => {}}
+                            className={`w-[220px] block w-auto rounded bg-white px-3 py-2.5 text-[16px] font-normal text-[#565656] outline-none transition-colors placeholder:text-[#333333]`}
+                            placeholder={
+                              freeQuesDetail?.condition?.conditionName
                             }
-                            `}
-                        placeholder={appointmentDetail?.time}
-                      />
-                    </div>
-                  </div>
+                          />
+                        </div>
+                      </div>
 
-                  <div className="">
+                      <div className="">
+                        <label className="block text-sm font-medium text-gray-700">
+                          Condition Time
+                        </label>
+                        <div className=" relative mt-1 rounded-[3px] border border-[#CED4DA]">
+                          <input
+                            readOnly
+                            type="text"
+                            onChange={() => {}}
+                            className={`w-[220px] block w-auto rounded bg-white px-3 py-2.5 text-[16px] font-normal text-[#565656] outline-none transition-colors placeholder:text-[#333333]`}
+                            placeholder={
+                              freeQuesDetail?.condition?.conditionTime
+                            }
+                          />
+                        </div>
+                      </div>
+
+                      <div className="">
+                        <label className="block text-sm font-medium text-gray-700">
+                          Currently Have this Condition
+                        </label>
+                        <div className=" relative mt-1 rounded-[3px] border border-[#CED4DA]">
+                          <input
+                            readOnly
+                            type="text"
+                            onChange={() => {}}
+                            className={`w-[220px] block w-auto rounded bg-white px-3 py-2.5 text-[16px] font-normal text-[#565656] outline-none transition-colors placeholder:text-[#333333]`}
+                            placeholder={
+                              freeQuesDetail?.condition?.currentlyHaveThisCondition ? "Yes" : "No"
+                            }
+                          />
+                        </div>
+                      </div>
+
+                      <div className="">
                     <label className="block text-sm font-medium text-gray-700">
-                      Appointment Status
+                      Optional Note
                     </label>
-                    <div className=" relative mt-1 rounded-[3px] border border-[#CED4DA]">
-                      <input
+                    <div className=" w-[50vw] relative mt-1 rounded-[3px] border border-[#CED4DA]">
+                      <textarea
                         readOnly
-                        type="text"
+                        rows={3}
                         onChange={() => {}}
-                        className={`w-[220px] block w-auto rounded bg-white px-3 py-2.5 text-[16px] font-normal  outline-none transition-colors  ${
-                          appointmentDetail?.status === "Concluded"
-                            ? "placeholder:text-green-500"
-                            : appointmentDetail?.status === "Declined"
-                            ? "placeholder:text-red-500"
-                            : appointmentDetail?.status === "Pending"
-                            ? "placeholder:text-yellow-500"
-                            : appointmentDetail?.status === "Accepted"
-                            ? "placeholder:text-blue-500"
-                            : "placeholder:text-[#35384D]"
-                        }`}
-                        placeholder={appointmentDetail?.status}
+                        className={`w-[220px] block w-auto rounded bg-white px-3 py-2.5 text-[16px] font-normal text-[#565656] outline-none transition-colors placeholder:text-[#333333]`}
+                        placeholder={freeQuesDetail?.condition?.optionalNote}
+                      />
+                    </div>
+                  </div>
+                    </>
+                  )}
+
+                  
+
+                 
+
+
+                  
+
+                  <div className="">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Health Question
+                    </label>
+                    <div className=" w-[50vw] relative mt-1 rounded-[3px] border border-[#CED4DA]">
+                      <textarea
+                        readOnly
+                        rows={3}
+                        onChange={() => {}}
+                        className={`w-[220px] block w-auto rounded bg-white px-3 py-2.5 text-[16px] font-normal text-[#565656] outline-none transition-colors placeholder:text-[#333333]`}
+                        placeholder={freeQuesDetail?.question}
                       />
                     </div>
                   </div>
 
                   <div className="">
                     <label className="block text-sm font-medium text-gray-700">
-                      Date of Booking
+                      Submission Date
                     </label>
                     <div className=" relative mt-1 rounded-[3px] border border-[#CED4DA]">
                       <input
@@ -413,87 +356,19 @@ const AppointmentsDetailsModal: React.FC<AppointmentsDetailsModalProps> = ({
                         onChange={() => {}}
                         className={`w-[220px] block w-auto rounded bg-white px-3 py-2.5 text-[16px] font-normal  outline-none transition-colors placeholder:text-[#333333]`}
                         placeholder={
-                          appointmentDetail?.createdAt
+                          freeQuesDetail?.createdAt
                             ? new Date(
-                                appointmentDetail?.createdAt
+                                freeQuesDetail?.createdAt
                               ).toLocaleDateString()
                             : ""
                         }
                       />
                     </div>
                   </div>
-
-                  <div className="">
-                    <label className="block text-sm font-medium text-gray-700">
-                      Reason For Appointment
-                    </label>
-                    <div className=" w-[50vw] relative mt-1 rounded-[3px] border border-[#CED4DA]">
-                      <textarea
-                        readOnly
-                        rows={3}
-                        onChange={() => {}}
-                        className={`w-[220px] block w-auto rounded bg-white px-3 py-2.5 text-[16px] font-normal text-[#565656] outline-none transition-colors placeholder:text-[#333333]`}
-                        placeholder={appointmentDetail?.reason}
-                      />
-                    </div>
-                  </div>
                 </div>
               </div>
 
-              {/* Insurance Info */}
-              <div className="mt-10 mb-3">
-                <label className="block text-sm font-medium text-gray-700 mt-2">
-                  Insurance Details
-                </label>
-
-                <div className="flex items-center  gap-3 flex-wrap ">
-                  <div className="">
-                    <label className="block text-sm font-medium text-gray-700">
-                      Insurance Provider
-                    </label>
-                    <div className=" relative mt-1 rounded-[3px] border border-[#CED4DA]">
-                      <input
-                        readOnly
-                        type="text"
-                        onChange={() => {}}
-                        className={`w-[220px] block w-auto rounded bg-white px-3 py-2.5 text-[16px] font-normal text-[#565656] outline-none transition-colors placeholder:text-[#333333]`}
-                        placeholder={appointmentDetail?.insuranceProvider}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="">
-                    <label className="block text-sm font-medium text-gray-700">
-                      Policy Number
-                    </label>
-                    <div className=" relative mt-1 rounded-[3px] border border-[#CED4DA]">
-                      <input
-                        readOnly
-                        type="text"
-                        onChange={() => {}}
-                        className={`w-[220px] block w-auto rounded bg-white px-3 py-2.5 text-[16px] font-normal text-[#565656] outline-none transition-colors placeholder:text-[#333333]`}
-                        placeholder={appointmentDetail?.policyNumber}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="">
-                    <label className="block text-sm font-medium text-gray-700">
-                      Group Number
-                    </label>
-                    <div className=" relative mt-1 rounded-[3px] border border-[#CED4DA]">
-                      <input
-                        readOnly
-                        type="text"
-                        onChange={() => {}}
-                        className={`w-[220px] block w-auto rounded bg-white px-3 py-2.5 text-[16px] font-normal text-[#565656] outline-none transition-colors placeholder:text-[#333333]`}
-                        placeholder={appointmentDetail?.groupNumber}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              {/* Insurance Info */}
+              
 
               {/* Action Button */}
               <div className="flex items-center justify-centre gap-3 mt-16">
@@ -510,39 +385,39 @@ const AppointmentsDetailsModal: React.FC<AppointmentsDetailsModalProps> = ({
                   <button
                     className={` rounded-[10px] border-2 py-3 text-[16px] font-semibold  shrink p-[10px] rounded text-center text-lg font-bold shadow-xl w-full sm:w-[190px] text-[#FBBF24] bg-white border border-[#FBBF24]`}
                     onClick={() => {
-                      setActionIndex(1);
+                    //   setActionIndex(1);
                       onSmallModal();
                     }}
                   >
-                    Start Chat
+                    Respond
                   </button>
                 </div>
 
                 {/* Call Button */}
-                <div className="w-full lg:w-auto">
+                {/* <div className="w-full lg:w-auto">
                   <button
                     className={` rounded-[10px] border-2 py-3 text-[16px] font-semibold shrink p-[10px] rounded text-center text-lg font-bold shadow-xl w-full sm:w-[190px] text-[#10B981] bg-white border border-[#10B981] `}
-                    onClick={() => {
-                      setActionIndex(2);
-                      onSmallModal();
-                    }}
+                    // onClick={() => {
+                    //   setActionIndex(2);
+                    //   onSmallModal();
+                    // }}
                   >
                     Join Call
                   </button>
-                </div>
+                </div> */}
 
                 {/* Close Appointment Button */}
-                <div className="w-full lg:w-auto">
+                {/* <div className="w-full lg:w-auto">
                   <button
                     className={` rounded-[10px] border-2 py-3 text-[16px] font-semibold shrink p-[10px] rounded text-center text-lg font-bold shadow-xl w-full sm:w-[190px] text-[#3B82F6] bg-white border border-[#3B82F6] `}
-                    onClick={() => {
-                      setActionIndex(3);
-                      onSmallModal();
-                    }}
+                    // onClick={() => {
+                    //   setActionIndex(3);
+                    //   onSmallModal();
+                    // }}
                   >
                     Close Appointment
                   </button>
-                </div>
+                </div> */}
 
                 <CustomButton
                   className={`shrink p-[10px] rounded text-center text-lg font-bold shadow-xl w-full sm:w-[190px] text-[#F60707] bg-white border border-[#F60707]`}
@@ -561,4 +436,4 @@ const AppointmentsDetailsModal: React.FC<AppointmentsDetailsModalProps> = ({
   );
 };
 
-export default AppointmentsDetailsModal;
+export default FreeHealthQuesDetailsModal;

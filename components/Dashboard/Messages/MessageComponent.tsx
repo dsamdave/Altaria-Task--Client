@@ -62,9 +62,10 @@ export const ResponseMessage: React.FC<ResponseMessageProps> = ({
     <div className="max-w-[536px]">
       <div className="flex items-center justify-end gap-3">
         <p className="text-xs text-[#90A1AC] font-normal">{userName}</p>
-        <p className="text-xs text-[#90A1AC] font-normal">{time}</p>
+        <p className=" text-xs text-[#90A1AC] font-normal">{time}</p>
       </div>
-      <p className="text-sm text-[#414D55] font-normal px-3 py-2 w-fit bg-[#DEEEFF] rounded-lg">
+      <p className="text-sm text-[#414D55] font-normal px-3 py-2 w-fit bg-[#DEEEFF] rounded-lg w-[300px] text-wrap"
+      >
         {message}
       </p>
       {attached !== "" ? (

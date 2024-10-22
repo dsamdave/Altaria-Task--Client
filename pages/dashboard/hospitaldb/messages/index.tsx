@@ -11,7 +11,7 @@ const index = () => {
 
   const { currentUser } = useAppSelector((state) => state.auth);
 
-  console.log({id: currentUser?.id})
+  // console.log({id: currentUser?.id})
 
     const [consultations, setConsultations] = useState<IConsultation[]>([]);
     const [socket, setSocket] = useState<any>(null);
@@ -67,7 +67,6 @@ const index = () => {
 
   return (
     <div className="p-5 bg-[#ECF0FF] bg-white"
-    // style={{height: "60vh"}}
     >
       <div className="bg-white rounded-[15px] p-3">
       <h1 className="text-3xl text-[#414D55] font-bold">Message Chat</h1>

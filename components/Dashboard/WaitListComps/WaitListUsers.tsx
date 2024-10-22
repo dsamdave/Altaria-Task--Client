@@ -146,25 +146,25 @@ const WaitListUsers: React.FC<IWaitList> = ({
           <button
             disabled={currentPage === 1}
             onClick={handlePrevPage}
-            className="shrink px-1 py-2.5 text-sm text-[#778CA2] font-normal"
+            className="shrink px-1 py-2.5 text-sm text-[#778CA2] font-normal hover:text-[#35384D]"
           >
             {"<"} Prev
           </button>
 
           <div className="flex gap-2">
             {pageNumbers.map((page, index) =>
-              typeof page === "string" ? ( // Check if the page is a string (i.e., "...")
+              typeof page === "string" ? (
                 <span key={index} className="text-sm font-medium text-gray-500">
                   ...
                 </span>
               ) : (
                 <button
                   key={index}
-                  onClick={() => handlePageClick(page)} // Only use the button if page is a number
+                  onClick={() => handlePageClick(page)}
                   className={`shrink w-12 p-2.5 rounded-lg ${
                     currentPage === page
                       ? "bg-[#1E2230] text-sm font-medium text-white"
-                      : "text-sm font-medium text-gray-500"
+                      : "text-sm font-medium text-gray-500 hover:text-[#35384D]"
                   }`}
                 >
                   {page}
@@ -177,7 +177,7 @@ const WaitListUsers: React.FC<IWaitList> = ({
             <button
               disabled={currentPage === totalPages}
               onClick={handleNextPage}
-              className="px-1 py-2.5 text-sm text-[#778CA2] font-normal"
+              className="px-1 py-2.5 text-sm text-[#778CA2] font-normal hover:text-[#35384D]"
             >
               Next {">"}
             </button>

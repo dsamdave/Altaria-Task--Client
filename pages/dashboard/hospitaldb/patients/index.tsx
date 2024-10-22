@@ -24,7 +24,9 @@ const Index = () => {
     `/patients?page=${currentPage}`,  
   );
 
-  console.log({ data });
+  if(error){
+    return <NoPatientData />
+  }
 
   return (
     <div className="p-5 bg-[#ECF0FF] h-full" style={{ height: "100vh" }}>

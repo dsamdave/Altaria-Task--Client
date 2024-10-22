@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Auth from "@/components/Universal/Auth";
 
-const NoPatientData = () => {
+const NoFreeHealthQues = () => {
     return (
       <div className="p-5 bg-[#ECF0FF] h-full"
       style={{height: "100vh"}}
       >
         <div className="bg-white rounded-[15px] p-3 px-5">
-          <h1 className="text-xl text-[#1B1B29] font-semibold pt-2">Patients</h1>
+          <h1 className="text-xl text-[#1B1B29] font-semibold pt-2">Free Health Questions</h1>
 
   
           <div
@@ -16,7 +16,7 @@ const NoPatientData = () => {
             style={{marginTop: "100px"}}
           >
             <Image
-                 src={"/Patients1.png"}
+                 src={"/ddocuments1.png"}
                  width={35}
               height={35}
               alt="No message icon"
@@ -34,4 +34,4 @@ const NoPatientData = () => {
   };
   
 
-export default NoPatientData;
+export default NoFreeHealthQues;
