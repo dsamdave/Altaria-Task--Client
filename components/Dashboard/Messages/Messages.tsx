@@ -483,7 +483,7 @@ const Messages: React.FC<IMsgProp> = ({ consultations }) => {
                   }
                  
             </button>
-                <button>
+                {/* <button>
                   <Image
                     src={"/call-icon.svg"}
                     width={40}
@@ -491,7 +491,7 @@ const Messages: React.FC<IMsgProp> = ({ consultations }) => {
                     alt="call icon"
                     className="rounded-lg"
                   />
-                </button>
+                </button> */}
               </div>
             </div>
             {/* Top section ends */}
@@ -576,7 +576,7 @@ const Messages: React.FC<IMsgProp> = ({ consultations }) => {
             </div>
             {/* Message input area */}
 
-            <div className="flex items-start gap-2 border-t border-[#F1F5F8] w-full p-3 mt-4 absolute bottom-0">
+            <div className=" bg-white flex items-start border-t border-[#F1F5F8] w-full p-3 mt-4 absolute bottom-0">
               {attach && (
                 <div className="flex flex-col gap-1 items-center justify-center w-[44px] rounded-[22px] z-50 absolute right-5 -top-36 shadow-xl">
                   {attachOptions.map((options, index) => (
@@ -598,13 +598,15 @@ const Messages: React.FC<IMsgProp> = ({ consultations }) => {
                 id="msg"
                 cols={30}
                 rows={4}
-                className="flex-1 text-black placeholder:text-center p-4"
+                className="flex-1 text-black placeholder:text-center p-4 mr-2"
                 placeholder="Start typing here"
                 value={msg}
                 onChange={handleChange}
               />
 
-              <div className="flex flex-col items-center gap-2">
+
+
+              <div className="flex flex-col items-center gap-2 bg-white">
                 <button
                   onClick={handleAttach}
                   className="transition-transform transform hover:scale-150"

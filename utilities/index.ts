@@ -74,5 +74,5 @@ export const capitalizeEachWord = (str?: string): string =>{
   export   const formatDateLabel = (date: dayjs.Dayjs): string => {
     if (dayjs(date).isToday()) return "Today";
     if (dayjs(date).isYesterday()) return "Yesterday";
-    return dayjs(date).format("MMMM D, YYYY"); // e.g., October 21, 2024
+    return dayjs(date).format("MMMM D, YYYY"); // 
   };
