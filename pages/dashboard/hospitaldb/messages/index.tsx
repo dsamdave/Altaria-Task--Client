@@ -103,6 +103,8 @@ export interface IConsultation {
   role: string;
   state: string;
   updatedAt: string;
+  closed: boolean
+
 }
 
 interface Doctor {

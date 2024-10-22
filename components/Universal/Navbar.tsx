@@ -2,8 +2,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import { useAppSelector } from "@/redux/store";
 
 const Navbar = () => {
+
+  const { currentUser } = useAppSelector((state) => state.auth);
+
+
   const [active, setActive] = useState(false);
 
   const handleClick = () => {
@@ -17,7 +22,7 @@ const Navbar = () => {
   const router = useRouter();
 
   const renderLogo = () => (
-    <Link href="/" className="inline-flex items-center p-2 mr-4 ">
+    <Link href="/" className="shrink inline-flex items-center p-2 mr-4 ">
       <Image src={"/m-logo.png"} width={103} height={103} alt="logo" />
     </Link>
   );
@@ -67,7 +72,7 @@ const Navbar = () => {
       <Link
         href={href}
         className={`
-        lg:inline-flex lg:w-auto w-[160px] px-4 py-2 text-[#121212] font-regular flex items-center lg:justify-center  mt-6 lg:mt-0 xl:mr-6 text-[16px]
+        shrink lg:inline-flex lg:w-auto w-[160px] px-4 py-2 text-[#121212] font-regular flex items-center lg:justify-center  mt-6 lg:mt-0 xl:mr-6 text-[16px]
         ${
           (router.asPath === href )
             ? "  lg:border-b-2 border-b-2 border-black"
@@ -83,12 +88,25 @@ const Navbar = () => {
 
   const renderApplyNowButton = () => (
     <div className="flex justify-center lg:ml-16 xl:ml-24">
+      {
+        currentUser && currentUser?.accessToken && currentUser?.role === "admin" ? (
+
       <Link
-        href="/_dashboard"
-        className={`lg:inline-flex  text-white flex items-center justify-center  mt-8 lg:mt-0 sm:ml-4 py-[10px] w-full lg:w-[168px] text-lg  font-semibold rounded-[24px] bg-[#1E2230] shadow-lg`}
+        href="/dashboard/hospitaldb/homedb"
+        className={` shrink lg:inline-flex  text-white flex items-center justify-center  mt-8 lg:mt-0 sm:ml-4 py-[10px] w-full lg:w-[168px] text-lg  font-semibold rounded-[24px] bg-[#1E2230] shadow-lg`}
+      >
+        Admin Dashboard
+      </Link>
+        ) : (
+
+      <Link
+        href="/dashboard"
+        className={`shrink lg:inline-flex  text-white flex items-center justify-center  mt-8 lg:mt-0 sm:ml-4 py-[10px] w-full lg:w-[168px] text-lg  font-semibold rounded-[24px] bg-[#1E2230] shadow-lg`}
       >
         Get Started
       </Link>
+        )
+      }
     </div>
   );
 

@@ -303,7 +303,7 @@ const Appointments: React.FC<IPatient> = ({
                       className={`text-[#35384D] text-xs font-medium  p-3 text-center ${
                         dayjs().isAfter(dayjs(data?.date))
                           ? "text-[#FF3333]"
-                          : "text-[#10B981]"
+                          : "text-green-500"
                       }`}
                     >
                       {new Date(data?.date).toLocaleDateString()} - {data?.time}

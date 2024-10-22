@@ -38,7 +38,7 @@ const BlessedPatients = () => {
         {/* Section 2 */}
         <div className="flex items-center justify-center flex-wrap sm:mt-0 gap-4">
           {cardData.map((data, index) => (
-            <div key={index} className="w-[174px] h-auto">
+            <div key={index} className="shrink w-[174px] h-auto">
               <div
                 className={`w-auto h-[152px] flex items-center justify-center  rounded-3xl ${data.bg} ${data.border}`}
               >

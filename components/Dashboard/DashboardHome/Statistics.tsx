@@ -1,26 +1,31 @@
+import { IAnalyticsDetails } from '@/pages/dashboard/hospitaldb/homedb'
 import Image from 'next/image'
 import React from 'react'
 
-const Statistics = () => {
+interface IProp {
+    analytics: IAnalyticsDetails | undefined 
+}
+
+const Statistics: React.FC<IProp> = ({ analytics }) => {
     const statData = [
         {
-            number: '45',
-            type: 'New Patient',
+            number: analytics?.totalPatients,
+            type: 'Total Patients',
             iconSrc: '/new-p.png'
         },
         {
-            number: '23',
-            type: 'Our Doctor',
+            number: analytics?.totalDoctors,
+            type: 'Total Doctors',
             iconSrc: '/doc.png'
         },
         {
-            number: '14',
-            type: 'Operation',
+            number: analytics?.totalFreeHealthQuestions,
+            type: 'Health Questions',
             iconSrc: '/op.png'
         },
         {
-            number: '$5728',
-            type: 'Income',
+            number: analytics?.totalAppointments,
+            type: 'Appointments',
             iconSrc: '/income.png'
         },
     ]

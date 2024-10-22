@@ -56,6 +56,19 @@ export interface IAppointmentsResponse {
 }
 
 
+export interface IAnalyticsDetails {
+  totalAppointments: number;
+  totalDoctors: number;
+  totalFreeHealthQuestions: number;
+  totalPatients: number;
+}
+
+interface IAnalyticsResponse {
+  details: IAnalyticsDetails;
+  message: string;
+}
+
+
 
 
 const Index = () => {
@@ -70,22 +83,25 @@ const Index = () => {
   const { data: dataa, error: errorr, isLoading: loading } = useApiQuery<IAppointmentsResponse>(
     ["admin-appointments-next"],
     "/appointments"
-    // "/admin-appointments/next"
   );
+
+  const { data: dataaa, error: erorrr, isLoading: loadingg } = useApiQuery<IAnalyticsResponse>(
+    ["analytics"],
+    `/analytics`,  
+  );
+
 
   const handleToggle = (index: number) => {
     setToggle(index);
   };
 
-  // console.log( {appointments: dataa?.appointments})
-  // console.log({dataa})
 
 
 
   return (
     <div className="p-5 bg-[#ECF0FF] h-full">
       <div>
-        <Statistics />
+        <Statistics analytics={dataaa?.details} />
         <div className="flex items-center justify-between gap-5"
         >
           <div className="bg-white mt-10 rounded-xl flex-1">
@@ -128,7 +144,7 @@ const Index = () => {
 
       <Auth />
 
-      { loading || isLoading && <Spinner /> }
+      { loading || isLoading || loadingg && <Spinner /> }
 
       {/* Appointment request */}
       <div>

@@ -63,6 +63,7 @@ const LeftSide: React.FC<leftSideProp> = ({
             height={136}
             alt="Logo"
             className="shrink cursor-pointer"
+            onClick={()=> router.push("/")}
           />
 
           <Image

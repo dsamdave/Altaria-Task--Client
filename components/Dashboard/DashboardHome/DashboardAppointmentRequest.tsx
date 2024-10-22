@@ -97,8 +97,8 @@ const DashboardAppointmentRequest: React.FC<IAppointmentProp> = ({
     },
   ];
 
-  console.log({ appointments });
 
+  
   return (
     <div className="h-full">
       <div className="bg-white rounded-xl shadow-xl p-2 max-w-[560px] overflow-x-scroll">

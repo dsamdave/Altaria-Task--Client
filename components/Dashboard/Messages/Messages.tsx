@@ -8,6 +8,8 @@ import { useAppSelector } from "@/redux/store";
 import io from "socket.io-client";
 import { formatDateLabel, formatTime } from "@/utilities";
 import dayjs from "dayjs";
+import CloseChatModal from "./CloseChatModal";
+import { toast } from "react-toastify";
 
 interface IMsgProp {
   consultations: IConsultation[];
@@ -138,8 +140,17 @@ const Messages: React.FC<IMsgProp> = ({ consultations }) => {
   const [time, setTime] = useState<string>("");
   const [typingUser, setTypingUser] = useState(null);
   const [isTyping, setIsTyping] = useState(false);
+  const [openCloseChatModal, setOpenCloseChatModal] = useState(false);
 
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+
+
+
+  const handleOpenCloseChatModal = ()=>{
+    setOpenCloseChatModal(!openCloseChatModal)
+  }
+
 
   const scrollToBottom = () => {
     if (divRef.current) {
@@ -166,6 +177,13 @@ const Messages: React.FC<IMsgProp> = ({ consultations }) => {
   const handleSubmitMessage = async () => {
     if (!msg.trim() && media.length < 1) {
       return;
+    }
+
+    if(selectedChat?.closed === true ){
+       toast.error("This conversation has been closed.")
+       setMsg("");
+       setMedia([]);
+       return
     }
 
     console.log(msg);
@@ -195,16 +213,6 @@ const Messages: React.FC<IMsgProp> = ({ consultations }) => {
 
     // }
 
-    // console.log({
-    //   patientID: selectedChat?.patientID,
-    //   doctorID: userID,
-    //   message: msg,
-    //   attachments,
-    //   links: "",
-    //   sender: userID,
-    //   recipient: selectedChat?.patientID,
-    // })
-
     socket.emit("chatMessage", {
       patientID: selectedChat?.patient?.id,
       doctorID: userID,
@@ -220,6 +228,20 @@ const Messages: React.FC<IMsgProp> = ({ consultations }) => {
     setMedia([]);
     setLoading(false);
   };
+
+  const handleCloseChat = async () => {
+    if (!selectedChatID && !currentUser?.id) {
+      return;
+    }
+
+    socket.emit("closeChat", {
+      conversationID: selectedChatID,
+      userID,
+    });
+
+    handleOpenCloseChatModal()
+  };
+
 
   useEffect(() => {
     if (!userID && selectedChat) return;
@@ -260,12 +282,23 @@ const Messages: React.FC<IMsgProp> = ({ consultations }) => {
       setLoading(false);
     });
 
+    socketInstance.on("chatClosed", (data) => {
+      setLoading(false);
+      if(data?.closed === true ){
+        toast.success("Chat has been closed.")
+      }
+      // console.log({ closedResponse: data });
+    });
+
     return () => {
       socketInstance.off("chatMessages");
       socketInstance.off("chatMessagesError");
+      socketInstance.off("chatClosed");
+      socketInstance.off("stopTyping");
       socketInstance.disconnect();
     };
   }, [currentUser?.id, selectedChat]);
+
 
   useEffect(() => {
     if (!selectedChatID) return;
@@ -279,11 +312,13 @@ const Messages: React.FC<IMsgProp> = ({ consultations }) => {
     setSelectedChat(selectChatHistory[0]);
   }, [selectedChatID]);
 
-  console.log({ messages });
+
 
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+
 
   return (
     <div
@@ -430,7 +465,7 @@ const Messages: React.FC<IMsgProp> = ({ consultations }) => {
 
               {/* Call icon and case history */}
               <div className="flex items-center gap-3">
-                <button className="w-[140px] bg-white rounded-[20px] flex items-center justify-center gap-1 py-1.5 shadow-sm border border-[#142E6E1A]">
+                {/* <button className="w-[140px] bg-white rounded-[20px] flex items-center justify-center gap-1 py-1.5 shadow-sm border border-[#142E6E1A]">
                   <Image
                     src={"/m-case.svg"}
                     width={20}
@@ -441,7 +476,13 @@ const Messages: React.FC<IMsgProp> = ({ consultations }) => {
                   <p className="text-sm text-[#1E2230] font-normal">
                     Case history
                   </p>
-                </button>
+                </button> */}
+                <button className="w-[150px] bg-[#F60707] rounded-[15px] py-1.5 shadow-sm text-sm text-white font-normal text-center" onClick={handleOpenCloseChatModal}>
+                  {
+                    selectedChat?.closed === true ? "Conversation Closed" : "Close Conversation"
+                  }
+                 
+            </button>
                 <button>
                   <Image
                     src={"/call-icon.svg"}
@@ -461,74 +502,75 @@ const Messages: React.FC<IMsgProp> = ({ consultations }) => {
               style={{ paddingBottom: "100px" }}
               ref={divRef}
             >
-              
-
               <>
-      {messages &&
-        messages.map((data, idx) => {
-          const messageDate = dayjs(data.createdAt);
-          const currentLabel = formatDateLabel(messageDate);
+                {messages &&
+                  messages.map((data, idx) => {
+                    const messageDate = dayjs(data.createdAt);
+                    const currentLabel = formatDateLabel(messageDate);
 
-          const shouldDisplayLabel = lastDateLabel !== currentLabel;
-          lastDateLabel = currentLabel;
+                    const shouldDisplayLabel = lastDateLabel !== currentLabel;
+                    lastDateLabel = currentLabel;
 
-          return (
-            <div key={idx}>
-              {/* Display date label when it changes */}
-              {shouldDisplayLabel && (
-                // <>
-                //   <hr className="my-4" />
-                //   <p className="text-center text-red-600 text-sm font-semibold">{currentLabel}</p>
-                // </>
+                    return (
+                      <div key={idx}>
+                        {/* Display date label when it changes */}
+                        {shouldDisplayLabel && (
+                          // <>
+                          //   <hr className="my-4" />
+                          //   <p className="text-center text-red-600 text-sm font-semibold">{currentLabel}</p>
+                          // </>
 
-              <div className="flex items-center gap-1">
-              <div className=" border-b w-5 h-1 border-dashed border-[#A2C0D4]" />
-              <p className="text-[10px] text-[#414D55] font-bold">{currentLabel}</p>
-              <div className=" border-b flex-1 h-1 border-dashed border-[#A2C0D4]" />
-            </div>
-                
-              )}
+                          <div className="flex items-center gap-1">
+                            <div className=" border-b w-5 h-1 border-dashed border-[#A2C0D4]" />
+                            <p className="text-[10px] text-[#414D55] font-bold">
+                              {currentLabel}
+                            </p>
+                            <div className=" border-b flex-1 h-1 border-dashed border-[#A2C0D4]" />
+                          </div>
+                        )}
 
-              {data.doctorID === userID ? (
-                <div>
-                  <ResponseMessage
-                    time={formatTime(data.createdAt)} 
-                    message={data.message}
-                    attached=""
-                    userName="Me"
-                  />
-                  {data.attachments[0]?.url && data.attachments.length > 0 &&
-                    data.attachments.map((item, idx) => (
-                      <UserMessage
-                        key={idx}
-                        attached={`/${item.url}`}
-                        time={formatTime(data.createdAt)}
-                      />
-                    ))}
-                </div>
-              ) : (
-                <div>
-                  <UserMessage
-                    key={idx}
-                    attached=""
-                    time={formatTime(data.createdAt)}
-                    message={data.message}
-                  />
+                        {data.doctorID === userID ? (
+                          <div>
+                            <ResponseMessage
+                              time={formatTime(data.createdAt)}
+                              message={data.message}
+                              attached=""
+                              userName="Me"
+                            />
+                            {data.attachments[0]?.url &&
+                              data.attachments.length > 0 &&
+                              data.attachments.map((item, idx) => (
+                                <UserMessage
+                                  key={idx}
+                                  attached={`/${item.url}`}
+                                  time={formatTime(data.createdAt)}
+                                />
+                              ))}
+                          </div>
+                        ) : (
+                          <div>
+                            <UserMessage
+                              key={idx}
+                              attached=""
+                              time={formatTime(data.createdAt)}
+                              message={data.message}
+                            />
 
-                  {data.attachments[0]?.url && data.attachments.length > 0 &&
-                    data.attachments.map((item, idx) => (
-                      <UserMessage
-                        key={idx}
-                        attached={`/${item.url}`}
-                        time={formatTime(data.createdAt)}
-                      />
-                    ))}
-                </div>
-              )}
-            </div>
-          );
-        })}
-    </>
+                            {data.attachments[0]?.url &&
+                              data.attachments.length > 0 &&
+                              data.attachments.map((item, idx) => (
+                                <UserMessage
+                                  key={idx}
+                                  attached={`/${item.url}`}
+                                  time={formatTime(data.createdAt)}
+                                />
+                              ))}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+              </>
 
               {/*  CHAT CONTENTS ENDS */}
             </div>
@@ -605,6 +647,9 @@ const Messages: React.FC<IMsgProp> = ({ consultations }) => {
           </div>
         )}
       </div>
+
+
+      { openCloseChatModal && <CloseChatModal onClose={handleOpenCloseChatModal} onProceed={handleCloseChat}/>}
     </div>
   );
 };
