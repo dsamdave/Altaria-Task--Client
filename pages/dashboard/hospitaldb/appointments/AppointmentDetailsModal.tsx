@@ -8,6 +8,7 @@ import { IUser } from "@/utilities/typings";
 import { capitalizeEachWord, getCityFromCoordinates } from "@/utilities";
 import { IAppointment } from "../homedb";
 import dayjs from "dayjs";
+import OpenImageModal from "./OpenImageModal";
 
 interface AppointmentsDetailsModalProps {
   onClose: () => void;
@@ -26,8 +27,14 @@ const AppointmentsDetailsModal: React.FC<AppointmentsDetailsModalProps> = ({
   const router = useRouter();
 
   const [city, setCity] = useState("");
+  const [openImage, setOpenImage] = useState(false);
+  const [imageIndex, setImageIndex] = useState(0);
 
-  // console.log({ appointmentDetail });
+  console.log({ appointmentDetail });
+
+  const handleOpenImage =()=>{
+    setOpenImage(!openImage)
+  }
 
   useEffect(() => {
     const getUserCity = async () => {
@@ -48,7 +55,7 @@ const AppointmentsDetailsModal: React.FC<AppointmentsDetailsModalProps> = ({
   }, [appointmentDetail]);
 
   return (
-    <div className="relative z-30 ">
+    <div className="relative z-30 " >
       <div className="fixed inset-0 bg-[rgba(29,36,45,0.8)]  "></div>
       <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-transparent px-2 sm:px-10">
         {/* <div className=" bg-white  shadow-[0_5px_100px_-5px_rgba(0,0,0,0.25)] w-full  sm:w-[630px] lg:w-[980px]  rounded-[14px] h-[450px] sm:h-[500px] lg:max-h-[520px] overflow-y-scroll  my-8"> */}
@@ -84,7 +91,7 @@ const AppointmentsDetailsModal: React.FC<AppointmentsDetailsModalProps> = ({
                       value=""
                       className={`w-[220px] block w-auto rounded bg-white px-3 py-2.5 text-[16px] font-normal text-[#565656] outline-none transition-colors placeholder:text-[#333333]`}
                       placeholder={appointmentDetail?.user?.firstName}
-                      defaultValue=""
+                      
                     />
                   </div>
                 </div>
@@ -100,7 +107,7 @@ const AppointmentsDetailsModal: React.FC<AppointmentsDetailsModalProps> = ({
                       value=""
                       className={`w-[220px] block w-auto rounded bg-white px-3 py-2.5 text-[16px] font-normal text-[#565656] outline-none transition-colors placeholder:text-[#333333]`}
                       placeholder={appointmentDetail?.user?.lastName}
-                      defaultValue=""
+                      
                     />
                   </div>
                 </div>
@@ -116,7 +123,7 @@ const AppointmentsDetailsModal: React.FC<AppointmentsDetailsModalProps> = ({
                       value=""
                       className={`w-[220px] block w-auto rounded bg-white px-3 py-2.5 text-[16px] font-normal text-[#565656] outline-none transition-colors placeholder:text-[#333333]`}
                       placeholder={appointmentDetail?.patientID}
-                      defaultValue=""
+                      
                     />
                   </div>
                 </div>
@@ -132,7 +139,7 @@ const AppointmentsDetailsModal: React.FC<AppointmentsDetailsModalProps> = ({
                       value=""
                       className={`w-[220px] block w-auto rounded bg-white px-3 py-2.5 text-[16px] font-normal text-[#565656] outline-none transition-colors placeholder:text-[#333333]`}
                       placeholder={appointmentDetail?.patientType}
-                      defaultValue=""
+                      
                     />
                   </div>
                 </div>
@@ -157,7 +164,7 @@ const AppointmentsDetailsModal: React.FC<AppointmentsDetailsModalProps> = ({
                         appointmentDetail?.user?.patientInfo?.basicInformation
                           ?.gender
                       }
-                      defaultValue=""
+                      
                     />
                   </div>
                 </div>
@@ -176,7 +183,7 @@ const AppointmentsDetailsModal: React.FC<AppointmentsDetailsModalProps> = ({
                         appointmentDetail?.user?.patientInfo?.basicInformation
                           ?.dateOfBirth
                       }
-                      defaultValue=""
+                      
                     />
                   </div>
                 </div>
@@ -192,7 +199,7 @@ const AppointmentsDetailsModal: React.FC<AppointmentsDetailsModalProps> = ({
                       value=""
                       className={`w-[220px] block w-auto rounded bg-white px-3 py-2.5 text-[16px] font-normal text-[#565656] outline-none transition-colors placeholder:text-[#333333]`}
                       placeholder={appointmentDetail?.user?.email}
-                      defaultValue=""
+                      
                     />
                   </div>
                 </div>
@@ -495,6 +502,25 @@ const AppointmentsDetailsModal: React.FC<AppointmentsDetailsModalProps> = ({
               </div>
               {/* Insurance Info */}
 
+              <div className="mt-20 grid grid-cols-2 gap-2 w-[500px] h-[300px]">
+      {appointmentDetail?.images.map((url, index) => (
+        <div key={index} className="shrink relative w-full h-20 overflow-hidden rounded-lg"
+        onClick={()=>{
+          setImageIndex(index)
+          handleOpenImage()
+        }}
+        >
+          <Image
+            src={url}
+            alt={`Image ${index + 1}`}
+            layout="fill"
+            objectFit="cover"
+            className="rounded-lg"
+          />
+        </div>
+      ))}
+    </div>
+
               {/* Action Button */}
               <div className="flex items-center justify-centre gap-3 mt-16">
                 {/* <CustomButton
@@ -557,6 +583,9 @@ const AppointmentsDetailsModal: React.FC<AppointmentsDetailsModalProps> = ({
           </div>
         </div>
       </div>
+
+
+      { openImage && <OpenImageModal onClose={handleOpenImage} appointmentDetail={appointmentDetail} imageIndex={imageIndex} />}
     </div>
   );
 };
