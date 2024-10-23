@@ -26,19 +26,19 @@ const Auth = () => {
 
 
 
-  // useEffect(() => {
-  //   const handleResize = () => {
-  //     if (window.innerWidth <= MOBILE_SCREEN_WIDTH) {
-  //       toast.error('Please open this dashboard on a computer for a better experience.');
-  //       router.push('/');
-  //     }
-  //   };
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= MOBILE_SCREEN_WIDTH) {
+        toast.error('Please open this dashboard on a computer for a better experience.');
+        router.push('/');
+      }
+    };
 
-  //   handleResize(); // Check size on initial render
-  //   window.addEventListener('resize', handleResize);
+    handleResize(); // Check size on initial render
+    window.addEventListener('resize', handleResize);
 
-  //   return () => window.removeEventListener('resize', handleResize);
-  // }, [router]);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [router]);
 
 
 //   Example of query
