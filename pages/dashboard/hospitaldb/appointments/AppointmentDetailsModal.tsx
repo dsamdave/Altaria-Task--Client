@@ -30,7 +30,6 @@ const AppointmentsDetailsModal: React.FC<AppointmentsDetailsModalProps> = ({
   const [openImage, setOpenImage] = useState(false);
   const [imageIndex, setImageIndex] = useState(0);
 
-  console.log({ appointmentDetail });
 
   const handleOpenImage =()=>{
     setOpenImage(!openImage)
@@ -443,6 +442,19 @@ const AppointmentsDetailsModal: React.FC<AppointmentsDetailsModalProps> = ({
                         placeholder={appointmentDetail?.reason}
                       />
                     </div>
+                  </div>
+
+                  <div className="">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Appointment Link:
+                    </label>
+                   
+                      <a href={appointmentDetail?.meetingLink} target="_blank" rel="noopener noreferrer">
+                      <label className=" cursor-pointer block text-sm font-medium text-[#0075D9]">
+                      {appointmentDetail?.meetingLink}
+                    </label>
+                      
+                      </a>
                   </div>
                 </div>
               </div>

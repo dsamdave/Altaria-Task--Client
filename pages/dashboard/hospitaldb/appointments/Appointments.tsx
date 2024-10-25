@@ -165,18 +165,12 @@ const Appointments: React.FC<IPatient> = ({
 
   const handleJoinCall = async () => {
     console.log("Joining Call...");
-
-    // joinChat.mutate({identifier: "", password: ""}, {
-    //   onSuccess: (data: ILoginResponse) => {
-
-    //     // toast.success("Login successful!");
-    //       // router.push("/");
-
-    //   },
-    //   onError: (error: any) => {
-    //     // toast.error(() => <Toast title="Login failed:" body={error?.response?.data?.message || "Unknown error"} />);
-    //   },
-    // });
+  
+    if (appointmentDetail?.meetingLink) {
+      window.open(appointmentDetail.meetingLink, "_blank");
+    }
+  
+    handleOpenSMallsModal();
   };
 
   const queryClient = useQueryClient();

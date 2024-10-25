@@ -39,6 +39,7 @@ export interface IAppointment {
   patientType: string;
   policyNumber: string;
   reason: string;
+  meetingLink: string;
   someOneDetails: SomeOneDetails;
   status: string;
   time: string;
