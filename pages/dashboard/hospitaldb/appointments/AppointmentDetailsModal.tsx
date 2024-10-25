@@ -16,6 +16,7 @@ interface AppointmentsDetailsModalProps {
   appointmentDetail: IAppointment | undefined;
   onSmallModal: () => void;
   setActionIndex: (actionIndex: number) => void;
+
 }
 const AppointmentsDetailsModal: React.FC<AppointmentsDetailsModalProps> = ({
   onClose,
@@ -449,12 +450,17 @@ const AppointmentsDetailsModal: React.FC<AppointmentsDetailsModalProps> = ({
                       Appointment Link:
                     </label>
                    
-                      <a href={appointmentDetail?.meetingLink} target="_blank" rel="noopener noreferrer">
-                      <label className=" cursor-pointer block text-sm font-medium text-[#0075D9]">
+                      {/* <a href={appointmentDetail?.meetingLink} target="_blank" rel="noopener noreferrer"> */}
+                      <label className=" cursor-pointer block text-sm font-medium text-[#0075D9]"
+                      onClick={() => {
+                        setActionIndex(2);
+                        onSmallModal();
+                      }}
+                      >
                       {appointmentDetail?.meetingLink}
                     </label>
                       
-                      </a>
+                      {/* </a> */}
                   </div>
                 </div>
               </div>

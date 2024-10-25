@@ -26,8 +26,8 @@ const AppointmentSmallModal: React.FC<AppointmentSmallModalProps> = ({
             Are you sure you want to <br /> 
             <span className="font-bold">
               {
-                actionIndex === 1 ? "start a chat?" :
-                actionIndex === 2 ? "join a call?" :
+                actionIndex === 1 ? "start this chat?" :
+                actionIndex === 2 ? "join this call?" :
                 actionIndex === 3 ? "conclude this appoinment?" :
                 actionIndex === 4 ? "accept this appoinment?" : 
                 actionIndex === 5 ? "decline this appoinment?" : ""
