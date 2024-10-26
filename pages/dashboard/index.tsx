@@ -133,7 +133,8 @@ const Index = () => {
             width={200}
             height={200}
             alt="Logo"
-            className="mb-20"
+            className="shrink cursor-pointer mb-20"
+            onClick={()=> router.push("/")}
           />
           <h1 className="mb-20 text-4xl text-white font-bold mt-3">
             Africa's No. 1 Digital Healthcare Platform

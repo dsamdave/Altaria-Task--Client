@@ -5,9 +5,12 @@ const PlatformFeatures = () => {
     const platformData = [
         {
           imgSrc: "/p1.png",
-          title: "Lorem ipsum dolor",
+          title: "General Practitioners",
+          title2: "Expatriate Focus",
           content:
-            "Ut sociis habitant lorem tortor faucibus et sit tellus nulla. Justo consequat dignissim massa convallis ",
+            "Get access to highly qualified Irish GPs with a deep understanding of  expatriate-specific health needs. Whether it's for a routine check-up or an acute  issue, our GPs are here to provide professional advice, prescriptions, and  ongoing care.",
+          content2:
+            "GPs on the platform can assist with health registration in  Ireland, provide guidance on navigating the local healthcare system, and offer  care tailored to different cultures and languages.",
         },
         {
           imgSrc: "/p2.png",
@@ -52,6 +55,10 @@ const PlatformFeatures = () => {
                 </h1>
                 <p className="text-[16px] text-[#798196] font-normal mt-4">
                   {data.content}
+                </p>
+
+                <p className="text-[16px] text-[#798196] font-normal mt-4">
+                  <span>Expatriate Focus:</span> GPs on the platform can assist with health registration in  Ireland, provide guidance on navigating the local healthcare system, and offer  care tailored to different cultures and languages
                 </p>
               </div>
             </div>

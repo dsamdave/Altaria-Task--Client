@@ -23,7 +23,7 @@ const Navbar = () => {
 
   const renderLogo = () => (
     <Link href="/" className="shrink inline-flex items-center p-2 mr-4 ">
-      <Image src={"/m-logo.png"} width={103} height={103} alt="logo" />
+      <Image src={"/expatdoc_logo.svg"} width={103} height={103} alt="logo" />
     </Link>
   );
 

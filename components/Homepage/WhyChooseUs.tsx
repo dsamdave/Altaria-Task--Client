@@ -7,61 +7,70 @@ const WhyChooseUs = () => {
   const whyData = [
     {
       imgSrc: "/wc1.png",
-      title: "Modern UI",
+      title: "On-Demand Care",
       content:
-        "Amet minim mollit non etca deserunt ullamco est sit etca aliqua dolor do amet sint etca aliqua dolor do amet.",
+        "Access healthcare professionals anytime, anywhere, from the comfort of your home or while on the go.",
     },
     {
       imgSrc: "/wc2.png",
-      title: "Secure System",
+      title: "Medical Expertise",
       content:
-        "Amet minim mollit non etca deserunt ullamco est sit etca aliqua dolor do amet sint etca aliqua dolor do amet.",
+        "Our platform connects you with licensed, experienced healthcare providers who are dedicated to delivering high-quality care and personalized treatment plans. Your health and well-being are in safe hands.",
     },
     {
       imgSrc: "/wc3.png",
-      title: "Web Based",
+      title: "Web & Mobile Based",
       content:
-        "Amet minim mollit non etca deserunt ullamco est sit etca aliqua dolor do amet sint etca aliqua dolor do amet.",
+        "Our platform provides a mobile & web based interface for users.",
     },
   ];
   //   Second why data
   const whyData2 = [
     {
       imgSrc: "/w1.png",
-      title: "Lorem ipsum dolor",
+      title: "General Practitioners",
       content:
-        "Ut sociis habitant lorem tortor faucibus et sit tellus nulla. Justo consequat dignissim massa convallis ",
+        "Get access to highly qualified Irish GPs with a deep understanding of  expatriate-specific health needs. Whether it's for a routine check-up or an acute  issue, our GPs are here to provide professional advice, prescriptions, and  ongoing care",
+      title2: "Expatriate Focus",
+      content2:
+        "GPs on the platform can assist with health registration in  Ireland, provide guidance on navigating the local healthcare system, and offer  care tailored to different cultures and languages",
     },
     {
       imgSrc: "/w2.png",
-      title: "Lorem ipsum dolor",
+      title: "Specialist Referrals",
       content:
-        "Ut sociis habitant lorem tortor faucibus et sit tellus nulla. Justo consequat dignissim massa convallis ",
+        " Need to see a specialist? Our GPs can seamlessly refer you to Ireland’s top  specialists, including cardiologists, dermatologists, and other experts. Whether  you need a referral for a chronic condition or a second opinion, we ensure  smooth coordination",
+      title2: "Expatriate Focus",
+      content2:
+        "We assist in understanding how the referral process works in  Ireland and how it helps expatriates avoid delays, ensuring they see the right  specialist promptly",
     },
     {
       imgSrc: "/w3.png",
-      title: "Lorem ipsum dolor",
+      title: "Mental Health Consultations",
       content:
-        "Ut sociis habitant lorem tortor faucibus et sit tellus nulla. Justo consequat dignissim massa convallis ",
+        "Your mental well-being is as important as your physical health. Connect with  licensed psychologists and counsellors who can help with stress, anxiety,  depression, and adjustment issues that often affect expatriates settling in a new  country.",
+        title2: "Expatriate Focus",
+        content2:
+        "Our mental health consultations address challenges unique  to expatriates, such as culture shock, homesickness, or adjusting to a new work  environment. Multilingual mental health professionals should be available for  those who prefer counselling in their native language.",
     },
-    {
-      imgSrc: "/w4.png",
-      title: "Lorem ipsum dolor",
-      content:
-        "Ut sociis habitant lorem tortor faucibus et sit tellus nulla. Justo consequat dignissim massa convallis ",
-    },
-    {
-      imgSrc: "/w5.png",
-      title: "Lorem ipsum dolor",
-      content:
-        "Ut sociis habitant lorem tortor faucibus et sit tellus nulla. Justo consequat dignissim massa convallis ",
-    },
-    {
-      imgSrc: "/w6.png",
-      title: "Lorem ipsum dolor",
-      content:
-        "Ut sociis habitant lorem tortor faucibus et sit tellus nulla. Justo consequat dignissim massa convallis ",
-    },
+    // {
+    //   imgSrc: "/w4.png",
+    //   title: "Lorem ipsum dolor",
+    //   content:
+    //     "Ut sociis habitant lorem tortor faucibus et sit tellus nulla. Justo consequat dignissim massa convallis ",
+    // },
+    // {
+    //   imgSrc: "/w5.png",
+    //   title: "Lorem ipsum dolor",
+    //   content:
+    //     "Ut sociis habitant lorem tortor faucibus et sit tellus nulla. Justo consequat dignissim massa convallis ",
+    // },
+    // {
+    //   imgSrc: "/w6.png",
+    //   title: "Lorem ipsum dolor",
+    //   content:
+    //     "Ut sociis habitant lorem tortor faucibus et sit tellus nulla. Justo consequat dignissim massa convallis ",
+    // },
   ];
 
   const router = useRouter();
@@ -74,8 +83,7 @@ const WhyChooseUs = () => {
             Why Choose Us
           </h1>
           <p className="text-[16px] text-[#798196] font-normal mt-4 sm:w-[610px] text-center">
-            Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-            accusantium doloremque laudantium, totam rem aperiam.
+          Choose ExpatDoc for convenient, on-demand access to trusted healthcare professionals, anytime, anywhere. Experience secure, private consultations with personalized care tailored to your needs.
           </p>
         </div>
         {/* Card section */}
@@ -90,7 +98,7 @@ const WhyChooseUs = () => {
                 <h1 className="text-xl sm:text-[32px] font-bold text-[#1D2B4F] ">
                   {data.title}
                 </h1>
-                <p className="text-[16px] text-[#798196] font-normal mt-4">
+                <p className="text-justify tracking-tight text-[16px] text-[#798196] font-normal mt-4">
                   {data.content}
                 </p>
               </div>
@@ -106,11 +114,19 @@ const WhyChooseUs = () => {
             <div key={index} className="w-full sm:w-[373px] mt-4 bg-white p-8 ">
               <Image src={data.imgSrc} width={60} height={72} alt="BP images" />
               <div className=" mt-3">
-                <h1 className="text-xl sm:text-[24px] font-bold text-[#1D2B4F] ">
+                <h1 className="text-xl sm:text-[22px] font-bold text-[#1D2B4F] ">
                   {data.title}
                 </h1>
-                <p className="text-[16px] text-[#798196] font-normal mt-4">
+                <p className="text-justify tracking-tight text-[16px] text-[#798196] font-normal mt-4">
                   {data.content}
+                </p>
+                <p className="text-[16px] text-[#798196] font-normal mt-4">
+
+                  <span className=" text-justify tracking-tight text-[16px] font-bold text-[#1D2B4F]">
+                    {data.title2}: {" "}
+                    </span>
+                    
+                    {data.content2}
                 </p>
               </div>
             </div>
