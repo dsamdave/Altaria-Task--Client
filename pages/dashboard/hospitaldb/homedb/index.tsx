@@ -56,12 +56,20 @@ export interface IAppointmentsResponse {
   
 }
 
+interface AppointmentStats {
+  labels: string[];
+  acceptedCounts: number[];
+  declinedCounts: number[];
+  concludedCounts: number[];
+}
+
 
 export interface IAnalyticsDetails {
   totalAppointments: number;
   totalDoctors: number;
   totalFreeHealthQuestions: number;
   totalPatients: number;
+  appointments: AppointmentStats
 }
 
 interface IAnalyticsResponse {

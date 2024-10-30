@@ -1,6 +1,7 @@
 import { useAppSelector } from "@/redux/store";
 import { capitalizeEachWord } from "@/utilities";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import SearchLineIcon from "remixicon-react/SearchLineIcon";
 
@@ -16,12 +17,13 @@ const RightSide: React.FC<rightSideProp> = ({
   showSidebar,
 }) => {
   const { currentUser } = useAppSelector((state) => state.auth);
+  const router = useRouter();
 
   const [notification, setNotification] = useState(false);
   const [isClient, setIsClient] = useState(false);
 
   const handleNotification = () => {
-    setNotification(!notification);
+    router.push('/dashboard/hospitaldb/homedb/notification')
   };
 
   useEffect(() => {
@@ -65,14 +67,14 @@ const RightSide: React.FC<rightSideProp> = ({
               alt="Toggle Sidebar"
               className="lg:hidden"
             />
-            <button onClick={handleNotification} className="shrink">
+            {/* <button onClick={handleNotification} className="shrink">
               <Image
                 src={"/m-noti.png"}
                 width={23}
                 height={23}
                 alt="Notification icon"
               />
-            </button>
+            </button> */}
 
             {/* Profile name and image */}
             <div className="flex items-center gap-2 flex-row-reverse lg:flex-row lg:pl-6">
