@@ -17,7 +17,7 @@ const Auth = () => {
   
     if (!accessToken || role !== "admin") {
       toast.error("Please log in as admin!");
-      router.push('/dashboard');
+      router.push('/login');
     }
     
   }, [currentUser, router]);

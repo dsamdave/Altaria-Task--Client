@@ -1,4 +1,45 @@
 import { ILoginVariables } from "@/pages/dashboard";
+import { ISignUpVariables } from "@/pages/signup";
+
+export const validateUserRegister = (userDetails: ISignUpVariables) => {
+    const {   firstName,
+      lastName,
+      email,
+      phoneNumber,
+      password,
+      country, } = userDetails;
+    const errors: string[]  = []
+  
+  
+    if(!firstName){
+      errors.push("Please enter your first name.")
+    } 
+    if(!lastName){
+      errors.push("Please enter your last name.")
+    } 
+    if(!phoneNumber){
+      errors.push("Please enter your phone number.")
+    } 
+    
+    if(!email){
+      errors.push("Please enter your email.")
+    } else if(!validateEmail(email)) {
+      errors.push("Email format incorrect.")
+    }
+    
+  
+    if(!password){
+      errors.push("Please enter your password.")
+    } else if(password.length < 6) {
+      errors.push("Incorrect password.")
+    }
+  
+    return {
+      errMsg: errors,
+      errLength: errors.length
+    }
+  }
+
 
 export const validateUserLogin = (userDetails: ILoginVariables) => {
     const { identifier,  password  } = userDetails;
@@ -7,9 +48,8 @@ export const validateUserLogin = (userDetails: ILoginVariables) => {
   
     if(!identifier){
       errors.push("Please enter your email.")
-    } else if( !validateEmail(identifier)){
-      errors.push("Email format is incorrect.")
-    }
+    } 
+    
   
     if(!password){
       errors.push("Please enter your password.")

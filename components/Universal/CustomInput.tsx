@@ -12,6 +12,7 @@ interface CustomInputProps {
   label: string;
   defaultValue?: string;
   className?: string;
+  className2?: string;
 }
 
 const CustomInput: React.FC<CustomInputProps> = ({
@@ -23,6 +24,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
   label,
   defaultValue,
   className,
+  className2
 }) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
@@ -35,14 +37,14 @@ const CustomInput: React.FC<CustomInputProps> = ({
   };
 
   return (
-    <div className="">
+    <div className={`${className}`}>
       <label className="block text-sm font-medium text-gray-700">{label}</label>
       <div className="relative mt-1 rounded-[3px] border border-[#CED4DA]">
         <input
           type={showPassword ? "text" : type}
           value={value}
           onChange={handleInputChange}
-          className={`block w-auto rounded bg-white px-3 py-2.5 text-[16px] font-normal text-[#565656] outline-none transition-colors ${className}`}
+          className={`block w-auto rounded bg-white px-3 py-2.5 text-[16px] font-normal text-[#565656] outline-none transition-colors ${className2}`}
           placeholder={placeholder}
           defaultValue={defaultValue}
         />

@@ -13,29 +13,22 @@ import { addCurrentUser } from "@/redux/slices/authSlice";
 import { IUser } from "@/utilities/typings";
 import { validateUserLogin } from "@/utilities/validations/authValids";
 
-
-
-
 interface ILoginResponse {
   accessToken: string;
   refreshToken: string;
   user: IUser;
 }
 
-
 export interface ILoginVariables {
   identifier: string;
   password: string;
 }
 
-
-
 const Index = () => {
   const router = useRouter();
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
 
   const { currentUser } = useAppSelector((state) => state.auth);
-
 
   const login = useApiMutation<ILoginResponse, ILoginVariables>("/login");
 
@@ -80,52 +73,62 @@ const Index = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const result = validateUserLogin({password: formValues.password, identifier: formValues.email});
+    const result = validateUserLogin({
+      password: formValues.password,
+      identifier: formValues.email,
+    });
 
     if (result.errLength) {
       // setLoading(false);
       return toast.error(() => <Toast title="Error" body={result.errMsg} />);
     }
 
-    if(!formValues.email){
-      return toast.error("Please add an email")
+    if (!formValues.email) {
+      return toast.error("Please add an email");
     }
-    if(!formValues.password){
-      return toast.error("Please add a password")
+    if (!formValues.password) {
+      return toast.error("Please add a password");
     }
-    
-    login.mutate({identifier: formValues.email, password: formValues.password}, {
-      onSuccess: (data: ILoginResponse) => {
 
-        toast.success("Login successful!");
-        // console.log('Login data:', data);
-        dispatch(
-          addCurrentUser({
-            ...data?.user,
-            accessToken: data?.accessToken,     
-          })
-        ); 
-        if(data?.user?.role !== "admin"){
-          toast.error("Please log in as admin!");
-          router.push("/");
-        } else {
-          
-          router.push("/dashboard/hospitaldb/homedb");
-        }      
-        
-        setFormValues({
-          email: "",
-          password: "",
-        });
-      },
-      onError: (error: any) => {
-        toast.error(() => <Toast title="Login failed:" body={error?.response?.data?.message || "Unknown error"} />);
-      },
-    });
+    login.mutate(
+      { identifier: formValues.email, password: formValues.password },
+      {
+        onSuccess: (data: ILoginResponse) => {
+          toast.success("Login successful!");
+          // console.log('Login data:', data);
+          dispatch(
+            addCurrentUser({
+              ...data?.user,
+              accessToken: data?.accessToken,
+            })
+          );
+          if (data?.user?.role !== "admin") {
+            toast.error("Please log in as admin!");
+            router.push("/");
+          } else {
+            router.push("/dashboard/hospitaldb/homedb");
+          }
+
+          setFormValues({
+            email: "",
+            password: "",
+          });
+        },
+        onError: (error: any) => {
+          toast.error(() => (
+            <Toast
+              title="Login failed:"
+              body={error?.response?.data?.message || "Unknown error"}
+            />
+          ));
+        },
+      }
+    );
   };
 
   return (
     <div className="flex items-stretch h-full" style={{ height: "100vh" }}>
+      
       <div className="bg-[#1E2230] w-full sm:w-[800px]">
         <div className="mt-20 px-10">
           <Image
@@ -134,7 +137,7 @@ const Index = () => {
             height={200}
             alt="Logo"
             className="shrink cursor-pointer mb-20"
-            onClick={()=> router.push("/")}
+            onClick={() => router.push("/")}
           />
           <h1 className="mb-20 text-4xl text-white font-bold mt-3">
             Africa's No. 1 Digital Healthcare Platform
@@ -220,7 +223,7 @@ const Index = () => {
                 Don’t have an account?{" "}
               </p>
               <Link
-                href={""}
+                href={"/signup"}
                 className="shrink ml-1 cursor-pointer border-0 text-center text-base font-bold text-[#1E2230] sm:text-lg"
               >
                 Sign Up

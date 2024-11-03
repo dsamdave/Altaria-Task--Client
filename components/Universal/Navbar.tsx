@@ -100,7 +100,7 @@ const Navbar = () => {
         ) : (
 
       <Link
-        href="/dashboard"
+        href="/login"
         className={`shrink lg:inline-flex  text-white flex items-center justify-center  mt-8 lg:mt-0 sm:ml-4 py-[10px] w-full lg:w-[168px] text-lg  font-semibold rounded-[24px] bg-[#1E2230] shadow-lg`}
       >
         Get Started
