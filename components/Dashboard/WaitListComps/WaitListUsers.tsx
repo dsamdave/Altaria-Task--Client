@@ -1,7 +1,11 @@
+import Spinner from "@/components/Universal/Spinner";
+import Toast from "@/components/Universal/Toast";
+import { useApiQuery } from "@/lib/useApi";
 import { WaitlistUser } from "@/pages/dashboard/hospitaldb/waitlist";
 import { getPageNumbers } from "@/utilities";
 import Image from "next/image";
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 
 interface IWaitList {
   waitlistUsers: WaitlistUser[] | undefined;
@@ -10,12 +14,19 @@ interface IWaitList {
   setCurrentPage: (currentPage: number) => void;
 }
 
+interface IResponse {
+  message: string;
+
+}
+
 const WaitListUsers: React.FC<IWaitList> = ({
   waitlistUsers,
   totalItems,
   currentPage,
   setCurrentPage,
 }) => {
+
+
   const tableHeadData = [
     {
       header: "S/N",
@@ -41,6 +52,12 @@ const WaitListUsers: React.FC<IWaitList> = ({
     },
   ];
 
+  const exportData = useApiQuery<IResponse>(
+    ['export-waitlist'],
+    `/export-waitlist`,
+    { enabled: false }
+  );
+
   // State and functions for pagination
 
   const itemsPerPage = 10;
@@ -65,12 +82,47 @@ const WaitListUsers: React.FC<IWaitList> = ({
   };
   const pageNumbers = getPageNumbers(currentPage, totalPages);
 
+
+
+
+  const handleSubmit = async () => {
+    exportData.refetch()
+      .then((response) => {
+        if (response.data?.message === "Successful") {
+          toast.success("Data exported successfully");
+        }
+      })
+      .catch((error) => {
+        toast.error(
+          <Toast
+            title="Export failed:"
+            body={error?.response?.data?.message || "Unknown error"}
+          />
+        );
+      });
+  };
+
+
+
   return (
     <div className="h-full ">
       <div className="bg-white rounded-xl shadow-xl p-2 ">
-        <h1 className="text-xl text-[#1B1B29] font-semibold pt-2 px-5">
-          All WaitList Users
-        </h1>
+      <div className="w-full flex items-center justify-between mb-10">
+
+<h1 className="text-xl text-[#1B1B29] font-semibold pt-2 px-5">
+  All WaitList Users
+</h1>
+
+<button
+  className="shrink p-[10px] rounded-[5px] text-center text-lg font-bold shadow-xl text-white sm:w-[300px] mt-6"
+  style={{ backgroundColor: "#009900" }}
+  onClick={handleSubmit}
+>
+  Export Waitlist Data
+</button>
+</div>
+
+       
 
         <div className=" mt-5">
           <table className="w-full">
@@ -185,6 +237,8 @@ const WaitListUsers: React.FC<IWaitList> = ({
         </div>
         {/* Pagination ends here */}
       </div>
+
+      { exportData.isRefetching && <Spinner />}
     </div>
   );
 };

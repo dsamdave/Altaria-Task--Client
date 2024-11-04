@@ -14,8 +14,8 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
 
-  // const isAuthRoute = router.pathname === "/dashboard";
-  const isAuthRoute = router.pathname === "/dashboard" || "/signup";
+  const isAuthRoute = router.pathname === "/dashboard";
+  // const isAuthRoute = router.pathname === "/dashboard" || "/signup";
   const isDashboardRoute = router.pathname.startsWith("/dashboard/hospitaldb");
   return (
     <main>
