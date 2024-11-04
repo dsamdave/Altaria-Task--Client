@@ -238,7 +238,7 @@ const WaitListUsers: React.FC<IWaitList> = ({
         {/* Pagination ends here */}
       </div>
 
-      { exportData.isRefetching && <Spinner />}
+      { (exportData.isRefetching || exportData.isPending) && <Spinner />}
     </div>
   );
 };
