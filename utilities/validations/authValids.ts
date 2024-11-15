@@ -1,5 +1,5 @@
 import { ILoginVariables } from "@/pages/dashboard";
-import { ISignUpVariables } from "@/pages/signup";
+import { ISignUpVariables } from "@/pages/dashboard/auth/signup";
 
 export const validateUserRegister = (userDetails: ISignUpVariables) => {
     const {   firstName,

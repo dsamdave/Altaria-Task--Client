@@ -1,8 +1,8 @@
-import DashboardAppointmentRequest from "@/components/Dashboard/DashboardHome/DashboardAppointmentRequest";
-import AppointmentRequest from "@/components/Dashboard/DashboardHome/DashboardAppointmentRequest";
-import DashboardRecentPatients from "@/components/Dashboard/DashboardHome/DashboardRecentPatients";
-import RecentPatients from "@/components/Dashboard/DashboardHome/RecentPatients/RecentPatients";
-import Statistics from "@/components/Dashboard/DashboardHome/Statistics";
+import DashboardAppointmentRequest from "@/components/Dashboard/Admin/DashboardHome/DashboardAppointmentRequest";
+import AppointmentRequest from "@/components/Dashboard/Admin/DashboardHome/DashboardAppointmentRequest";
+import DashboardRecentPatients from "@/components/Dashboard/Admin/DashboardHome/DashboardRecentPatients";
+import RecentPatients from "@/components/Dashboard/Admin/DashboardHome/RecentPatients/RecentPatients";
+import Statistics from "@/components/Dashboard/Admin/DashboardHome/Statistics";
 import Auth from "@/components/Universal/Auth";
 import Spinner from "@/components/Universal/Spinner";
 import { useApiQuery } from "@/lib/useApi";

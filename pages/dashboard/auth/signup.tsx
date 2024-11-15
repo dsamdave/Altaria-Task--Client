@@ -60,7 +60,7 @@ const Index = () => {
         if (data?.message === "Successful") {
           toast.success("Registration Succesful.");
           router.push({
-            pathname: "/verify-otp",
+            pathname: "/dashboard/auth/verify-otp",
             query: { email: formValues.email },
           });
           
@@ -210,7 +210,7 @@ const Index = () => {
                 Already have an account?
               </p>
               <Link
-                href={"/login"}
+                href={"/dashboard/auth/login"}
                 className="shrink cursor-pointer border-0 text-center text-sm font-medium text-[#1E2230] sm:text-lg"
               >
                 Log In

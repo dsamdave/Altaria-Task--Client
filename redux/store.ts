@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
-import authReducer, { AuthState } from "./slices/authSlice";
+import authReducer  from "./slices/authSlice";
+import appointmentSlice  from "./slices/appointmentSlice";
 import { loadState, saveState } from "../utilities/stateHelpers";
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 // import type { AppDispatch, RootState } from './store';
 
 export interface RootState {
   auth: ReturnType<typeof authReducer>;
+  appointment: ReturnType<typeof appointmentSlice>;
 }
 
 const persistedState: Partial<RootState> | undefined = loadState();
@@ -13,6 +15,7 @@ const persistedState: Partial<RootState> | undefined = loadState();
 export const store = configureStore({
   reducer: {
     auth: authReducer,
+    appointment: appointmentSlice,
   },
   preloadedState: persistedState,
   middleware: (getDefaultMiddleware) =>
@@ -24,6 +27,7 @@ export const store = configureStore({
 store.subscribe(() => {
   saveState({
     auth: store.getState().auth,
+    appointment: store.getState().appointment,
   });
 });
 

@@ -97,10 +97,22 @@ const Navbar = () => {
       >
         Admin Dashboard
       </Link>
-        ) : (
+        ) : 
+
+        currentUser && currentUser?.accessToken && currentUser?.role === "patient" || currentUser && currentUser?.accessToken && currentUser?.role === "user" ? (
+
+          <Link
+            href="/dashboard/users/home"
+            className={` shrink lg:inline-flex  text-white flex items-center justify-center  mt-8 lg:mt-0 sm:ml-4 py-[10px] w-full lg:w-[168px] text-lg  font-semibold rounded-[24px] bg-[#1E2230] shadow-lg`}
+          >
+            Dashboard
+          </Link>
+            ) :
+        
+        (
 
       <Link
-        href="/login"
+        href="/dashboard/auth/login"
         className={`shrink lg:inline-flex  text-white flex items-center justify-center  mt-8 lg:mt-0 sm:ml-4 py-[10px] w-full lg:w-[168px] text-lg  font-semibold rounded-[24px] bg-[#1E2230] shadow-lg`}
       >
         Get Started

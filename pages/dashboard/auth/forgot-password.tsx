@@ -165,7 +165,7 @@ const forgot_password = () => {
                   Already have an account?{" "}
                 </p>
                 <Link
-                  href={"/login"}
+                  href={"/dashboard/auth/login"}
                   className="shrink cursor-pointer border-0 text-center text-sm font-medium text-[#1E2230] sm:text-lg"
                 >
                   Log In

@@ -1,4 +1,4 @@
-import FreeHealthCare from '@/components/Dashboard/FreeHealthCare/FreeHealthCare'
+import FreeHealthCare from '@/components/Dashboard/Admin/FreeHealthCare/FreeHealthCare'
 import Auth from '@/components/Universal/Auth'
 import React, { useState } from 'react'
 import NoFreeHealthQues from './NoFreeHealthQues'

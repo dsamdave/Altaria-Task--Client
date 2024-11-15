@@ -110,3 +110,9 @@ return (
    });
  }; -->
 
+
+ Card Number: 4242 4242 4242 4242
+Expiration Date: Any future date (e.g., 12/34)
+CVC: Any 3 digits (e.g., 123)
+Postal Code: 12345 (or any 5-digit code)
+

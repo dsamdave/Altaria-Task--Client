@@ -1,4 +1,4 @@
-import AppointmentRequest from '@/components/Dashboard/DashboardHome/AppointmentRequest/AppointmentRequest'
+import AppointmentRequest from '@/components/Dashboard/Admin/DashboardHome/AppointmentRequest/AppointmentRequest'
 import React from 'react'
 
 const appointmentRequest = () => {

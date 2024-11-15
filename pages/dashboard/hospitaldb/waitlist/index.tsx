@@ -1,4 +1,4 @@
-import WaitListUsers from '@/components/Dashboard/WaitListComps/WaitListUsers'
+import WaitListUsers from '@/components/Dashboard/Admin/WaitListComps/WaitListUsers'
 import Auth from '@/components/Universal/Auth'
 import React, { useEffect, useState } from 'react'
 import NoWaitList from './NoWaitList'

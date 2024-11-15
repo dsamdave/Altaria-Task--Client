@@ -1,5 +1,5 @@
-import Messages from "@/components/Dashboard/Messages/Messages";
-import NoMessage from "@/components/Dashboard/Messages/NoMessage";
+import Messages from "@/components/Dashboard/Admin/Messages/Messages";
+import NoMessage from "@/components/Dashboard/Admin/Messages/NoMessage";
 import Auth from "@/components/Universal/Auth";
 import Spinner from "@/components/Universal/Spinner";
 import {  SocketBaseURL } from "@/lib/query";

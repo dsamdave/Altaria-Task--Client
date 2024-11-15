@@ -6,7 +6,7 @@ import { capitalizeEachWord, getPageNumbers } from "@/utilities";
 import { useApiMutation, useApiQuery } from "@/lib/useApi";
 import { PatientResponse } from "@/pages/dashboard/hospitaldb/patients";
 import { IAppointment } from "../homedb";
-import AppointmentDetailsModal from "@/components/Dashboard/DashboardHome/AppointmentRequest/AppointmentDetailsModal";
+import AppointmentDetailsModal from "@/components/Dashboard/Admin/DashboardHome/AppointmentRequest/AppointmentDetailsModal";
 import AppointmentsDetailsModal from "./AppointmentDetailsModal";
 import dayjs from "dayjs";
 import AppointmentSmallModal from "./SmallModal";

@@ -1,4 +1,4 @@
-import Conversation from '@/components/Dashboard/FreeHealthCare/Conversation'
+import Conversation from '@/components/Dashboard/Admin/FreeHealthCare/Conversation'
 import React from 'react'
 
 const conversation = () => {

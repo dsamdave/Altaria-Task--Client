@@ -1,5 +1,6 @@
 import React from 'react'
 import Navbar from '../Universal/Navbar'
+import Link from 'next/link'
 
 const HeroSection = () => {
   return (
@@ -29,9 +30,11 @@ const HeroSection = () => {
         There nothing more important than our good healthy, cause that’s our principal capital asset for our good future
       </p>
       <div className="flex items-center flex-wrap w-full gap-4 mt-8">
-        <button className="shrink w-full lg:w-[187px] rounded-3xl py-2 bg-[#10BEDA] text-center text-[16px] text-white font-medium">
+        <Link href="/dashboard/auth/login" className="shrink w-full lg:w-[187px] rounded-3xl py-2 bg-[#10BEDA] text-center text-[16px] text-white font-medium">
           Get Appointment
-        </button>
+        </Link>
+        {/* <button >
+        </button> */}
         <button className="shrink w-full lg:w-[153px] rounded-3xl py-2 bg-transparent border border-[#003647] text-center text-[16px] text-[#003647] font-medium">
           Learn More
         </button>

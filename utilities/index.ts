@@ -76,3 +76,68 @@ export const capitalizeEachWord = (str?: string): string =>{
     if (dayjs(date).isYesterday()) return "Yesterday";
     return dayjs(date).format("MMMM D, YYYY"); // 
   };
+
+
+  export const generateTimeSlots = (start: number, end: number) => {
+    const timeSlots = [];
+    let currentTime = dayjs().hour(start).minute(0);
+    const endTime = dayjs().hour(end).minute(0);
+  
+    while (currentTime.isBefore(endTime)) {
+      timeSlots.push(currentTime.format('hh:mm A'));
+      currentTime = currentTime.add(15, 'minute');
+    }
+    return timeSlots;
+  };
+
+  export const getGreeting = () => {
+    const currentHour = new Date().getHours();
+  
+    if (currentHour < 12) {
+      return "Good Morning";
+    } else if (currentHour >= 12 && currentHour < 17) {
+      return "Good Afternoon";
+    } else {
+      return "Good Evening";
+    }
+  };
+
+
+  export const getRelativeTime = (isoDate: string): string => {
+    const now = new Date();
+    const past = new Date(isoDate);
+    const diffInSeconds = Math.floor((now.getTime() - past.getTime()) / 1000);
+  
+    if (diffInSeconds < 60) {
+      return `${diffInSeconds}s ago`;
+    }
+  
+    const diffInMinutes = Math.floor(diffInSeconds / 60);
+    if (diffInMinutes < 60) {
+      return `${diffInMinutes}min${diffInMinutes === 1 ? '' : 's'} ago`;
+    }
+  
+    const diffInHours = Math.floor(diffInMinutes / 60);
+    if (diffInHours < 24) {
+      return `${diffInHours}h${diffInHours === 1 ? '' : 's'} ago`;
+    }
+  
+    const diffInDays = Math.floor(diffInHours / 24);
+    if (diffInDays < 7) {
+      return `${diffInDays}day${diffInDays === 1 ? '' : 's'} ago`;
+    }
+  
+    const diffInWeeks = Math.floor(diffInDays / 7);
+    if (diffInWeeks < 4) {
+      return `${diffInWeeks}week${diffInWeeks === 1 ? '' : 's'} ago`;
+    }
+  
+    const diffInMonths = Math.floor(diffInDays / 30);
+    if (diffInMonths < 12) {
+      return `${diffInMonths}month${diffInMonths === 1 ? '' : 's'} ago`;
+    }
+  
+    const diffInYears = Math.floor(diffInDays / 365);
+    return `${diffInYears}year${diffInYears === 1 ? '' : 's'} ago`;
+  };
+  

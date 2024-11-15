@@ -1,4 +1,4 @@
-import RecentPatients from '@/components/Dashboard/DashboardHome/RecentPatients/RecentPatients'
+import RecentPatients from '@/components/Dashboard/Admin/DashboardHome/RecentPatients/RecentPatients'
 import React from 'react'
 
 const recentPatients = () => {

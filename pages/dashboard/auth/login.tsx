@@ -54,6 +54,9 @@ const login = () => {
         if (accessToken && role === "admin") {
           router.push("/dashboard/hospitaldb/homedb");
         }
+        if (accessToken && role === "patient" || accessToken && role === "user") {
+          router.push("/dashboard/users/home");
+        }
       }, [currentUser, router]);
 
 
@@ -83,6 +86,7 @@ const login = () => {
             onSuccess: (data: ILoginResponse) => {
               toast.success("Login successful!");
               // console.log('Login data:', data);
+              
               dispatch(
                 addCurrentUser({
                   ...data?.user,
@@ -93,8 +97,7 @@ const login = () => {
                   router.push("/dashboard/hospitaldb/homedb");
 
                 } else if (data?.user?.role === "patient" || data?.user?.role === "user" )  {
-                // router.push("/dashboard/hospitaldb/homedb");
-                // router.push("/");
+                router.push("/dashboard/users/home")
               } else {
                 return 
               }
@@ -194,7 +197,7 @@ const login = () => {
                 {/* Checkbox ends here */}
                 <Link
                   className="shrink text-sm font-semibold text-primary-green sm:text-base text-[#F87171]"
-                  href={"/forgot-password"}
+                  href={"/dashboard/auth/forgot-password"}
                 >
                   Forgot Password?
                 </Link>
@@ -214,7 +217,7 @@ const login = () => {
                 Don’t have an account?{" "}
               </p>
               <Link
-                href={"/signup"}
+                href={"/dashboard/auth/signup"}
                 className="shrink cursor-pointer border-0 text-center text-sm font-medium text-[#1E2230] sm:text-lg"
               >
                 Sign Up

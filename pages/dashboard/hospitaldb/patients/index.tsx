@@ -1,4 +1,4 @@
-import Patients from "@/components/Dashboard/Patients/Patients";
+import Patients from "@/components/Dashboard/Admin/Patients/Patients";
 import Auth from "@/components/Universal/Auth";
 import Spinner from "@/components/Universal/Spinner";
 import { useApiQuery } from "@/lib/useApi";
