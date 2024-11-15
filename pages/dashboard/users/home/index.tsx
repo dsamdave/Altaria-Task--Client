@@ -6,7 +6,7 @@ import FreeHealthModal from "@/components/Dashboard/Users/Home/FreeHealth/FreeHe
 
 
 
-const index = () => {
+const Index = () => {
 
 
 const [bookingModal, setBookingModal] = useState(false);
@@ -91,4 +91,4 @@ useEffect(() => {
   );
 };
 
-export default index;
+export default Index;
