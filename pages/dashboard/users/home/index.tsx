@@ -36,7 +36,7 @@ const cardData = [
     action: handleAskFreeHealthQuestionModal
   },
   {
-    text: "Next consults for You",
+    text: "Your Consultations",
     image: "/h2.png",
     action: handleNextConsult
   },
