@@ -140,4 +140,22 @@ export const capitalizeEachWord = (str?: string): string =>{
     const diffInYears = Math.floor(diffInDays / 365);
     return `${diffInYears}year${diffInYears === 1 ? '' : 's'} ago`;
   };
+
+
+  export const formatDateWithDay = (date: string | Date | null | undefined): string => {
+    if (!date) return ''; 
+  
+    const parsedDate = new Date(date);
+  
+    if (isNaN(parsedDate.getTime())) {
+      return '';  
+    }
+  
+    return parsedDate.toLocaleDateString('en-US', {
+      weekday: 'long',  
+      year: 'numeric',
+      month: 'long',  
+      day: 'numeric',     
+    });
+  };
   

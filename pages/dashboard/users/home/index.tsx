@@ -2,6 +2,7 @@ import BookingModal from "@/components/Dashboard/Users/Home/Booking/BookingModal
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import FreeHealthModal from "@/components/Dashboard/Users/Home/FreeHealth/FreeHealthModal";
+import NextConsult from "@/components/Dashboard/Users/Home/NextConsult/NextConsult";
 
 
 
@@ -11,6 +12,7 @@ const Index = () => {
 
 const [bookingModal, setBookingModal] = useState(false);
 const [freeHealthQuestionModal, setFreeHealthQuestionModal] = useState(false);
+const [nextConsult, setNextConsult] = useState(false);
 
 
 const handleBookingModal = ()=>{
@@ -21,6 +23,12 @@ const handleAskFreeHealthQuestionModal = () =>{
   setFreeHealthQuestionModal(!freeHealthQuestionModal)
 }
 
+const handleNextConsult = () =>{
+  setNextConsult(!nextConsult)
+}
+
+
+
 const cardData = [
   {
     text: "Ask a free health question",
@@ -30,6 +38,7 @@ const cardData = [
   {
     text: "Next consults for You",
     image: "/h2.png",
+    action: handleNextConsult
   },
   {
     text: "My File",
@@ -86,6 +95,7 @@ useEffect(() => {
     </div>
       {bookingModal && <BookingModal onClose={handleBookingModal} />}
       {freeHealthQuestionModal && <FreeHealthModal onClose={handleAskFreeHealthQuestionModal} />}
+      {nextConsult && <NextConsult onClose={handleNextConsult}/>}
 
     </div>
   );

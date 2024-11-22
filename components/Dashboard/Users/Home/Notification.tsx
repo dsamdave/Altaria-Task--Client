@@ -55,7 +55,7 @@ const Notification = () => {
         data.notifications.map((data, index) => (
           <div
             key={index}
-            className="shrink cursor-pointer flex items-center justify-between pt-2.5"
+            className="shrink cursor-pointer flex items-center justify-between pt-2.5 shadow-sm p-2"
           >
             <div className="flex items-center gap-3">
               {data.type === "appointment" ? (

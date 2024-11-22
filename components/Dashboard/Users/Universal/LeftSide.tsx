@@ -112,21 +112,31 @@ const LeftSide: React.FC<leftSideProp> = ({
             </h1>
           </Link>
 
-          {/* Logout */}
-          {/* <div className={` mt-40 `}>
-            <button
-              className={`w-[208px]  rounded-lg flex items-center py-3 px-4 gap-5  text-[16px] ${
-                logOut ? "bg-[#1E2230] rounded-[5px] text-white" : "text-[#1E2230]"
+          {/* <Link
+            href={"/dashboard/users/medical"}
+            className={`flex items-center gap-2 cursor-pointer px-4 py-3 ${
+              router.pathname.includes("/dashboard/users/medical")
+                ? " bg-[#1E2230] rounded-[5px]"
+                : ""
+            } `}
+          >
+            {router.pathname.includes("/dashboard/users/medical") ? (
+              <DashboardLineIcon size={24} className="text-white" />
+            ) : (
+              <DashboardLineIcon size={24} className="text-[#1E2230]" />
+            )}
+            <h1
+              className={`text-sm ${
+                router.pathname.includes("/dashboard/users/medical")
+                  ? "text-white font-medium"
+                  : "font-normal text-[#1E2230]"
               }`}
-              onClick={handleLogOutModal}
             >
-              <LogoutBoxFillIcon
-                size={24}
-                className={` ${logOut ? "text-white" : "text-[#1E2230]"} `}
-              />
-              Logout
-            </button>
-          </div> */}
+              Medical
+            </h1>
+          </Link> */}
+
+         
 
 
            {/* Logout */}
