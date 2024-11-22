@@ -22,7 +22,7 @@ const LogoutModal: React.FC<LogoutModalProps> = ({ onClose, handleLogOut }) => {
           </p>
           <CustomButton
             className={`rounded-[5px] p-[10px] text-center 
-           bg-[#1E2230]
+           bg-red-600
              
           w-full border-0 text-lg font-bold text-white shrink border-transparent mt-8`}
             btnText={"Yes"}
