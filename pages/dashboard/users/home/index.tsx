@@ -41,11 +41,11 @@ const cardData = [
     action: handleNextConsult
   },
   {
-    text: "My File",
+    text: "Your Records",
     image: "/h3.png",
   },
   {
-    text: "Book Consultation",
+    text: "Book A Consultation",
     image: "/h4.png",
     action: handleBookingModal
   },
