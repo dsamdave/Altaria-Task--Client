@@ -28,7 +28,7 @@ const index = () => {
       const socketInstance = io(SocketBaseURL, {
         transports: ['websocket'],  
         reconnectionAttempts: 3,    
-        timeout: 10000,             
+        timeout: 10000,              
       });
   
       setSocket(socketInstance);

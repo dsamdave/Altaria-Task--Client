@@ -14,6 +14,9 @@ import CloseLineIcon from "remixicon-react/CloseLineIcon";
 import { useAppDispatch } from "@/redux/store";
 import { clearCurrentUser } from "@/redux/slices/authSlice";
 import UserAuth from "@/components/Universal/UserAuth";
+import FileHistoryFillIcon from 'remixicon-react/FileHistoryFillIcon';
+import HospitalFillIcon from 'remixicon-react/HospitalFillIcon';
+import Chat1FillIcon from'remixicon-react/Chat1FillIcon'
 
 interface leftSideProp {
   toggleSidebar: () => void;
@@ -135,6 +138,58 @@ const LeftSide: React.FC<leftSideProp> = ({
               Medical
             </h1>
           </Link> */}
+
+
+<Link
+            href={"/dashboard/users/chat"}
+            className={`flex items-center gap-2 cursor-pointer px-4 py-3 ${
+              router.pathname.includes("/dashboard/users/chat")
+                ? " bg-[#1E2230] rounded-[5px]"
+                : ""
+            } `}
+            // onClick={() => handleActivePage("dashboard")}
+          >
+            {router.pathname.includes("/dashboard/users/chat") ? (
+              <Chat1FillIcon size={24} className="text-white" />
+            ) : (
+              <Chat1FillIcon size={24} className="text-[#1E2230]" />
+            )}
+            <h1
+              className={`text-sm ${
+                router.pathname.includes("/dashboard/users/chat")
+                  ? "text-white font-medium"
+                  : "font-normal text-[#1E2230]"
+              }`}
+            >
+              Chat
+            </h1>
+          </Link>
+
+
+          <Link
+            href={"/dashboard/users/records"}
+            className={`flex items-center gap-2 cursor-pointer px-4 py-3 ${
+              router.pathname.includes("/dashboard/users/records")
+                ? " bg-[#1E2230] rounded-[5px]"
+                : ""
+            } `}
+            // onClick={() => handleActivePage("dashboard")}
+          >
+            {router.pathname.includes("/dashboard/users/records") ? (
+              <FileHistoryFillIcon size={24} className="text-white" />
+            ) : (
+              <FileHistoryFillIcon size={24} className="text-[#1E2230]" />
+            )}
+            <h1
+              className={`text-sm ${
+                router.pathname.includes("/dashboard/users/records")
+                  ? "text-white font-medium"
+                  : "font-normal text-[#1E2230]"
+              }`}
+            >
+              Records
+            </h1>
+          </Link>
 
          
 

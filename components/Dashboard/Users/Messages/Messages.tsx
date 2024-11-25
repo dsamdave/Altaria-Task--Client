@@ -2,22 +2,26 @@ import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import { ResponseMessage, UserMessage } from "./MessageComponent";
 import { IConsultation } from "@/pages/dashboard/hospitaldb/messages";
-import { SocketBaseURL } from "@/lib/query";
-import { useSelector } from "react-redux";
+import { Conversation } from "../../Admin/Messages/Messages";
 import { useAppSelector } from "@/redux/store";
+import { toast } from "react-toastify";
+import { SocketBaseURL } from "@/lib/query";
 import io from "socket.io-client";
 import { formatDateLabel, formatTime } from "@/utilities";
 import dayjs from "dayjs";
-import CloseChatModal from "./CloseChatModal";
-import { toast } from "react-toastify";
 
 interface IMsgProp {
   consultations: IConsultation[];
 }
 
+
+
 const Messages: React.FC<IMsgProp> = ({ consultations }) => {
+
   const { currentUser } = useAppSelector((state) => state.auth);
   const userID = currentUser?.id;
+
+
   const messageData = [
     {
       userImg: "/m-user2.png",
@@ -123,7 +127,9 @@ const Messages: React.FC<IMsgProp> = ({ consultations }) => {
 
   const [activeChat, setActiveChat] = useState<number>(0);
   const [attach, setAttach] = useState(false);
+
   const [selectedChatID, setSelectedChatID] = useState("");
+  const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
 
   const [loading, setLoading] = useState(false);
 
@@ -137,19 +143,13 @@ const Messages: React.FC<IMsgProp> = ({ consultations }) => {
     { uri: string; name: string; mimeType: string }[]
   >([]);
 
-  const [time, setTime] = useState<string>("");
   const [typingUser, setTypingUser] = useState(null);
   const [isTyping, setIsTyping] = useState(false);
-  const [openCloseChatModal, setOpenCloseChatModal] = useState(false);
-
-  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
 
-
-
-  const handleOpenCloseChatModal = ()=>{
-    setOpenCloseChatModal(!openCloseChatModal)
-  }
+  const handleAttach = () => {
+    setAttach(!attach);
+  };
 
 
   const scrollToBottom = () => {
@@ -162,17 +162,14 @@ const Messages: React.FC<IMsgProp> = ({ consultations }) => {
     setMsg(e.target.value);
   };
 
-  const handleMoreOption = () => {
-    setMore(!more);
-  };
 
   const handleActiveChat = (index: number) => {
     setActiveChat(index);
+    setIsChatOpen(true); // Open chat on small screens
   };
 
-  const handleAttach = () => {
-    setAttach(!attach);
-  };
+
+
 
   const handleSubmitMessage = async () => {
     if (!msg.trim() && media.length < 1) {
@@ -214,13 +211,13 @@ const Messages: React.FC<IMsgProp> = ({ consultations }) => {
     // }
 
     socket.emit("chatMessage", {
-      patientID: selectedChat?.patient?.id,
-      doctorID: userID,
+      patientID: userID,
+      doctorID: selectedChat?.patient?.id,
       message: msg,
       attachments,
       links: "",
       sender: userID,
-      recipient: selectedChat?.patient?.id,
+      recipient: selectedChat?.doctor?.id,
     });
 
     // setLinks([]);
@@ -229,22 +226,12 @@ const Messages: React.FC<IMsgProp> = ({ consultations }) => {
     setLoading(false);
   };
 
-  const handleCloseChat = async () => {
-    if (!selectedChatID && !currentUser?.id) {
-      return;
-    }
-
-    socket.emit("closeChat", {
-      conversationID: selectedChatID,
-      userID,
-    });
-
-    handleOpenCloseChatModal()
-  };
 
 
   useEffect(() => {
     if (!userID && selectedChat) return;
+
+    console.log({selectedChat})
 
     setLoading(true);
     const socketInstance = io(SocketBaseURL, {
@@ -299,7 +286,6 @@ const Messages: React.FC<IMsgProp> = ({ consultations }) => {
     };
   }, [currentUser?.id, selectedChat]);
 
-
   useEffect(() => {
     if (!selectedChatID) return;
 
@@ -312,34 +298,104 @@ const Messages: React.FC<IMsgProp> = ({ consultations }) => {
     setSelectedChat(selectChatHistory[0]);
   }, [selectedChatID]);
 
-
-
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
 
 
+  // console.log({selectedChatID, selectedChat})
+
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) {
+        setIsChatOpen(true); // Ensure chat is open on larger screens
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    handleResize();
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+
+
+
+
+
+
+
 
   return (
-    <div
-      className="flex items-stretch gap-3 mt-5 fixed top-0 left-0 h-[85%]"
-      style={{
-        marginLeft: "270px",
-        marginTop: "100px",
-        // width: "50%",
-        // height: "60vh"
-      }}
-    >
+    <div className="flex items-stretch gap-3 mt-5 h-full">
       {/* Left Section */}
-      <div className=" w-[300px] bg-white shadow-2xl border-t border-[#F1F5F8]  relative ">
-        <div className="overflow-y-scroll h-[95%] ">
-          {consultations.map((data, index) => (
+      <div
+        className={`w-full lg:w-[300px] bg-white shadow-2xl border-t border-[#F1F5F8] h-[1015px] relative lg:block ${
+          isChatOpen ? "hidden" : "block"
+        }`}
+      >
+        <div className=" max-h-[800px] overflow-y-scroll">
+          {/* {messageData.map((data, index) => (
+            <div
+              key={index}
+              className={`flex items-center justify-between p-2 sm:p-4 border-b border-[#F1F5F8] ${
+                activeChat === index ? "bg-[#F1F5F8] rounded-lg" : ""
+              } cursor-pointer`}
+              onClick={() => handleActiveChat(index)}
+            >
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 relative">
+                  {data.status === "online" ? (
+                    <Image
+                      src={"/online.svg"}
+                      width={12}
+                      height={12}
+                      alt="online icon"
+                      className="absolute -right-1 -top-1.5"
+                    />
+                  ) : null}
+                  <Image
+                    src={data.userImg}
+                    width={40}
+                    height={40}
+                    alt="users"
+                    className="rounded-lg"
+                  />
+                </div>
+                <div>
+                  <h1 className="text-base text-[#414D55] font-bold">
+                    {data.userName}
+                  </h1>
+                  <p className="text-sm text-[#90A1AC] font-normal mt-1">
+                    {data.recentMessage}
+                  </p>
+                </div>
+              </div>
+
+
+              {data.numberOfMessages !== "" ? (
+                <div className="w-[22px] h-5 rounded-[10px] bg-[#FDCA40] flex items-center justify-center">
+                  <p className="text-[10px] text-[#2D353B] font-normal">
+                    {data.numberOfMessages}
+                  </p>
+                </div>
+              ) : null}
+
+            </div>
+          ))} */}
+
+{consultations.map((data, index) => (
             <div
               key={index}
               className={`hover:bg-gray-100 flex items-center justify-between p-4 border-b border-[#F1F5F8] ${
                 data?.id === selectedChatID ? "bg-[#F1F5F8] rounded-lg" : ""
               } cursor-pointer`}
-              onClick={() => setSelectedChatID(data?.id)}
+              onClick={() =>{
+                handleActiveChat(index)
+                setSelectedChatID(data?.id)
+              } 
+                
+
+              }
             >
               <div className="shrink flex items-center gap-4">
                 <div className="w-10 h-10 relative">
@@ -377,52 +433,6 @@ const Messages: React.FC<IMsgProp> = ({ consultations }) => {
               {/* nUMBER OF MESSAGES ENDS */}
             </div>
           ))}
-          {/* {messageData.map((data, index) => (
-            <div
-              key={index}
-              className={`flex items-center justify-between p-4 border-b border-[#F1F5F8] ${
-                activeChat === index ? "bg-[#F1F5F8] rounded-lg" : ""
-              } cursor-pointer`}
-              onClick={() => handleActiveChat(index)}
-            >
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 relative">
-                  {data.status === "online" ? (
-                    <Image
-                      src={"/online.svg"}
-                      width={12}
-                      height={12}
-                      alt="online icon"
-                      className="absolute -right-1 -top-1.5"
-                    />
-                  ) : null}
-                  <Image
-                    src={data.userImg}
-                    width={40}
-                    height={40}
-                    alt="users"
-                    className="rounded-lg"
-                  />
-                </div>
-                <div>
-                  <h1 className="text-base text-[#414D55] font-bold">
-                    {data.userName}
-                  </h1>
-                  <p className="text-sm text-[#90A1AC] font-normal mt-1">
-                    {data.recentMessage}
-                  </p>
-                </div>
-              </div>
-
-              {data.numberOfMessages !== "" ? (
-                <div className="w-[22px] h-5 rounded-[10px] bg-[#FDCA40] flex items-center justify-center">
-                  <p className="text-[10px] text-[#2D353B] font-normal">
-                    {data.numberOfMessages}
-                  </p>
-                </div>
-              ) : null}
-            </div>
-          ))} */}
         </div>
 
         {/* Search Input area */}
@@ -440,69 +450,81 @@ const Messages: React.FC<IMsgProp> = ({ consultations }) => {
       {/* Right Side */}
       {/* Right Side */}
       <div
-        className="overflow-x-auto whitespace-nowrap bg-white flex-1 border-t border-[#F1F5F8] shadow-2xl relative"
-        style={{ width: "50vw" }}
+        className={`bg-white flex-1 border-t border-[#F1F5F8] shadow-2xl relative ${
+          isChatOpen ? "block" : "hidden"
+        }`}
       >
-        {selectedChat ? (
-          <div>
-            {/* Top Section */}
-            <div className="flex items-center justify-between p-3 border-b border-[#F1F5F8]">
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-11 rounded-lg overflow-hidden">
-                  <Image
+        {isChatOpen && (
+          <Image
+            src={"/mra.svg"}
+            width={40}
+            height={40}
+            alt="icon"
+            onClick={() => setIsChatOpen(false)}
+            className="lg:hidden m-3"
+          />
+        )}
+
+{
+  selectedChat ? (
+
+      <div>
+        
+        {/* Top Section */}
+        <div className="flex items-center justify-between p-3 border-b border-[#F1F5F8] flex-wrap">
+          <div className="flex items-center gap-4">
+          <div className="w-10 h-11 rounded-lg overflow-hidden">
+
+            <Image
                     src={selectedChat?.patient?.avatar || ""}
-                    alt="User img"
                     width={60}
-                    height={60}
-                    className="object-cover w-full h-full"
-                  />
-                </div>
-                <h1 className="text-xl text-[#414d55] font-bold">
-                  {selectedChat?.patient?.firstName}{" "}
-                  {selectedChat?.patient?.lastName}
-                </h1>
-              </div>
+              height={60}
+              alt="users"
+              className="object-cover w-full h-full"
+            />
+          </div>
+            <h1 className="text-xl text-[#414d55] font-bold">
+            {selectedChat?.patient?.firstName}{" "}
+            {selectedChat?.patient?.lastName}
+            </h1>
+          </div>
 
-              {/* Call icon and case history */}
-              <div className="flex items-center gap-3">
-                {/* <button className="w-[140px] bg-white rounded-[20px] flex items-center justify-center gap-1 py-1.5 shadow-sm border border-[#142E6E1A]">
-                  <Image
-                    src={"/m-case.svg"}
-                    width={20}
-                    height={20}
-                    alt="call icon"
-                    className="rounded-lg"
-                  />
-                  <p className="text-sm text-[#1E2230] font-normal">
-                    Case history
-                  </p>
-                </button> */}
-                <button className="w-[150px] bg-[#F60707] rounded-[15px] py-1.5 shadow-sm text-sm text-white font-normal text-center" onClick={handleOpenCloseChatModal}>
-                  {
-                    selectedChat?.closed === true ? "Conversation Closed" : "Close Conversation"
-                  }
-                 
+          {/* Call icon and case history */}
+          {/* <div className="flex items-center gap-3">
+            <button className="w-[140px] bg-white rounded-[20px] flex items-center justify-center gap-1 py-1.5 shadow-sm border border-[#142E6E1A]">
+              <Image
+                src={"/m-case.svg"}
+                width={20}
+                height={20}
+                alt="call icon"
+                className="rounded-lg"
+              />
+              <p className="text-sm text-[#1E2230] font-normal">Case history</p>
             </button>
-                {/* <button>
-                  <Image
-                    src={"/call-icon.svg"}
-                    width={40}
-                    height={40}
-                    alt="call icon"
-                    className="rounded-lg"
-                  />
-                </button> */}
-              </div>
-            </div>
-            {/* Top section ends */}
+            <button>
+              <Image
+                src={"/call-icon.svg"}
+                width={40}
+                height={40}
+                alt="call icon"
+                className="rounded-lg"
+              />
+            </button>
+          </div> */}
+        </div>
+        {/* Top section ends */}
 
-            {/* CHAT CONTENTS */}
-            <div
-              className="max-h-[418px] overflow-y-auto px-4 py-2.5 lg:max-h-[500px] xl:max-h-[570px]"
-              style={{ paddingBottom: "100px" }}
-              ref={divRef}
-            >
-              <>
+        {/* CHAT CONTENTS */}
+        <div className="max-h-[418px] overflow-y-auto px-4 py-2.5 lg:max-h-[500px] xl:max-h-[570px] mb-28 lg:mb-0">
+          {/* Chat period/date */}
+          <div className="flex items-center gap-1">
+            {/* <div className=" border-b w-5 h-1 border-dashed border-[#A2C0D4]" /> */}
+            {/* <p className="text-[10px] text-[#414D55] font-bold">TODAY</p> */}
+            {/* <div className=" border-b flex-1 h-1 border-dashed border-[#A2C0D4]" /> */}
+          </div>
+          {/* Chat content here */}
+
+          <>
                 {messages &&
                   messages.map((data, idx) => {
                     const messageDate = dayjs(data.createdAt);
@@ -510,6 +532,8 @@ const Messages: React.FC<IMsgProp> = ({ consultations }) => {
 
                     const shouldDisplayLabel = lastDateLabel !== currentLabel;
                     lastDateLabel = currentLabel;
+
+                    console.log({data})
 
                     return (
                       <div key={idx}>
@@ -529,13 +553,14 @@ const Messages: React.FC<IMsgProp> = ({ consultations }) => {
                           </div>
                         )}
 
-                        {data.sender === userID ? (
+                        {/* {data.patientID === userID ? ( */}
+                        {data.sender === "66ede5a622950de08dae5fef" ? (
                           <div>
                             <ResponseMessage
                               time={formatTime(data.createdAt)}
                               message={data.message}
                               attached=""
-                              userName="Me"
+                              userName={`${selectedChat?.patient?.firstName} ${selectedChat?.patient?.lastName}`}
                             />
                             {data.attachments[0]?.url &&
                               data.attachments.length > 0 &&
@@ -544,6 +569,7 @@ const Messages: React.FC<IMsgProp> = ({ consultations }) => {
                                   key={idx}
                                   attached={`/${item.url}`}
                                   time={formatTime(data.createdAt)}
+                                  userName={`${selectedChat?.patient?.firstName} ${selectedChat?.patient?.lastName}`}
                                 />
                               ))}
                           </div>
@@ -553,7 +579,8 @@ const Messages: React.FC<IMsgProp> = ({ consultations }) => {
                               key={idx}
                               attached=""
                               time={formatTime(data.createdAt)}
-                              message={data.message}
+                              messages={[data.message]}
+                              userName={`${selectedChat?.doctor?.firstName} ${selectedChat?.doctor?.lastName}`}
                             />
 
                             {data.attachments[0]?.url &&
@@ -563,6 +590,7 @@ const Messages: React.FC<IMsgProp> = ({ consultations }) => {
                                   key={idx}
                                   attached={`/${item.url}`}
                                   time={formatTime(data.createdAt)}
+                                  userName={`${selectedChat?.doctor?.firstName} ${selectedChat?.doctor?.lastName}`}
                                 />
                               ))}
                           </div>
@@ -572,136 +600,119 @@ const Messages: React.FC<IMsgProp> = ({ consultations }) => {
                   })}
               </>
 
-              {/*  CHAT CONTENTS ENDS */}
-            </div>
-            {/* Message input area */}
+          {/* <UserMessage
+            attached={""}
+            userName={messageData[activeChat].userName}
+            time="04:12 am"
+            messages={["Hello, Dr. Nicholas! 👋🏼"]}
+          /> */}
+          {/* <UserMessage
+            attached={""}
+            userName={messageData[activeChat].userName}
+            time="04:13 am"
+            messages={[
+              "I have some strange redness on the fingers 😱, could you check?",
+            ]}
+          />
+          <UserMessage
+            attached={"/attach.png"}
+            userName={messageData[activeChat].userName}
+            time="04:17 am"
+          />
 
-            <div className=" bg-white flex items-start border-t border-[#F1F5F8] w-full p-3 mt-4 absolute bottom-0">
-              {attach && (
-                <div className="flex flex-col gap-1 items-center justify-center w-[44px] rounded-[22px] z-50 absolute right-5 -top-36 shadow-xl">
-                  {attachOptions.map((options, index) => (
-                    <button>
-                      <Image
-                        key={index}
-                        src={options.iconSrc}
-                        width={36}
-                        height={36}
-                        alt="attach icon"
-                      />
-                    </button>
-                  ))}
-                </div>
-              )}
+          <ResponseMessage
+            time="10:18 am"
+            message="Hello. You need to come and pass a few tests."
+            attached=""
+            userName="Me"
+          />
+          <ResponseMessage
+            time="10:18 am"
+            message="When will it be convenient for you to come to the reception?"
+            attached=""
+            userName="Me"
+          /> */}
 
-              <textarea
-                name="msg"
-                id="msg"
-                cols={30}
-                rows={4}
-                className="flex-1 text-black placeholder:text-center p-4 mr-2"
-                placeholder="Start typing here"
-                value={msg}
-                onChange={handleChange}
-              />
-
-
-
-              <div className="flex flex-col items-center gap-2 bg-white">
-                <button
-                  onClick={handleAttach}
-                  className="transition-transform transform hover:scale-150"
-                >
+          {/*  CHAT CONTENTS ENDS */}
+        </div>
+        {/* Message input area */}
+        <div className="flex items-start gap-2 border-t border-[#F1F5F8] w-full p-3 mt-4 absolute bottom-0">
+          {/* Attach options */}
+          {attach && (
+            <div className="flex flex-col gap-1 items-center justify-center w-[44px] rounded-[22px] z-50 absolute right-5 -top-36 shadow-xl">
+              {attachOptions.map((options, index) => (
+                <button>
                   <Image
-                    src={"/attach-icon.svg"}
-                    width={16}
-                    height={16}
+                    key={index}
+                    src={options.iconSrc}
+                    width={36}
+                    height={36}
                     alt="attach icon"
-                    className="rounded-lg"
                   />
                 </button>
-                <button
+              ))}
+            </div>
+          )}
+
+          {/* Attach options ends here */}
+          <textarea
+            name=""
+            id=""
+            cols={30}
+            rows={10}
+            className="flex-1 text-black placeholder:text-center p-2 h-10 lg:h-auto"
+            placeholder="Start typing here"
+            value={msg}
+                onChange={handleChange}
+          />
+          {/* <button onClick={handleAttach}>
+            <Image
+              src={"/attach-icon.svg"}
+              width={16}
+              height={16}
+              alt="call icon"
+              className="rounded-lg"
+            />
+          </button> */}
+          <button
                   className="bg-blue-500 text-white p-2 rounded-lg shrink"
                   onClick={handleSubmitMessage}
                 >
                   {loading ? "loading..." : "Send"}
                 </button>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div className="flex flex-col items-center justify-center h-full text-center">
-            <div>
-              <div className="flex justify-center">
-                <Image
-                  src={"/no-m.svg"}
-                  width={44}
-                  height={44}
-                  alt="No message icon"
-                />
-              </div>
-              <h1 className="text-xl text-[#0F1222] font-bold mt-3">
-                No conversation selected
-              </h1>
-              <p className="text-base text-[#535875] font-normal w-[480px] mt-2">
-                All your chats and messages will appear here.
-              </p>
-            </div>
-          </div>
-        )}
+        </div>
       </div>
+  ) : (
 
 
-      { openCloseChatModal && <CloseChatModal onClose={handleOpenCloseChatModal} onProceed={handleCloseChat}/>}
+          <div className="max-h-[418px] overflow-y-auto px-4 py-2.5 lg:max-h-[500px] xl:max-h-[570px] mb-28 lg:mb-0"
+          style={{
+            height: "100vh"
+          }}
+          >
+          {/* Chat period/date */}
+          <div className="flex items-center gap-1">
+            <div className=" border-b w-5 h-1 border-dashed border-[#A2C0D4]" />
+            <p className="text-[17px] text-[#414D55] font-bold">
+            No conversation selected
+            </p>
+            <div className=" border-b flex-1 h-1 border-dashed border-[#A2C0D4]" />
+          </div>
+          
+
+          
+
+          {/*  CHAT CONTENTS ENDS */}
+        </div>
+  )
+}
+
+
+
+
+      </div>
     </div>
   );
 };
 
 export default Messages;
-
-export interface Attachment {
-  url: string;
-  filename: string;
-  _id: string;
-}
-
-interface PatientInfo {
-  medications: object;
-  appointments: object[];
-  conditions?: object[];
-  treatmentHistory?: object[];
-  labResults?: object[];
-  basicInformation?: object;
-  allergies?: object[];
-  clinicalVitals?: object[];
-}
-
-interface Person {
-  avatar: string;
-  country: string;
-  firstName: string;
-  lastName: string;
-  id: string;
-  latitude: number;
-  longitude: number;
-  patientID: string;
-  patientInfo: PatientInfo;
-  phoneNumber: string;
-  role: string;
-  state: string;
-}
-
-export interface Conversation {
-  attachments: Attachment[];
-  conversationID: string;
-  createdAt: string;
-  doctor: Person;
-  doctorID: string;
-  id: string;
-  links: string[];
-  message: string;
-  patient: Person;
-  patientID: string;
-  recipient: string;
-  sender: string;
-  updatedAt: string;
-}
