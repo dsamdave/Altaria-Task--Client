@@ -9,8 +9,13 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 
-import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
-import stripePromise from '@/utilities/stripeClient';
+import {
+  Elements,
+  CardElement,
+  useStripe,
+  useElements,
+} from "@stripe/react-stripe-js";
+import stripePromise from "@/utilities/stripeClient";
 import PaymentForm from "@/components/Payment";
 
 interface ConsultDetailsProp {
@@ -33,14 +38,15 @@ const userType = [
   },
 ];
 
-const ConsultDetails: React.FC<ConsultDetailsProp> = ({ onSuccess, onClose }) => {
-
+const ConsultDetails: React.FC<ConsultDetailsProp> = ({
+  onSuccess,
+  onClose,
+}) => {
   const { currentAppointmentPayload } = useAppSelector(
     (state) => state.appointment
   );
 
   const dispatch = useDispatch();
-
 
   const [selectedPerson, setSelectedPerson] = useState(0);
   // const [diagnosedCondition, setDiagnosedCondition] = useState(false);
@@ -58,7 +64,7 @@ const ConsultDetails: React.FC<ConsultDetailsProp> = ({ onSuccess, onClose }) =>
   const [birthday, setBirthday] = useState("");
   const [emergencyPhone, setEmergencyPhone] = useState("");
   const [gender, setGender] = useState("");
-  const [attachments, setAttachments] = useState<File[]>([]);  
+  const [attachments, setAttachments] = useState<File[]>([]);
   const [previewImages, setPreviewImages] = useState<string[]>([]);
 
   // const [forYou, setForYou] = useState(false);
@@ -76,7 +82,7 @@ const ConsultDetails: React.FC<ConsultDetailsProp> = ({ onSuccess, onClose }) =>
   // };
 
   // const handleMedications = () => {
-  //   setMedications(!medications); 
+  //   setMedications(!medications);
   // };
 
   // const handleAllergy = () => {
@@ -88,16 +94,16 @@ const ConsultDetails: React.FC<ConsultDetailsProp> = ({ onSuccess, onClose }) =>
   // };
 
   const handleAttachmentOptionClick = () => {
-    const fileInput = document.createElement('input');
-    fileInput.type = 'file';
-    fileInput.accept = 'image/*';
+    const fileInput = document.createElement("input");
+    fileInput.type = "file";
+    fileInput.accept = "image/*";
     fileInput.multiple = true;
     fileInput.onchange = (event: Event) => {
       const target = event.target as HTMLInputElement;
       if (target.files) {
         const files = Array.from(target.files).slice(0, 4);
         setAttachments(files);
-        const previews = files.map(file => URL.createObjectURL(file));
+        const previews = files.map((file) => URL.createObjectURL(file));
         setPreviewImages(previews);
       }
     };
@@ -128,9 +134,9 @@ const ConsultDetails: React.FC<ConsultDetailsProp> = ({ onSuccess, onClose }) =>
       dOB: birthday,
       phone: emergencyPhone,
       gender,
-      forYou: selectedPerson === 0 ? true : false, 
+      forYou: selectedPerson === 0 ? true : false,
       forSomeOne: selectedPerson === 1 ? true : false,
-      images: []
+      images: [],
     };
 
     const result = validateUserBooking(formData);
@@ -139,62 +145,55 @@ const ConsultDetails: React.FC<ConsultDetailsProp> = ({ onSuccess, onClose }) =>
       return toast.error(() => <Toast title="Error" body={result.errMsg} />);
     }
 
-    setLoading(true)
+    setLoading(true);
 
     const uploadedUrls: string[] = [];
 
     for (const file of attachments) {
       const formData = new FormData();
-      formData.append('file', file);
-  
-      formData.append('upload_preset', 'zi7fzibg');
-      formData.append('cloud_name', 'dvxsj1hf8');
+      formData.append("file", file);
 
-      const response = await fetch('https://api.cloudinary.com/v1_1/dvxsj1hf8/upload', {
-        method: 'POST',
-        body: formData,
-      });
+      formData.append("upload_preset", "zi7fzibg");
+      formData.append("cloud_name", "dvxsj1hf8");
+
+      const response = await fetch(
+        "https://api.cloudinary.com/v1_1/dvxsj1hf8/upload",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
       const data = await response.json();
       uploadedUrls.push(data.secure_url);
     }
 
-    console.log('Uploaded URLs:', uploadedUrls);
+    // console.log("Uploaded URLs:", uploadedUrls);
     setAttachments([]);
 
+    // console.log({ ...formData, images: uploadedUrls });
 
-    console.log({formData});
+    dispatch(addAppointmentPayload({ ...formData, images: uploadedUrls }));
 
-    dispatch(
-      addAppointmentPayload(formData)
-    );
-
-    setLoading(false)
-    setPaymentModal(true)
-
+    setLoading(false);
+    setPaymentModal(true);
   };
 
   // console.log({currentAppointmentPayload})
 
   return (
     <>
-    {
-      paymentModal ? (
-
-
+      {paymentModal ? (
         <Elements stripe={stripePromise}>
-        <PaymentForm onClose={onClose} />
-      </Elements>
-
-
+          <PaymentForm onClose={onClose} />
+        </Elements>
       ) : (
-
         <div className="max-w-4xl mx-auto p-2 sm:p-6 bg-white rounded-lg  space-y-6">
           {/* Header */}
           <div>
             <h2 className="text-sm font-semibold text-gray-600">Step 2 of 3</h2>
             <h3 className="text-2xl font-bold">Consult Details</h3>
           </div>
-    
+
           {/* Main Content */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Left Side */}
@@ -234,7 +233,7 @@ const ConsultDetails: React.FC<ConsultDetailsProp> = ({ onSuccess, onClose }) =>
                           />
                         )}
                       </div>
-    
+
                       <p
                         className={` text-[10px] sm:text-xs text-center ${
                           selectedPerson === index
@@ -248,7 +247,7 @@ const ConsultDetails: React.FC<ConsultDetailsProp> = ({ onSuccess, onClose }) =>
                   ))}
                 </div>
               </div>
-    
+
               {selectedPerson === 1 && (
                 <form onSubmit={handleSubmit}>
                   <div>
@@ -300,13 +299,15 @@ const ConsultDetails: React.FC<ConsultDetailsProp> = ({ onSuccess, onClose }) =>
                         />
                       </div>
                       <div className="flex items-center space-x-4">
-                        <span className="font-semibold text-gray-700">Gender:</span>
+                        <span className="font-semibold text-gray-700">
+                          Gender:
+                        </span>
                         <label className="inline-flex items-center">
                           <input
                             type="radio"
                             name="gender"
                             value="male"
-                            checked={gender === 'male'}
+                            checked={gender === "male"}
                             onChange={handleGenderChange}
                             className="form-radio text-blue-500"
                             style={{ transform: "scale(1.5)", margin: "5px" }}
@@ -318,7 +319,7 @@ const ConsultDetails: React.FC<ConsultDetailsProp> = ({ onSuccess, onClose }) =>
                             type="radio"
                             name="gender"
                             value="female"
-                            checked={gender === 'female'}
+                            checked={gender === "female"}
                             onChange={handleGenderChange}
                             className="form-radio text-blue-500"
                             style={{ transform: "scale(1.5)", margin: "5px" }}
@@ -328,10 +329,9 @@ const ConsultDetails: React.FC<ConsultDetailsProp> = ({ onSuccess, onClose }) =>
                       </div>
                     </div>
                   </div>
-                 
                 </form>
               )}
-    
+
               <div>
                 {/* <label className="font-semibold text-gray-700 flex items-center gap-4">
                   <Image src={"/c2.png"} width={32} height={32} alt="Images" />
@@ -341,7 +341,7 @@ const ConsultDetails: React.FC<ConsultDetailsProp> = ({ onSuccess, onClose }) =>
                   className="w-full h-24 mt-2 p-3 border rounded-lg border-gray-300 focus:outline-none focus:border-blue-500"
                   placeholder="Enter your question here..."
                 ></textarea> */}
-    
+
                 {/* {showAttachmentModal && (
                   <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
                     <div className="bg-white p-2 sm:p-4 lg:p-6 rounded-lg space-y-4 w-[280px] sm:w-96">
@@ -377,7 +377,7 @@ const ConsultDetails: React.FC<ConsultDetailsProp> = ({ onSuccess, onClose }) =>
                     </div>
                   </div>
                 )} */}
-    
+
                 {/* Uploaded Attachment Details */}
                 {/* {showUploadedDetails && (
                   <div className="flex items-center flex-wrap gap-3 bg-[#F6F6F6] p-2 mt-4">
@@ -398,7 +398,7 @@ const ConsultDetails: React.FC<ConsultDetailsProp> = ({ onSuccess, onClose }) =>
                     </div>
                   </div>
                 )} */}
-    
+
                 {/* <div className="space-y-4 mt-5">
                   <button
                     onClick={handleAttachmentOptionClick}
@@ -440,7 +440,7 @@ const ConsultDetails: React.FC<ConsultDetailsProp> = ({ onSuccess, onClose }) =>
                 </div> */}
               </div>
             </div>
-    
+
             {/* Right Side */}
             {/* Right Side */}
             <div className="space-y-4">
@@ -448,18 +448,18 @@ const ConsultDetails: React.FC<ConsultDetailsProp> = ({ onSuccess, onClose }) =>
                 <Image src={"/c3.png"} width={32} height={32} alt="Images" />
                 Additional Information
               </h4>
-    
+
               <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-2">
-            {previewImages.map((url, index) => (
-              <img
-                key={index}
-                src={url}
-                alt={`preview ${index}`}
-                className="w-full h-auto rounded-lg object-cover"
-              />
-            ))}
-          </div>
-    
+                {previewImages.map((url, index) => (
+                  <img
+                    key={index}
+                    src={url}
+                    alt={`preview ${index}`}
+                    className="w-full h-auto rounded-lg object-cover"
+                  />
+                ))}
+              </div>
+
               <div className="shrink space-y-4 mt-5">
                 <button
                   onClick={handleAttachmentOptionClick}
@@ -476,7 +476,7 @@ const ConsultDetails: React.FC<ConsultDetailsProp> = ({ onSuccess, onClose }) =>
                     Add Attachments
                   </span>
                 </button>
-    
+
                 {/* Dropdown for Attachment Options */}
                 {/* {attachmentOptionsOpen && (
                   <div className="relative">
@@ -499,7 +499,7 @@ const ConsultDetails: React.FC<ConsultDetailsProp> = ({ onSuccess, onClose }) =>
                   </div>
                 )} */}
               </div>
-    
+
               {/* <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="w-[150px] sm:w-auto">
@@ -551,7 +551,7 @@ const ConsultDetails: React.FC<ConsultDetailsProp> = ({ onSuccess, onClose }) =>
                   </div>
                 )}
               </div> */}
-    
+
               {/* <div className="flex items-center justify-between">
                 <span className="w-[150px] sm:w-auto">
                   Do you take any medications?
@@ -571,7 +571,7 @@ const ConsultDetails: React.FC<ConsultDetailsProp> = ({ onSuccess, onClose }) =>
     
                 
               </div> */}
-    
+
               {/* <div className="flex items-center justify-between">
                 <span className="w-[150px] sm:w-auto">
                   Do you have any allergies?
@@ -589,7 +589,7 @@ const ConsultDetails: React.FC<ConsultDetailsProp> = ({ onSuccess, onClose }) =>
                   <button className={`w-7 h-7 bg-white shadow-lg rounded-full `} />
                 </div>
               </div> */}
-    
+
               {/* <div className="mt-7 pt-5 border-t border-[#F6F6F6]">
                 <h4 className="font-semibold text-[#1E1F20]">
                   Sync with Health Services
@@ -611,7 +611,7 @@ const ConsultDetails: React.FC<ConsultDetailsProp> = ({ onSuccess, onClose }) =>
                   </span>
                 </button>
               </div> */}
-    
+
               {/* Footer */}
               <div className="flex flex-col items-center justify-center ">
                 <p className="text-xs text-[#1E1F20] text-center mt-10 lg:mt-40">
@@ -628,13 +628,11 @@ const ConsultDetails: React.FC<ConsultDetailsProp> = ({ onSuccess, onClose }) =>
               </div>
             </div>
           </div>
-    
+
           {loading && <Spinner />}
         </div>
-      )
-    }
+      )}
     </>
-
   );
 };
 

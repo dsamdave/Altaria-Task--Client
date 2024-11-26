@@ -143,6 +143,8 @@ const Messages: React.FC<IMsgProp> = ({ consultations }) => {
   const [openCloseChatModal, setOpenCloseChatModal] = useState(false);
 
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [attachments, setAttachments] = useState<File[]>([]);
+  const [previewImages, setPreviewImages] = useState<string[]>([]);
 
 
 
@@ -174,8 +176,28 @@ const Messages: React.FC<IMsgProp> = ({ consultations }) => {
     setAttach(!attach);
   };
 
+
+  const handleAttachmentOptionClick = () => {
+    const fileInput = document.createElement("input");
+    fileInput.type = "file";
+    fileInput.accept = "image/*";
+    fileInput.multiple = true;
+    fileInput.onchange = (event: Event) => {
+      const target = event.target as HTMLInputElement;
+      if (target.files) {
+        const files = Array.from(target.files).slice(0, 4);
+        setAttachments(files);
+        const previews = files.map((file) => URL.createObjectURL(file));
+        setPreviewImages(previews);
+        handleAttach()
+      }
+    };
+    fileInput.click();
+  };
+
+
   const handleSubmitMessage = async () => {
-    if (!msg.trim() && media.length < 1) {
+    if (!msg.trim() && attachments.length < 1) {
       return;
     }
 
@@ -188,44 +210,47 @@ const Messages: React.FC<IMsgProp> = ({ consultations }) => {
 
     console.log(msg);
 
-    let attachments;
+    // let attachments;
     setLoading(true);
 
-    // if(media.length > 0){
-    //   setLoading(true);
+    const uploadedUrls: string[] = [];
 
-    //   const uploadPromises = media.map((file) =>
-    //     upload4ImagesToCloud(file.uri, file.name, file.mimeType)
-    //   );
+    if (attachments.length > 0) {
+      for (const file of attachments) {
+        const formData = new FormData();
+        formData.append("file", file);
 
-    //   const uploadedImages = await Promise.all(uploadPromises);
+        formData.append("upload_preset", "zi7fzibg");
+        formData.append("cloud_name", "dvxsj1hf8");
 
-    //   const imageUrls = await uploadedImages.map((image) => image.url);
+        const response = await fetch(
+          "https://api.cloudinary.com/v1_1/dvxsj1hf8/upload",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+        const data = await response.json();
+        uploadedUrls.push(data.secure_url);
+      }
+    }
 
-    //   const urls = imageUrls.map((url, index) => ({
-    //     filename: `File ${index + 1}`,
-    //     url,
-    //   }));
-
-    //   attachments = urls
-
-    //   setLoading(false);
-
-    // }
-
-    socket.emit("chatMessage", {
+    const payload = {
       patientID: selectedChat?.patient?.id,
       doctorID: userID,
       message: msg,
-      attachments,
+      attachments: uploadedUrls,
       links: "",
       sender: userID,
       recipient: selectedChat?.patient?.id,
-    });
+    };
 
-    // setLinks([]);
+    socket.emit("chatMessage", payload);
+
     setMsg("");
     setMedia([]);
+    setPreviewImages([]);
+
     setLoading(false);
   };
 
@@ -499,7 +524,7 @@ const Messages: React.FC<IMsgProp> = ({ consultations }) => {
             {/* CHAT CONTENTS */}
             <div
               className="max-h-[418px] overflow-y-auto px-4 py-2.5 lg:max-h-[500px] xl:max-h-[570px]"
-              style={{ paddingBottom: "100px" }}
+              style={{ paddingBottom: "150px" }}
               ref={divRef}
             >
               <>
@@ -511,14 +536,13 @@ const Messages: React.FC<IMsgProp> = ({ consultations }) => {
                     const shouldDisplayLabel = lastDateLabel !== currentLabel;
                     lastDateLabel = currentLabel;
 
+                    // console.log({ data });
+
                     return (
                       <div key={idx}>
                         {/* Display date label when it changes */}
                         {shouldDisplayLabel && (
-                          // <>
-                          //   <hr className="my-4" />
-                          //   <p className="text-center text-red-600 text-sm font-semibold">{currentLabel}</p>
-                          // </>
+                         
 
                           <div className="flex items-center gap-1">
                             <div className=" border-b w-5 h-1 border-dashed border-[#A2C0D4]" />
@@ -529,42 +553,46 @@ const Messages: React.FC<IMsgProp> = ({ consultations }) => {
                           </div>
                         )}
 
+{/* {data.sender === "66ede5a622950de08dae5fef" ? ( */}
                         {data.sender === userID ? (
                           <div>
                             <ResponseMessage
                               time={formatTime(data.createdAt)}
                               message={data.message}
-                              attached=""
-                              userName="Me"
+                              attached={data.attachments}
+                              userName={`${selectedChat?.patient?.firstName} ${selectedChat?.patient?.lastName}`}
                             />
-                            {data.attachments[0]?.url &&
+                            {/* {
                               data.attachments.length > 0 &&
                               data.attachments.map((item, idx) => (
-                                <UserMessage
+                                <ResponseMessage
                                   key={idx}
-                                  attached={`/${item.url}`}
+                                  attached={`${item}`}
                                   time={formatTime(data.createdAt)}
+                                  userName={`${selectedChat?.patient?.firstName} ${selectedChat?.patient?.lastName}`}
                                 />
-                              ))}
+                              ))} */}
                           </div>
                         ) : (
                           <div>
                             <UserMessage
                               key={idx}
-                              attached=""
+                              attached={data.attachments}
                               time={formatTime(data.createdAt)}
-                              message={data.message}
+                              messages={[data.message]}
+                              userName={`${selectedChat?.doctor?.firstName} ${selectedChat?.doctor?.lastName}`}
                             />
 
-                            {data.attachments[0]?.url &&
+                            {/* {data.attachments[0]?.url &&
                               data.attachments.length > 0 &&
                               data.attachments.map((item, idx) => (
                                 <UserMessage
                                   key={idx}
-                                  attached={`/${item.url}`}
+                                  attached={`/${item}`}
                                   time={formatTime(data.createdAt)}
+                                  userName={`${selectedChat?.doctor?.firstName} ${selectedChat?.doctor?.lastName}`}
                                 />
-                              ))}
+                              ))} */}
                           </div>
                         )}
                       </div>
@@ -573,25 +601,45 @@ const Messages: React.FC<IMsgProp> = ({ consultations }) => {
               </>
 
               {/*  CHAT CONTENTS ENDS */}
+
+
             </div>
             {/* Message input area */}
 
-            <div className=" bg-white flex items-start border-t border-[#F1F5F8] w-full p-3 mt-4 absolute bottom-0">
+            <div className=" items-start gap-2 border-t border-[#F1F5F8] w-full p-3 mt-4 absolute bottom-0">
+
+            
+
+              
+              <div className=" bg-white flex items-start border-t border-[#F1F5F8] w-full p-3 mt-4 absolute bottom-0">
+
               {attach && (
                 <div className="flex flex-col gap-1 items-center justify-center w-[44px] rounded-[22px] z-50 absolute right-5 -top-36 shadow-xl">
                   {attachOptions.map((options, index) => (
-                    <button>
-                      <Image
-                        key={index}
-                        src={options.iconSrc}
-                        width={36}
-                        height={36}
-                        alt="attach icon"
-                      />
-                    </button>
-                  ))}
+                      <button key={index} onClick={handleAttachmentOptionClick}>
+                        <Image
+                          src={options.iconSrc}
+                          width={36}
+                          height={36}
+                          alt="attach icon"
+                        />
+                      </button>
+                    ))}
                 </div>
               )}
+
+<div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-2">
+                {previewImages.map((url, index) => (
+                  <Image
+                    key={index}
+                    src={url}
+                    width={50}
+                    height={50}
+                    alt={`preview ${index}`}
+                    className="l h-auto rounded-lg object-cover"
+                  />
+                ))}
+              </div>
 
               <textarea
                 name="msg"
@@ -613,20 +661,24 @@ const Messages: React.FC<IMsgProp> = ({ consultations }) => {
                 >
                   <Image
                     src={"/attach-icon.svg"}
-                    width={16}
-                    height={16}
+                    width={30}
+                    height={30}
                     alt="attach icon"
                     className="rounded-lg"
                   />
                 </button>
                 <button
-                  className="bg-blue-500 text-white p-2 rounded-lg shrink"
+                  className="bg-blue-500 text-white p-4 rounded-lg shrink"
                   onClick={handleSubmitMessage}
                 >
                   {loading ? "loading..." : "Send"}
                 </button>
               </div>
+              </div>
+              
             </div>
+
+
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center h-full text-center">
@@ -691,7 +743,7 @@ interface Person {
 }
 
 export interface Conversation {
-  attachments: Attachment[];
+  attachments: string[];
   conversationID: string;
   createdAt: string;
   doctor: Person;

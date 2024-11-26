@@ -98,14 +98,14 @@ const RightSide: React.FC<rightSideProp> = ({
                 <MenuLineIcon
                   size={24}
                   onClick={toggleSidebar}
-                  className="cursor-pointer"
+                  className="cursor-pointer shrink text-black"
                 />
                 <Image
                   src={"/m-noti.png"}
                   width={23}
                   height={23}
                   alt="Notification icon"
-                  className="cursor-pointer"
+                  className="cursor-pointer shrink"
                   onClick={handleNotification}
                 />
               </div>
@@ -137,7 +137,7 @@ const RightSide: React.FC<rightSideProp> = ({
             notification ? "block" : "hidden lg:block"
           } `}
         >
-          <ArrowLeftLineIcon size={43} className="lg:hidden" onClick={handleNotification}  />
+          <ArrowLeftLineIcon size={43} className="lg:hidden cursor-pointer shrink" onClick={handleNotification}  />
           <div className="flex items-center justify-between">
             <h1 className="text-lg text-black font-bold text-center">Notifications</h1>
 

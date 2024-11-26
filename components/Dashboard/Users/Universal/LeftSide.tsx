@@ -72,9 +72,9 @@ const LeftSide: React.FC<leftSideProp> = ({
           />
 
           <CloseLineIcon
-            size={24}
+            size={30}
             onClick={toggleSidebar}
-            className="lg:hidden text-[#1E2230]"
+            className="lg:hidden text-[#1E2230] cursor-pointer shrink"
           />
           {/* <Image
             src={"/close-img.svg"}
