@@ -70,13 +70,14 @@ const Conversation = () => {
           </div>
           {/* Chat content here */}
           <UserMessage
-            attached={""}
-            // userName="Princewill Iroka"
+            attached={[]}
+            userName=" "
             time="04:12 am"
             // messages={["Hello, Dr. Nicholas! 👋🏼"]}
           />
           <UserMessage
-            attached={""}
+            attached={[]}
+            userName=" "
             // userName="Princewill Iroka"
             time="04:13 am"
             // messages={[
@@ -84,7 +85,8 @@ const Conversation = () => {
             // ]}
           />
           <UserMessage
-            attached={"/attach.png"}
+            attached={[]}
+            userName=" "
             // userName="Princewill Iroka"
             time="04:17 am"
           />
