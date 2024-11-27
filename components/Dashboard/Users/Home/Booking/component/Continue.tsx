@@ -26,7 +26,7 @@ const Continue:React.FC<CoontinueProps> = ({onSelectTime}) => {
         Click "Continue" to proceed with booking an appointment with ExpatDoc Online.
         </p>
 
-        <button className=" bg-[#2662F0] rounded-xl w-full sm:w-[279px] mt-20 text-base text-center font-bold text-[#F5F5F5] py-3" onClick={onSelectTime}>
+        <button className="shrink bg-[#2662F0] rounded-xl w-full sm:w-[279px] mt-20 text-base text-center font-bold text-[#F5F5F5] py-3" onClick={onSelectTime}>
           Continue
         </button>
       </div>

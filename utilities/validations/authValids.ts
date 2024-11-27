@@ -1,3 +1,4 @@
+import { IRecordFormData } from "@/components/Dashboard/Users/Records/components/BasicInfo";
 import { ILoginVariables } from "@/pages/dashboard";
 import { ISignUpVariables } from "@/pages/dashboard/auth/signup";
 
@@ -57,6 +58,41 @@ export const validateUserLogin = (userDetails: ILoginVariables) => {
       errors.push("Incorrect password.")
   
     }
+  
+    return {
+      errMsg: errors,
+      errLength: errors.length
+    }
+  }
+
+  export const validateUpdateRecords = (userDetails: IRecordFormData) => {
+    const {   firstName,
+      lastName,
+      birthday,
+      gender,
+      language,
+      email,
+      zip,
+      phoneNumber,
+      address,
+      contactName,
+      ezip,
+      EphoneNumber,
+      relationship, } = userDetails;
+    const errors: string[]  = []
+  
+  
+    // if(!identifier){
+    //   errors.push("Please enter your email.")
+    // } 
+    
+  
+    // if(!password){
+    //   errors.push("Please enter your password.")
+    // } else if(password.length < 6) {
+    //   errors.push("Incorrect password.")
+  
+    // }
   
     return {
       errMsg: errors,

@@ -3,11 +3,14 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import FreeHealthModal from "@/components/Dashboard/Users/Home/FreeHealth/FreeHealthModal";
 import NextConsult from "@/components/Dashboard/Users/Home/NextConsult/NextConsult";
+import { useRouter } from "next/router";
 
 
 
 
 const Index = () => {
+
+  const router = useRouter()
 
 
 const [bookingModal, setBookingModal] = useState(false);
@@ -43,6 +46,7 @@ const cardData = [
   {
     text: "Your Records",
     image: "/h3.png",
+    action: ()=> router.push("/dashboard/users/records")
   },
   {
     text: "Book A Consultation",
