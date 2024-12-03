@@ -231,7 +231,7 @@ const Messages: React.FC<IMsgProp> = ({ consultations }) => {
       recipient: selectedChat?.doctor?.id,
     };
 
-    console.log({ payload });
+    // console.log({ payload });
 
     socket.emit("chatMessage", payload);
 
