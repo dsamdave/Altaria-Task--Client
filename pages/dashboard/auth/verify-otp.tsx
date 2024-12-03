@@ -73,7 +73,7 @@ const Index = () => {
         if (data?.message === "Successful") {
           toast.success("Account created!");
           router.push({
-            pathname: "/login",
+            pathname: "/dashboard/auth/login",
             // query: { email: formValues.email },
           });
         } else {
