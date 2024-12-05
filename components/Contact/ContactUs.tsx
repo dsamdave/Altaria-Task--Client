@@ -64,7 +64,7 @@ const ContactUs = () => {
                 {/* Our Email */}
                 <div className="mt-5">
                     <h2 className="text-[16px] text-[#1D2B4F] font-bold">Our Email</h2>
-                    <p className="text-[#798196] text-xs font-bold mt-3">Hello@medtele.com</p>
+                    <p className="text-[#798196] text-xs font-bold mt-3">support@expatdoctoronline.ie</p>
                 </div>
                 {/* Phone Number */}
                 <div className="mt-5">

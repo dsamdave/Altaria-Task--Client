@@ -178,7 +178,7 @@ const Footer = () => {
         </div>
       </div>
       <p className="text-sm text-[#ECF0FF] font-normal mt-8 lg:mt-20 text-center">
-        © {currentDate} ExpatDoc Online. All rights reserved.
+        © {currentDate} ExpatDoctor Online. All rights reserved.
       </p>
 
       {suscribe.isPending && <Spinner />}
