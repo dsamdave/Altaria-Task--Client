@@ -18,99 +18,7 @@ interface IMsgProp {
 const Messages: React.FC<IMsgProp> = ({ consultations }) => {
   const { currentUser } = useAppSelector((state) => state.auth);
   const userID = currentUser?.id;
-  const messageData = [
-    {
-      userImg: "/m-user2.png",
-      userName: "Harold Joe",
-      recentMessage: "Thank you",
-      numberOfMessages: "2",
-      status: "online",
-    },
-    {
-      userImg: "/m-user.png",
-      userName: "Harold Joe",
-      recentMessage: "Typing",
-      numberOfMessages: "",
-      status: "online",
-    },
-    {
-      userImg: "/m-user.png",
-      userName: "Harold Joe",
-      recentMessage: "Can you help me?",
-      numberOfMessages: "7",
-      status: "online",
-    },
-    {
-      userImg: "/m-user.png",
-      userName: "Harold Joe",
-      recentMessage: "",
-      numberOfMessages: "",
-      status: "offline",
-    },
-    {
-      userImg: "/m-user.png",
-      userName: "Harold Joe",
-      recentMessage: "Hello",
-      numberOfMessages: "8",
-      status: "offline",
-    },
-    {
-      userImg: "/m-user.png",
-      userName: "Harold Joe",
-      recentMessage: "Hello",
-      numberOfMessages: "10",
-      status: "offline",
-    },
-    {
-      userImg: "/m-user.png",
-      userName: "Harold Joe",
-      recentMessage: "I will revert",
-      numberOfMessages: "10",
-      status: "online",
-    },
-    {
-      userImg: "/m-user.png",
-      userName: "Harold Joe",
-      recentMessage: "I will revert",
-      numberOfMessages: "10",
-      status: "online",
-    },
-    {
-      userImg: "/m-user.png",
-      userName: "Harold Joe",
-      recentMessage: "I will revert",
-      numberOfMessages: "10",
-      status: "online",
-    },
-    {
-      userImg: "/m-user2.png",
-      userName: "Harold Joe",
-      recentMessage: "I will revert",
-      numberOfMessages: "10",
-      status: "online",
-    },
-    {
-      userImg: "/m-user2.png",
-      userName: "Harold Bridges",
-      recentMessage: "Hello",
-      numberOfMessages: "8",
-      status: "offline",
-    },
-    {
-      userImg: "/m-user2.png",
-      userName: "Harold Joe",
-      recentMessage: "Hello",
-      numberOfMessages: "8",
-      status: "offline",
-    },
-    {
-      userImg: "/m-user2.png",
-      userName: "Harold Joe",
-      recentMessage: "Hello",
-      numberOfMessages: "8",
-      status: "offline",
-    },
-  ];
+
 
   const attachOptions = [
     { iconSrc: "/image.svg" },
@@ -290,8 +198,20 @@ const Messages: React.FC<IMsgProp> = ({ consultations }) => {
       setMessages(data);
     });
 
+    // socketInstance.on("newMessage", (newMessage) => {
+    //   setMessages((prevMessages) => [...prevMessages, newMessage]);
+    // });
+
     socketInstance.on("newMessage", (newMessage) => {
-      setMessages((prevMessages) => [...prevMessages, newMessage]);
+      setMessages((prevMessages) => {
+        const exists = prevMessages.some(
+          (message) => message.id === newMessage.id
+        );
+        if (!exists) {
+          return [...prevMessages, newMessage];
+        }
+        return prevMessages;
+      });
     });
 
     socketInstance.on("typing", (userID) => {

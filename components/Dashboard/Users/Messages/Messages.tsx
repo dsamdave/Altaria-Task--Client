@@ -267,8 +267,20 @@ const Messages: React.FC<IMsgProp> = ({ consultations }) => {
       setMessages(data);
     });
 
+    // socketInstance.on("newMessage", (newMessage) => {
+    //   setMessages((prevMessages) => [...prevMessages, newMessage]);
+    // });
+
     socketInstance.on("newMessage", (newMessage) => {
-      setMessages((prevMessages) => [...prevMessages, newMessage]);
+      setMessages((prevMessages) => {
+        const exists = prevMessages.some(
+          (message) => message.id === newMessage.id
+        );
+        if (!exists) {
+          return [...prevMessages, newMessage];
+        }
+        return prevMessages;
+      });
     });
 
     socketInstance.on("typing", (userID) => {
