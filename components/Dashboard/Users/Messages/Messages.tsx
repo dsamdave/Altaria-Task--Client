@@ -231,7 +231,7 @@ const Messages: React.FC<IMsgProp> = ({ consultations }) => {
       recipient: selectedChat?.doctor?.id,
     };
 
-    // console.log({ payload });
+    console.log({ payload });
 
     socket.emit("chatMessage", payload);
 
@@ -330,7 +330,7 @@ const Messages: React.FC<IMsgProp> = ({ consultations }) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // console.log({messages})
+  console.log({messages})
 
   return (
     <div className="flex items-stretch gap-3 mt-5 h-full">

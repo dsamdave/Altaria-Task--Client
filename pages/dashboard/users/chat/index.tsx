@@ -77,7 +77,7 @@ const index = () => {
 
 
 
-console.log({consultations, user: currentUser?.id})
+// console.log({consultations, user: currentUser?.id})
 
 
   return (

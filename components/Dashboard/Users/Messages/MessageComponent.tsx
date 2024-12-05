@@ -57,6 +57,7 @@ export const UserMessage: React.FC<UserMessageProps> = ({
       {attached.length > 0
         ? attached.map((each, i) => (
             <Image
+            key={i}
               src={each}
               width={50}
               height={50}
@@ -105,6 +106,7 @@ export const ResponseMessage: React.FC<ResponseMessageProps> = ({
         {attached.length > 0
           ? attached.map((each, i) => (
               <Image
+              key={i}
                 src={each}
                 width={50}
                 height={50}
