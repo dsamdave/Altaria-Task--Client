@@ -132,14 +132,15 @@ const ConsultationDetails: React.FC<consultationDetailsProp> = ({
               </p>
             </div>
 
-            {selectedBooking?.forSomeOne === false && (
+            {selectedBooking?.forSomeOne === true && (
               <div>
                 <p className="text-base text-[#1E1F20] font-bold mb-4">
                 Patient ID: {selectedBooking?.patientID}
                 </p>
                 <p className="text-base text-[#1E1F20] font-bold">
                   For {selectedBooking?.someOneDetails?.firstName}{" "}
-                  {selectedBooking?.someOneDetails?.lastName}, 4 years old
+                  {selectedBooking?.someOneDetails?.lastName}, 
+                  {/* 4 years old */}
                 </p>
                 <p className="text-base text-[#1E1F20] font-bold">
                   Date of Birth: {selectedBooking?.someOneDetails?.dOB},
