@@ -1,4 +1,3 @@
-import DashboardLayout from "@/components/Dashboard/Admin/DashboardLayout";
 import Layout from "@/components/Layout";
 import { store } from "@/redux/store";
 import "@/styles/globals.css";
@@ -7,26 +6,41 @@ import { useRouter } from "next/router";
 import { Provider } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { QueryClientProvider } from '@tanstack/react-query';
-import { queryClient } from '@/lib/query';
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "@/lib/query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import UsersLayout from "@/components/Dashboard/Users/UsersLayout";
+import { useEffect } from "react";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import '../styles/globals.css';
+
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
 
-  // const isAuthRoute = router.pathname === "/dashboard";
-  // const isAuthRoute = router.pathname === "/dashboard" || "/signup";
-  const isAuthRoute = router.pathname.startsWith("/dashboard/auth");
-  const isDashboardRoute = router.pathname.startsWith("/dashboard/hospitaldb");
-  const isUsersDashboardRoute = router.pathname.startsWith("/dashboard/users")
-  return (
-    <main>
-      <QueryClientProvider client={queryClient}>
 
+
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "/path-to-your-file.js";
+    script.async = true;
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
+
+  // const isAuthRoute = router.pathname.startsWith("/dashboard/auth");
+  // const isDashboardRoute = router.pathname.startsWith("/dashboard/hospitaldb");
+  // const isUsersDashboardRoute = router.pathname.startsWith("/dashboard/users")
+
+  return (
+    <main className="color-theme-blue main-wrapper">
       
-      <Provider store={store}>
-        {isAuthRoute ? (
+      <QueryClientProvider client={queryClient}>
+        <Provider store={store}>
+          {/* {isAuthRoute ? (
           <>
             <Component {...pageProps} />
           </>
@@ -42,12 +56,16 @@ export default function App({ Component, pageProps }: AppProps) {
           <Layout>
             <Component {...pageProps} />
           </Layout>
-        )}
+        )} */}
 
-        <ToastContainer autoClose={5000} />
-      </Provider>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
 
-      <ReactQueryDevtools initialIsOpen={false} />
+          <ToastContainer autoClose={5000} />
+        </Provider>
+
+        <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </main>
   );

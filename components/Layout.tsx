@@ -1,4 +1,7 @@
-import Footer from "./Universal/Footer";
+// import Footer from "./Universal/Footer";
+
+import FooterComp from "./Universal/FooterComp";
+import HeaderComp from "./Universal/HeaderComp";
 
 
 
@@ -8,9 +11,12 @@ type LayoutProp = {
 const Layout = (prop:LayoutProp) => {
     return ( 
         <div>
+
+          <HeaderComp />
             
             {prop.children}
-            <Footer />
+            
+            <FooterComp />
         </div>
      );
 }

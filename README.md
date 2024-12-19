@@ -41,20 +41,6 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 
 
-medtelehealth4@gmail.com
-new: Medtele@2024
-Heroku: Medtele2024!
-
-expatdoconline@gmail.com
-Expat2024
-
-4 stripe
-expat2024@
-
-suppport@expatdoctoronline.ie
-support@2expatdoctor
-
-vacel Tokoni: HXp6tcG6iLUuV2ITQDxOAfMn
 
 
 <!-- Fix Hydration Error -->
@@ -115,31 +101,4 @@ return (
      },
    });
  }; -->
-
-
- Card Number: 4242 4242 4242 4242
-Expiration Date: Any future date (e.g., 12/34)
-CVC: Any 3 digits (e.g., 123)
-Postal Code: 12345 (or any 5-digit code)
-
-
-
-# Domain
-
-https://www.letshost.ie/
-
-https://login.register365.com/
-
-
-# using
-https://www.blacknight.com/
-
-# access it here with Virtual Savvy
-https://cp.blacknighthosting.com/.
-
-
-
-
-$59.92
-₦98,243.60
 
