@@ -13,35 +13,35 @@ import Head from "next/head";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function Home() {
+export default function FAQ() {
 
 
   return (
   <div className="main-wrapper">
-    <Head><title>Homepage</title></Head>
+    <Head><title>FAQ</title></Head>
 
-    <BannerComp />
-
-
-    {/* <PopularCouponComp /> */}
-
-    <LogosComp />
-
-    <OnlinePaymentComp />
-
-    <CategoriesComp />
-
-    <TestimonialsComp />
     
-    <HowItWorks />
+    <div className="parallax-wrapper pb-7 pt-7" style={{backgroundImage: 'url("/images/parallax.jpg")'}} >
+          <div className="container">
+              <div className="row">
+                  <div className="col-lg-6 offset-lg-3 text-center">
+                      <h2 className="text-white fw-600 display2-size display2-size-sm">Frequently Asked Questions</h2>
+                      <p className="text-grey-400 font-xsss mb-4">Find answers to your questions here.</p>
+                     
+                  </div>
+              </div>
+          </div>
+      </div>
 
 
-    {/* <FAQSComp /> */}
+    <FAQSComp />
+
+    {/* <CategoriesComp /> */}
 
 
 
 
-{/* <div className="payment-option  pb-5 pt-5 bg-white">
+<div className="payment-option  pb-5 pt-5 bg-whitee bg-lightblue">
             <div className="container">
                 <div className="row">
                     <div className="col-lg-3 col-md-6 mb-3 text-center">
@@ -70,7 +70,20 @@ export default function Home() {
         </div>
 
 
-  
+        {/* <div className="container">
+        <div className="row">
+                    <div className="col-sm-5">
+                        <h2 className="text-grey-100 fw-600 font-xxl mb-0">Our Newsletter</h2>
+                        <p className="text-grey-100 fw-300 font-xssss mb-2">and receive $20 coupon for first shopping</p>
+                    </div>
+                    <div className="col-sm-7">
+                        <form action="#" className="w-100 float-left rounded-lg overflow-hidden">
+                            <input type="text" className="border-1 bg-white form-control w-xs-100 mb-xs-2 w-75 rounded-0 h60 float-left" placeholder="Enter your email address.."/>
+                            <button className="border-0 bg-yellow text-black h60 form-control p-0 w-xs-100  rounded-0 float-left d-block w-25 font-xsss">Subscribe</button>
+                        </form>
+                    </div>
+                    </div>
+                    </div> */}
 
 
 <div className="info-wrappper pt-lg--7 pt-5 pb-lg--7 pb-4">
@@ -106,7 +119,7 @@ export default function Home() {
                     </div>
                 </div>
             </div>
-        </div> */}
+        </div>
   
    
  

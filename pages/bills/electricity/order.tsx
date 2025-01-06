@@ -5,14 +5,24 @@ import { useAppDispatch, useAppSelector } from "@/redux/store";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { AirtelLogo, GloLogo, MTNLogo, NineMobileLogo } from "./select";
 import { validateAirtimeOrder } from "@/utilities/validations/airtimeValidations";
 import { toast } from "react-toastify";
 import Toast from "@/components/Universal/Toast";
 import { addCurrentOrder } from "@/redux/slices/orderSlice";
 import { ICurrentOrder } from "@/utilities/typings";
+import {
+  BeninDisco,
+  EkoDisco,
+  EnuguDisco,
+  IbadanDisco,
+  IkejaDisco,
+  KadunaDisco,
+  KanoDisco,
+  PHEDDisco,
+  YolaDisco,
+} from "./select";
 
-const OrderAirtimePage = () => {
+const OrderPage = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
@@ -24,21 +34,34 @@ const OrderAirtimePage = () => {
     email: "",
   });
 
-  // console.log({ currentService });
-
   let logoSrc = "";
   switch (currentService?.serviceName) {
-    case "MTN":
-      logoSrc = MTNLogo;
+    case "BENIN ELECTRIC BILLS":
+      logoSrc = BeninDisco;
       break;
-    case "9mobile":
-      logoSrc = NineMobileLogo;
+    case "EKO ELECTRIC BILLS":
+      logoSrc = EkoDisco;
       break;
-    case "Glo":
-      logoSrc = GloLogo;
+    case "ENUGU ELECTRIC BILLS":
+      logoSrc = EnuguDisco;
       break;
-    case "Airtel":
-      logoSrc = AirtelLogo;
+    case "IBADAN ELECTRIC BILLS":
+      logoSrc = IbadanDisco;
+      break;
+    case "IKEJA ELECTRIC BILLS":
+      logoSrc = IkejaDisco;
+      break;
+    case "KADUNA ELECTRIC BILLS":
+      logoSrc = KadunaDisco;
+      break;
+    case "KANO ELECTRIC BILLS":
+      logoSrc = KanoDisco;
+      break;
+    case "PORT HARCOURT ELECTRIC BILLS":
+      logoSrc = PHEDDisco;
+      break;
+    case "YOLA ELECTRIC BILLS":
+      logoSrc = YolaDisco;
       break;
     default:
       logoSrc = "";
@@ -124,51 +147,40 @@ const OrderAirtimePage = () => {
                                       marginRight: "10px",
                                     }}
                                   />
-                                  <h4 className="fw-700 font-xl mb-0">
-                                    {/* {currentService?.serviceName}  */}
-                                    Airtime
+                                  <h4 className="fw-700 font-l mb-0">
+                                    {currentService?.serviceName}
                                   </h4>
                                 </div>
                               </div>
                             </div>
                           </div>
                         </div>
-
-                        {/* <div className="col-sm-12 mb-4">
-                      <div className="custom-control mr-4 custom-radio custom-control-inline">
-                        <input
-                          type="radio"
-                          className="custom-control-input"
-                          id="customRadio"
-                          name="example"
-                          value="customEx"
-                        />
-                        <label
-                          className="custom-control-label small-size fw-500 text-grey-900 font-xsss"
-                          htmlFor="customRadio"
-                        >
-                          Postpaid
-                        </label>
-                      </div>
-                      <div className="custom-control mr-0 custom-radio custom-control-inline">
-                        <input
-                          type="radio"
-                          className="custom-control-input"
-                          id="customRadio2"
-                          name="example"
-                          value="customEx"
-                        />
-                        <label
-                          className="custom-control-label small-size fw-500 text-grey-900 font-xsss"
-                          htmlFor="customRadio2"
-                        >
-                          Prepaid
-                        </label>
-                      </div>
-                    </div> */}
                       </div>
 
                       <div className="row">
+                        <div className="col-lg-6 mb-3">
+                        <div className="form-gorup">
+
+                          <label
+                            className="mont-font fw-500 font-xsss"
+                            htmlFor="phoneNumber"
+                          >
+                            Phone Number
+                          </label>{" "}
+                          <span className="text-danger">*</span>
+                          <select
+                            className="form-control mb-3"
+                            name="operator"
+                            // value={formData.operator}
+                            // onChange={handleInputChange}
+                          >
+                            {/* <option value="">Select Operator</option> */}
+                            <option value="MTN">PREPAID</option>
+                            <option value="9mobile">POSTPAID</option>
+                          </select>
+                        </div>
+                        </div>
+
                         <div className="col-lg-6 mb-3">
                           <div className="form-gorup">
                             <label
@@ -188,7 +200,9 @@ const OrderAirtimePage = () => {
                             />
                           </div>
                         </div>
+                      </div>
 
+                      <div className="row">
                         <div className="col-lg-6 mb-3">
                           <div className="form-gorup">
                             <label
@@ -208,9 +222,7 @@ const OrderAirtimePage = () => {
                             />
                           </div>
                         </div>
-                      </div>
 
-                      <div className="row">
                         <div className="col-lg-6 mb-3">
                           <div className="form-gorup">
                             <label
@@ -219,6 +231,7 @@ const OrderAirtimePage = () => {
                             >
                               Email
                             </label>
+                            <span className="text-danger">*</span>
                             <input
                               type="text"
                               name="email"
@@ -231,40 +244,31 @@ const OrderAirtimePage = () => {
                         </div>
                       </div>
 
-                      {/* Long Input fields */}
-                      {/* <div className="row">
-                    <div className="col-lg-12 mb-3">
-                      <div className="form-gorup">
-                        <label
-                          className="mont-font fw-500 font-xsss"
-                          htmlFor="comment-name"
-                        >
-                          Country
-                        </label>
-                        <input
-                          type="text"
-                          name="comment-name"
-                          className="form-control"
-                        />
-                      </div>
-                    </div>
 
-                    <div className="col-lg-12 mb-3">
-                      <div className="form-gorup">
-                        <label
-                          className="mont-font fw-500 font-xsss"
-                          htmlFor="comment-name"
-                        >
-                          Address
-                        </label>
-                        <input
-                          type="text"
-                          name="comment-name"
-                          className="form-control"
-                        />
+                      <div className="row">
+                        
+
+                        <div className="col-lg-6 mb-3">
+                          <div className="form-gorup">
+                            <label
+                              className="mont-font fw-500 font-xsss"
+                              htmlFor="email"
+                            >
+                              Phone Number
+                            </label>
+                            <input
+                              type="text"
+                              name="email"
+                              value={formData.email}
+                              onChange={handleInputChange}
+                              className="form-control"
+                              placeholder="Enter Phone number"
+                            />
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div> */}
+
+                     
 
                       <div className="row pt-3">
                         <div className="col-lg-12 mb-3">
@@ -446,4 +450,4 @@ const OrderAirtimePage = () => {
   );
 };
 
-export default OrderAirtimePage;
+export default OrderPage;

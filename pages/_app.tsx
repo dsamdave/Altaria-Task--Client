@@ -13,6 +13,10 @@ import { useEffect } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/globals.css';
 
+import '../styles/owl.carousel.min.css';
+import '../styles/jquery.countdown.css';
+import '../styles/owl.theme.default.min.css';
+
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -21,7 +25,9 @@ export default function App({ Component, pageProps }: AppProps) {
 
   useEffect(() => {
     const script = document.createElement("script");
-    script.src = "/path-to-your-file.js";
+    script.src = "/js/plugin.js";
+    script.src = "/js/script.js";
+    script.src = "/js/fullpage.js";
     script.async = true;
     document.body.appendChild(script);
 

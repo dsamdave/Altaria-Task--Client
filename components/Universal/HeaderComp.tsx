@@ -13,65 +13,18 @@ const HeaderComp = () => {
 
   return (
     <div>
-      {/* <div className="upper-header bg-greylight">
-        <div className="container">
-          <div className="row">
-            <div className="col-md-6 col-xs-6 d-none d-block-md">
-              <ul className="list-inline list-item-style mt-0 float-left pl-1">
-                <li className="list-inline-item pl-0">
-                  <Link href="#">(+1)866-540-3229</Link>
-                </li>
-              </ul>
-            </div>
-            <div className="col-md-6 col-xs-6 d-none d-block-md">
-              <ul className="list-inline list-item-style mt-0 float-right">
-                <li className="list-inline-item">
-                  <Link href="#">
-                    <i className="ti-user mr-2"></i> My Account
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div className="col-12 d-none d-lg-block">
-              <ul className="list-inline list-item-style mt-0 float-left pl-1">
-                <li className="list-inline-item pl-0">
-                  <Link href="#">BECOME AN AGENT</Link>
-                </li>
-                <li className="list-inline-item">
-                  <Link href="#">PRIVACY</Link>
-                </li>
-                <li className="list-inline-item">
-                  <Link href="#">CUSTOMER SERVICE</Link>
-                </li>
-              </ul>
-              <ul className="list-inline list-item-style mt-0 float-right">
-                <li className="list-inline-item">
-                  <Link href="#">
-                    <i className="ti-location-pin mr-2"></i> Store Locator
-                  </Link>
-                </li>
-                <li className="list-inline-item">
-                  <Link href="#">
-                    <i className="ti-user mr-2"></i> My Account
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div> */}
 
       <div className="header-wrapper">
         <div className="container">
           <div className="row">
             <div className="col-lg-8 navbar">
-              <Link href="index.html" className="logo">
+              <Link href="/" className="shrink logo">
                 <h1 className="fredoka-font ls-3 fw-700 text-current display1-size">
                   OrderPay
                 </h1>
               </Link>
               <button
-                className="navbar-toggler"
+                className="shrink navbar-toggler"
                 type="button"
                 data-toggle="collapse"
                 data-target="#navbarNavDropdown"
@@ -85,13 +38,13 @@ const HeaderComp = () => {
               <div className="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul className="navbar-nav nav-menu float-none text-center">
                   <li className="nav-item">
-                    <Link href="/" className="nav-link">
+                    <Link href="/" className="shrink nav-link">
                       Home
                     </Link>
                   </li>
                   <li className="nav-item dropdown">
                     <a
-                      className="nav-link dropdown-toggle"
+                      className="shrink nav-link dropdown-toggle"
                       href="#"
                       data-toggle="dropdown"
                     >
@@ -99,35 +52,40 @@ const HeaderComp = () => {
                       Pay Bills <i className="ti-angle-down"></i>
                     </a>
                     <div className="dropdown-menu">
-                      <Link className="dropdown-item" href="/bills/airtime/select">
+                      <Link className="shrink dropdown-item" href="/bills/airtime/select">
                         Airtime
                       </Link>
-                      <Link className="dropdown-item" href="#">
+                      <Link className="shrink dropdown-item" href="/bills/data/select">
                         Data
                       </Link>
-                      <Link className="dropdown-item" href="#">
+                      <Link className="shrink dropdown-item" href="/bills/cable-tv/select">
                         Cable TV
                       </Link>
-                      <Link className="dropdown-item" href="#">
+                      <Link className="shrink dropdown-item" href="/bills/electricity/select">
                         Electricity
                       </Link>
                     </div>
                   </li>
 
                   <li className="nav-item">
-                    <Link href="/coming-soon" className="nav-link">
+                    <Link href="/coming-soon" className="shrink nav-link">
                       Decoders & Inverters
                     </Link>
                   </li>
                   <li className="nav-item">
-                    <Link href="/aboutus" className="nav-link">
+                    <Link href="/aboutus" className="shrink nav-link">
                       About Us
                     </Link>
                   </li>
 
                   <li className="nav-item">
-                    <Link href="/contact" className="nav-link">
+                    <Link href="/contact" className="shrink nav-link">
                       Contact
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link href="/faq" className="shrink nav-link">
+                      FAQs
                     </Link>
                   </li>
                 </ul>

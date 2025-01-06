@@ -26,7 +26,8 @@
   width: 100px;
   height: 100px;
   border-radius: 50%;
-  background-color: #1E2230;
+  background-color: #335bd7;
+  /* background-color: var(--theme-color) !important; */
   /* background-color: #3498db; */
   animation: ripple-animation 1.5s ease-out infinite;
   opacity: 1;

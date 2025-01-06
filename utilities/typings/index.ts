@@ -1,3 +1,36 @@
+export interface ISelectedService {
+  country: string
+  currency: string
+  serviceName: string
+
+  billerCode: string,
+  itemCode: string,
+  billerName: string
+}
+
+export interface ICurrentOrder {
+    country: string | undefined
+    customer_id: string
+    amount: string
+    currency: string | undefined
+    serviceName: string | undefined
+    userName: string
+    billerCode: string | undefined,
+    itemCode: string | undefined,
+    type: string
+    biller_name: string | undefined,
+    callback_url: string,
+    meta: {
+      tax_type: string,
+      tax_period: string,
+    },
+    userEmail: string,
+    phoneNumber: string,
+
+}
+
+
+
 export interface IUser {
   accessToken: string;
   phoneNumber: string;

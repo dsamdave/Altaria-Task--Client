@@ -5,7 +5,7 @@ const nextConfig = {
     domains: ['res.cloudinary.com'],
   },
   async headers() {
-    const backendUrl = 'https://med-tele-healthcare-server-12dfae60da9e.herokuapp.com';
+    const backendUrl = 'https://orderpay-r1p1.onrender.com';
     const isDev = process.env.NODE_ENV === 'development';
 
     const cspValue = `

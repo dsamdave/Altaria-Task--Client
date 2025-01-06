@@ -10,12 +10,11 @@ import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 
 // Images
-export const MTNLogo = "/images/mtn.png";
-export const NineMobileLogo = "/images/9mobile.webp";
-export const GloLogo = "/images/glo.jpeg";
-export const AirtelLogo = "/images/airtel.svg";
+export const DSTVlOGO = "/images/dstv.jpg";
+export const GOTVLOGO = "/images/gotv.jpg";
+export const STARTIMESLOGO = "/images/startimes.jpeg";
 
-const SelectAirtimePage = () => {
+const SelectPage = () => {
   const dispatch = useAppDispatch();
 
   const router = useRouter();
@@ -55,7 +54,7 @@ const SelectAirtimePage = () => {
         <div className="row">
           <div className="page-title col-md-6 style1 text-left mb-4">
             <h2 className="text-grey-900 fw-700 font-xxl pb-0 mb-1 d-block">
-              Airtime Categories
+              Cable TV Categories
             </h2>
           </div>
         </div>
@@ -71,11 +70,15 @@ const SelectAirtimePage = () => {
             <div
               className="position-relative"
               style={{ width: "100%", height: "200px" }}
-              onClick={() => handleSelectService("11", "55", "MTN", "MTN")}
+              onClick={() =>
+                handleSelectService("11", "55", "Airtel", "airtel")
+              }
             >
               <Image
-                src={MTNLogo}
+                src={DSTVlOGO}
                 alt="food"
+                // width={20}
+                // height={200}
                 layout="fill"
                 objectFit="contain"
               />
@@ -86,13 +89,13 @@ const SelectAirtimePage = () => {
             <div
               className="position-relative"
               style={{ width: "100%", height: "200px" }}
-              onClick={() =>
-                handleSelectService("11", "55", "9mobile", "9mobile")
-              }
+              onClick={() => handleSelectService("11", "55", "MTN", "MTN")}
             >
               <Image
-                src={NineMobileLogo}
+                src={GOTVLOGO}
                 alt="food"
+                // width={20}
+                // height={200}
                 layout="fill"
                 objectFit="contain"
               />
@@ -106,33 +109,21 @@ const SelectAirtimePage = () => {
               onClick={() => handleSelectService("11", "55", "Glo", "glo")}
             >
               <Image
-                src={GloLogo}
+                src={STARTIMESLOGO}
                 alt="food"
-               layout="fill"
-                objectFit="contain"
-              />
-            </div>
-          </div>
-          <div className="shrink col-sm-2 p-3 border-right-0 border-right-xs text-center">
-            <div
-              className="position-relative"
-              style={{ width: "100%", height: "200px" }}
-              onClick={() =>
-                handleSelectService("11", "55", "Airtel", "airtel")
-              }
-            >
-              <Image
-                src={AirtelLogo}
-                alt="food"
+                // width={20}
+                // height={200}
                 layout="fill"
                 objectFit="contain"
               />
             </div>
           </div>
+
+       
         </div>
       </div>
     </div>
   );
 };
 
-export default SelectAirtimePage;
+export default SelectPage;

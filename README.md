@@ -102,3 +102,13 @@ return (
    });
  }; -->
 
+
+ Flutterwave Test Card Details
+Test Card 1:
+
+Card Number: 5531886652142950
+Expiry Date: 12/25
+CVV: 123
+PIN: 3310
+OTP: 12345
+

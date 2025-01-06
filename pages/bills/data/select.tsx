@@ -71,11 +71,49 @@ const SelectAirtimePage = () => {
             <div
               className="position-relative"
               style={{ width: "100%", height: "200px" }}
+              onClick={() =>
+                handleSelectService("11", "55", "Airtel", "airtel")
+              }
+            >
+              <Image
+                src={AirtelLogo}
+                alt="food"
+                // width={20}
+                // height={200}
+                layout="fill"
+                objectFit="contain"
+              />
+            </div>
+          </div>
+
+          <div className="shrink col-sm-2 p-3 border-right-0 border-right-xs text-center">
+            <div
+              className="position-relative"
+              style={{ width: "100%", height: "200px" }}
               onClick={() => handleSelectService("11", "55", "MTN", "MTN")}
             >
               <Image
                 src={MTNLogo}
                 alt="food"
+                // width={20}
+                // height={200}
+                layout="fill"
+                objectFit="contain"
+              />
+            </div>
+          </div>
+
+          <div className="shrink col-sm-2 p-3 border-right-0 border-right-xs text-center">
+            <div
+              className="position-relative"
+              style={{ width: "100%", height: "200px" }}
+              onClick={() => handleSelectService("11", "55", "Glo", "glo")}
+            >
+              <Image
+                src={GloLogo}
+                alt="food"
+                // width={20}
+                // height={200}
                 layout="fill"
                 objectFit="contain"
               />
@@ -93,37 +131,8 @@ const SelectAirtimePage = () => {
               <Image
                 src={NineMobileLogo}
                 alt="food"
-                layout="fill"
-                objectFit="contain"
-              />
-            </div>
-          </div>
-
-          <div className="shrink col-sm-2 p-3 border-right-0 border-right-xs text-center">
-            <div
-              className="position-relative"
-              style={{ width: "100%", height: "200px" }}
-              onClick={() => handleSelectService("11", "55", "Glo", "glo")}
-            >
-              <Image
-                src={GloLogo}
-                alt="food"
-               layout="fill"
-                objectFit="contain"
-              />
-            </div>
-          </div>
-          <div className="shrink col-sm-2 p-3 border-right-0 border-right-xs text-center">
-            <div
-              className="position-relative"
-              style={{ width: "100%", height: "200px" }}
-              onClick={() =>
-                handleSelectService("11", "55", "Airtel", "airtel")
-              }
-            >
-              <Image
-                src={AirtelLogo}
-                alt="food"
+                // width={20}
+                // height={200}
                 layout="fill"
                 objectFit="contain"
               />
