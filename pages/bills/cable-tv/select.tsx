@@ -35,7 +35,7 @@ const SelectPage = () => {
     };
 
     dispatch(addSelectedService(payload));
-    router.push("/bills/airtime/order");
+    router.push("/bills/cable-tv/order");
   };
 
   useEffect(() => {
@@ -71,7 +71,7 @@ const SelectPage = () => {
               className="position-relative"
               style={{ width: "100%", height: "200px" }}
               onClick={() =>
-                handleSelectService("11", "55", "Airtel", "airtel")
+                handleSelectService("11", "55", "DSTV", "DSTV")
               }
             >
               <Image
@@ -89,7 +89,7 @@ const SelectPage = () => {
             <div
               className="position-relative"
               style={{ width: "100%", height: "200px" }}
-              onClick={() => handleSelectService("11", "55", "MTN", "MTN")}
+              onClick={() => handleSelectService("11", "55", "GOTV", "GOTV")}
             >
               <Image
                 src={GOTVLOGO}
@@ -106,7 +106,7 @@ const SelectPage = () => {
             <div
               className="position-relative"
               style={{ width: "100%", height: "200px" }}
-              onClick={() => handleSelectService("11", "55", "Glo", "glo")}
+              onClick={() => handleSelectService("11", "55", "STARTIMES", "STARTTIMES")}
             >
               <Image
                 src={STARTIMESLOGO}

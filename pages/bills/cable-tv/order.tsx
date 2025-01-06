@@ -10,17 +10,7 @@ import { toast } from "react-toastify";
 import Toast from "@/components/Universal/Toast";
 import { addCurrentOrder } from "@/redux/slices/orderSlice";
 import { ICurrentOrder } from "@/utilities/typings";
-import {
-  BeninDisco,
-  EkoDisco,
-  EnuguDisco,
-  IbadanDisco,
-  IkejaDisco,
-  KadunaDisco,
-  KanoDisco,
-  PHEDDisco,
-  YolaDisco,
-} from "./select";
+import { DSTVlOGO, GOTVLOGO, STARTIMESLOGO } from "./select";
 
 const OrderPage = () => {
   const router = useRouter();
@@ -32,38 +22,21 @@ const OrderPage = () => {
     phoneNumber: "",
     amount: "",
     email: "",
-    meterNumber: ""
+    meterNumber: "",
   });
 
   let logoSrc = "";
   switch (currentService?.serviceName) {
-    case "BENIN ELECTRIC BILLS":
-      logoSrc = BeninDisco;
+    case "DSTV":
+      logoSrc = DSTVlOGO;
       break;
-    case "EKO ELECTRIC BILLS":
-      logoSrc = EkoDisco;
+    case "GOTV":
+      logoSrc = GOTVLOGO;
       break;
-    case "ENUGU ELECTRIC BILLS":
-      logoSrc = EnuguDisco;
+    case "STARTIMES":
+      logoSrc = STARTIMESLOGO;
       break;
-    case "IBADAN ELECTRIC BILLS":
-      logoSrc = IbadanDisco;
-      break;
-    case "IKEJA ELECTRIC BILLS":
-      logoSrc = IkejaDisco;
-      break;
-    case "KADUNA ELECTRIC BILLS":
-      logoSrc = KadunaDisco;
-      break;
-    case "KANO ELECTRIC BILLS":
-      logoSrc = KanoDisco;
-      break;
-    case "PORT HARCOURT ELECTRIC BILLS":
-      logoSrc = PHEDDisco;
-      break;
-    case "YOLA ELECTRIC BILLS":
-      logoSrc = YolaDisco;
-      break;
+
     default:
       logoSrc = "";
   }
@@ -149,7 +122,7 @@ const OrderPage = () => {
                                     }}
                                   />
                                   <h4 className="fw-700 font-l mb-0">
-                                    {currentService?.serviceName}
+                                    {/* {currentService?.serviceName} */}
                                   </h4>
                                 </div>
                               </div>
@@ -160,26 +133,25 @@ const OrderPage = () => {
 
                       <div className="row">
                         <div className="col-lg-6 mb-3">
-                        <div className="form-gorup">
-
-                          <label
-                            className="mont-font fw-500 font-xsss"
-                            htmlFor="phoneNumber"
-                          >
-                            Category
-                          </label>{" "}
-                          <span className="text-danger">*</span>
-                          <select
-                            className="form-control mb-3"
-                            name="operator"
-                            // value={formData.operator}
-                            // onChange={handleInputChange}
-                          >
-                            {/* <option value="">Select Operator</option> */}
-                            <option value="MTN">PREPAID</option>
-                            <option value="9mobile">POSTPAID</option>
-                          </select>
-                        </div>
+                          <div className="form-gorup">
+                            <label
+                              className="mont-font fw-500 font-xsss"
+                              htmlFor="phoneNumber"
+                            >
+                              Packages
+                            </label>{" "}
+                            <span className="text-danger">*</span>
+                            <select
+                              className="form-control mb-3"
+                              name="operator"
+                              // value={formData.operator}
+                              // onChange={handleInputChange}
+                            >
+                              <option value="">Select a package</option>
+                              {/* <option value="MTN">PREPAID</option>
+                            <option value="9mobile">POSTPAID</option> */}
+                            </select>
+                          </div>
                         </div>
 
                         <div className="col-lg-6 mb-3">
@@ -188,7 +160,7 @@ const OrderPage = () => {
                               className="mont-font fw-500 font-xsss"
                               htmlFor="phoneNumber"
                             >
-                              Meter Number
+                              Smartcard Number
                             </label>{" "}
                             <span className="text-danger">*</span>
                             <input
@@ -208,6 +180,29 @@ const OrderPage = () => {
                           <div className="form-gorup">
                             <label
                               className="mont-font fw-500 font-xsss"
+                              htmlFor="phoneNumber"
+                            >
+                              Number of Months
+                            </label>{" "}
+                            <span className="text-danger">*</span>
+                            <select
+                              className="form-control mb-3"
+                              name="operator"
+                              // value={formData.operator}
+                              // onChange={handleInputChange}
+                            >
+                              <option value="">Select number of months</option>
+                              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((each, i) => (
+                                <option value={each}>{each}</option>
+                              ))}
+                            </select>
+                          </div>
+                        </div>
+
+                        <div className="col-lg-6 mb-3">
+                          <div className="form-gorup">
+                            <label
+                              className="mont-font fw-500 font-xsss"
                               htmlFor="amount"
                             >
                               Amount
@@ -217,13 +212,15 @@ const OrderPage = () => {
                               type="number"
                               name="amount"
                               value={formData.amount}
-                              onChange={handleInputChange}
+                              // onChange={handleInputChange}
                               className="form-control"
-                              placeholder="Enter amount"
+                              placeholder="Default Amount"
                             />
                           </div>
                         </div>
+                      </div>
 
+                      <div className="row">
                         <div className="col-lg-6 mb-3">
                           <div className="form-gorup">
                             <label
@@ -243,11 +240,6 @@ const OrderPage = () => {
                             />
                           </div>
                         </div>
-                      </div>
-
-
-                      <div className="row">
-                        
 
                         <div className="col-lg-6 mb-3">
                           <div className="form-gorup">
@@ -268,8 +260,6 @@ const OrderPage = () => {
                           </div>
                         </div>
                       </div>
-
-                     
 
                       <div className="row pt-3">
                         <div className="col-lg-12 mb-3">

@@ -55,7 +55,7 @@ const SelectAirtimePage = () => {
         <div className="row">
           <div className="page-title col-md-6 style1 text-left mb-4">
             <h2 className="text-grey-900 fw-700 font-xxl pb-0 mb-1 d-block">
-              Airtime Categories
+              Data Categories
             </h2>
           </div>
         </div>

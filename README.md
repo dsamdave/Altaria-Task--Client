@@ -103,6 +103,11 @@ return (
  }; -->
 
 
+ Client: https://orderpay.vercel.app
+
+ Server: https://orderpay-r1p1.onrender.com/api
+
+
  Flutterwave Test Card Details
 Test Card 1:
 

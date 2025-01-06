@@ -10,17 +10,17 @@ import { toast } from "react-toastify";
 import Toast from "@/components/Universal/Toast";
 import { addCurrentOrder } from "@/redux/slices/orderSlice";
 import { ICurrentOrder } from "@/utilities/typings";
-import {
-  BeninDisco,
-  EkoDisco,
-  EnuguDisco,
-  IbadanDisco,
-  IkejaDisco,
-  KadunaDisco,
-  KanoDisco,
-  PHEDDisco,
-  YolaDisco,
-} from "./select";
+// import {
+//   BeninDisco,
+//   EkoDisco,
+//   EnuguDisco,
+//   IbadanDisco,
+//   IkejaDisco,
+//   KadunaDisco,
+//   KanoDisco,
+//   PHEDDisco,
+//   YolaDisco,
+// } from "./select";
 
 const OrderPage = () => {
   const router = useRouter();
@@ -36,37 +36,37 @@ const OrderPage = () => {
   });
 
   let logoSrc = "";
-  switch (currentService?.serviceName) {
-    case "BENIN ELECTRIC BILLS":
-      logoSrc = BeninDisco;
-      break;
-    case "EKO ELECTRIC BILLS":
-      logoSrc = EkoDisco;
-      break;
-    case "ENUGU ELECTRIC BILLS":
-      logoSrc = EnuguDisco;
-      break;
-    case "IBADAN ELECTRIC BILLS":
-      logoSrc = IbadanDisco;
-      break;
-    case "IKEJA ELECTRIC BILLS":
-      logoSrc = IkejaDisco;
-      break;
-    case "KADUNA ELECTRIC BILLS":
-      logoSrc = KadunaDisco;
-      break;
-    case "KANO ELECTRIC BILLS":
-      logoSrc = KanoDisco;
-      break;
-    case "PORT HARCOURT ELECTRIC BILLS":
-      logoSrc = PHEDDisco;
-      break;
-    case "YOLA ELECTRIC BILLS":
-      logoSrc = YolaDisco;
-      break;
-    default:
-      logoSrc = "";
-  }
+  // switch (currentService?.serviceName) {
+  //   case "BENIN ELECTRIC BILLS":
+  //     logoSrc = BeninDisco;
+  //     break;
+  //   case "EKO ELECTRIC BILLS":
+  //     logoSrc = EkoDisco;
+  //     break;
+  //   case "ENUGU ELECTRIC BILLS":
+  //     logoSrc = EnuguDisco;
+  //     break;
+  //   case "IBADAN ELECTRIC BILLS":
+  //     logoSrc = IbadanDisco;
+  //     break;
+  //   case "IKEJA ELECTRIC BILLS":
+  //     logoSrc = IkejaDisco;
+  //     break;
+  //   case "KADUNA ELECTRIC BILLS":
+  //     logoSrc = KadunaDisco;
+  //     break;
+  //   case "KANO ELECTRIC BILLS":
+  //     logoSrc = KanoDisco;
+  //     break;
+  //   case "PORT HARCOURT ELECTRIC BILLS":
+  //     logoSrc = PHEDDisco;
+  //     break;
+  //   case "YOLA ELECTRIC BILLS":
+  //     logoSrc = YolaDisco;
+  //     break;
+  //   default:
+  //     logoSrc = "";
+  // }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -108,7 +108,7 @@ const OrderPage = () => {
     };
 
     dispatch(addCurrentOrder(payload));
-    // router.push("/bills/airtime/summary");
+    router.push("/bills/airtime/summary");
   };
 
   useEffect(() => {
@@ -166,7 +166,7 @@ const OrderPage = () => {
                             className="mont-font fw-500 font-xsss"
                             htmlFor="phoneNumber"
                           >
-                            Category
+                            Phone Number
                           </label>{" "}
                           <span className="text-danger">*</span>
                           <select

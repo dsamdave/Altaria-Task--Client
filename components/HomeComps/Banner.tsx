@@ -20,7 +20,9 @@ const BannerComp = () => {
     planType: "Prepaid",
   });
 
-  const handleInputChange = ( e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -66,7 +68,7 @@ const BannerComp = () => {
       phoneNumber: formData?.phoneNumber,
     };
 
-    console.log({payload})
+    console.log({ payload });
 
     dispatch(addCurrentOrder(payload));
     router.push("/bills/airtime/summary");
@@ -102,11 +104,11 @@ const BannerComp = () => {
                     </h4>
                   </Link>
 
-                  <a
+                  <Link
                     className="shrink nav-item nav-link rounded-lg border-0 p-4 mr-2"
                     id="nav-profile-tab"
                     data-toggle="tab"
-                    href="#nav-profile"
+                    href="/bills/data/select"
                     role="tab"
                     aria-controls="nav-profile"
                     aria-selected="false"
@@ -115,13 +117,13 @@ const BannerComp = () => {
                     <h4 className="font-xssss fw-600 text-grey-900 mt-3">
                       Data
                     </h4>
-                  </a>
+                  </Link>
 
-                  <a
+                  <Link
                     className="shrink nav-item nav-link rounded-lg border-0 p-4 mr-2"
                     id="nav-contact-tab"
                     data-toggle="tab"
-                    href="#nav-contact"
+                    href="/bills/cable-tv/select"
                     role="tab"
                     aria-controls="nav-contact"
                     aria-selected="false"
@@ -130,13 +132,13 @@ const BannerComp = () => {
                     <h4 className="font-xssss fw-600 text-grey-900 mt-3">
                       Cable TV
                     </h4>
-                  </a>
+                  </Link>
 
-                  <a
+                  <Link
                     className="shrink nav-item nav-link rounded-lg border-0 p-4 mr-2"
                     id="nav-about-tab"
                     data-toggle="tab"
-                    href="#nav-about"
+                    href="/bills/electricity/select"
                     role="tab"
                     aria-controls="nav-about"
                     aria-selected="false"
@@ -145,7 +147,7 @@ const BannerComp = () => {
                     <h4 className="font-xssss fw-600 text-grey-900 mt-3">
                       Electricity
                     </h4>
-                  </a>
+                  </Link>
 
                   <a
                     className="shrink nav-item nav-link rounded-lg border-0 p-4 mr-2"
@@ -176,6 +178,20 @@ const BannerComp = () => {
                       Education
                     </h4>
                   </a>
+                  <Link
+                    className="shrink nav-item nav-link rounded-lg border-0 p-4 mr-2"
+                    id="nav-haeddisk-tab"
+                    data-toggle="tab"
+                    href="/coming-soon"
+                    role="tab"
+                    aria-controls="nav-about"
+                    aria-selected="false"
+                  >
+                    <i className="font-xxl ti-book text-current d-block mt-2"></i>
+                    <h4 className="font-xssss fw-600 text-grey-900 mt-3">
+                      Decorders & Inverters
+                    </h4>
+                  </Link>
 
                   <a
                     className="shrink nav-item nav-link rounded-lg border-0 p-4 mr-0"
@@ -319,95 +335,95 @@ const BannerComp = () => {
                   aria-labelledby="nav-home-tab"
                 >
                   <form onSubmit={handleSubmit}>
-      <div className="row">
-        <div className="col-sm-12 mb-2">
-          <h4 className="fw-700 font-xl">Quick Airtime</h4>
-        </div>
+                    <div className="row">
+                      <div className="col-sm-12 mb-2">
+                        <h4 className="fw-700 font-xl">Quick Airtime</h4>
+                      </div>
 
-        <div className="col-sm-12 mb-4">
-          <div className="custom-control mr-4 custom-radio custom-control-inline">
-            <input
-              type="radio"
-              className="custom-control-input"
-              id="customRadio"
-              name="planType"
-              value="Prepaid"
-              checked={formData.planType === "Prepaid"}
-              onChange={handlePlanChange}
-            />
-            <label
-              className="custom-control-label small-size fw-500 text-grey-900 font-xsss"
-              htmlFor="customRadio"
-            >
-              Prepaid
-            </label>
-          </div>
-          <div className="custom-control mr-0 custom-radio custom-control-inline">
-            <input
-              type="radio"
-              className="custom-control-input"
-              id="customRadio2"
-              name="planType"
-              value="Postpaid"
-              checked={formData.planType === "Postpaid"}
-              onChange={handlePlanChange}
-            />
-            <label
-              className="custom-control-label small-size fw-500 text-grey-900 font-xsss"
-              htmlFor="customRadio2"
-            >
-              Postpaid
-            </label>
-          </div>
-        </div>
+                      <div className="col-sm-12 mb-4">
+                        <div className="custom-control mr-4 custom-radio custom-control-inline">
+                          <input
+                            type="radio"
+                            className="custom-control-input"
+                            id="customRadio"
+                            name="planType"
+                            value="Prepaid"
+                            checked={formData.planType === "Prepaid"}
+                            onChange={handlePlanChange}
+                          />
+                          <label
+                            className="custom-control-label small-size fw-500 text-grey-900 font-xsss"
+                            htmlFor="customRadio"
+                          >
+                            Prepaid
+                          </label>
+                        </div>
+                        <div className="custom-control mr-0 custom-radio custom-control-inline">
+                          <input
+                            type="radio"
+                            className="custom-control-input"
+                            id="customRadio2"
+                            name="planType"
+                            value="Postpaid"
+                            checked={formData.planType === "Postpaid"}
+                            onChange={handlePlanChange}
+                          />
+                          <label
+                            className="custom-control-label small-size fw-500 text-grey-900 font-xsss"
+                            htmlFor="customRadio2"
+                          >
+                            Postpaid
+                          </label>
+                        </div>
+                      </div>
 
-        <div className="col-sm-3">
-          <input
-            type="text"
-            className="form-control mb-2"
-            placeholder="Enter 11 digit Mobile Number"
-            name="phoneNumber"
-            value={formData.phoneNumber}
-            onChange={handleInputChange}
-          />
-        </div>
+                      <div className="col-sm-3">
+                        <input
+                          type="text"
+                          className="form-control mb-2"
+                          placeholder="Enter 11 digit Mobile Number"
+                          name="phoneNumber"
+                          value={formData.phoneNumber}
+                          onChange={handleInputChange}
+                        />
+                      </div>
 
-        <div className="col-sm-3">
-          <select
-            className="form-control mb-2"
-            name="operator"
-            value={formData.operator}
-            onChange={handleInputChange}
-          >
-            <option value="">Select Operator</option>
-            <option value="MTN">MTN</option>
-            <option value="9mobile">9mobile</option>
-            <option value="Glo">Glo</option>
-            <option value="Airtel">Airtel</option>
-          </select>
-        </div>
+                      <div className="col-sm-3">
+                        <select
+                          className="form-control mb-2"
+                          name="operator"
+                          value={formData.operator}
+                          onChange={handleInputChange}
+                        >
+                          <option value="">Select Operator</option>
+                          <option value="MTN">MTN</option>
+                          <option value="9mobile">9mobile</option>
+                          <option value="Glo">Glo</option>
+                          <option value="Airtel">Airtel</option>
+                        </select>
+                      </div>
 
-        <div className="col-sm-3">
-          <input
-            type="text"
-            className="form-control mb-2"
-            placeholder="Amount"
-            name="amount"
-            value={formData.amount}
-            onChange={handleInputChange}
-          />
-        </div>
+                      <div className="col-sm-3">
+                        <input
+                          type="text"
+                          className="form-control mb-2"
+                          placeholder="Amount"
+                          name="amount"
+                          value={formData.amount}
+                          onChange={handleInputChange}
+                        />
+                      </div>
 
-        <div className="col-sm-3">
-          <button
-            type="submit"
-            className="bg-current border-0 w-100 form-bttn fw-500 rounded-lg text-white"
-          >
-            Proceed 
-          </button>
-        </div>
-      </div>
-    </form>
+                      <div className="col-sm-3">
+                        <button
+                          type="submit"
+                          className="bg-current border-0 w-100 form-bttn fw-500 rounded-lg text-white"
+                        >
+                          Proceed
+                        </button>
+                      </div>
+                    </div>
+                  </form>
                 </div>
               </div>
             </div>
