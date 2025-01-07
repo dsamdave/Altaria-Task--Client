@@ -36,7 +36,7 @@ const SelectAirtimePage = () => {
     };
 
     dispatch(addSelectedService(payload));
-    router.push("/bills/airtime/order");
+    router.push("/bills/data/order");
   };
 
   useEffect(() => {

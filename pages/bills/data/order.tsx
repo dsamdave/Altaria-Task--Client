@@ -5,22 +5,19 @@ import { useAppDispatch, useAppSelector } from "@/redux/store";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { validateAirtimeOrder } from "@/utilities/validations/airtimeValidations";
+import {  validateDataOrder } from "@/utilities/validations/airtimeValidations";
 import { toast } from "react-toastify";
 import Toast from "@/components/Universal/Toast";
 import { addCurrentOrder } from "@/redux/slices/orderSlice";
 import { ICurrentOrder } from "@/utilities/typings";
-// import {
-//   BeninDisco,
-//   EkoDisco,
-//   EnuguDisco,
-//   IbadanDisco,
-//   IkejaDisco,
-//   KadunaDisco,
-//   KanoDisco,
-//   PHEDDisco,
-//   YolaDisco,
-// } from "./select";
+import { AirtelLogo, GloLogo, MTNLogo, NineMobileLogo } from "./select";
+
+interface FormData {
+  dataPlan: string;     
+  phoneNumber: string;  
+  amount: number;      
+  email: string;       
+}
 
 const OrderPage = () => {
   const router = useRouter();
@@ -32,43 +29,28 @@ const OrderPage = () => {
     phoneNumber: "",
     amount: "",
     email: "",
-    meterNumber: ""
+    dataPlan: ""
   });
 
   let logoSrc = "";
-  // switch (currentService?.serviceName) {
-  //   case "BENIN ELECTRIC BILLS":
-  //     logoSrc = BeninDisco;
-  //     break;
-  //   case "EKO ELECTRIC BILLS":
-  //     logoSrc = EkoDisco;
-  //     break;
-  //   case "ENUGU ELECTRIC BILLS":
-  //     logoSrc = EnuguDisco;
-  //     break;
-  //   case "IBADAN ELECTRIC BILLS":
-  //     logoSrc = IbadanDisco;
-  //     break;
-  //   case "IKEJA ELECTRIC BILLS":
-  //     logoSrc = IkejaDisco;
-  //     break;
-  //   case "KADUNA ELECTRIC BILLS":
-  //     logoSrc = KadunaDisco;
-  //     break;
-  //   case "KANO ELECTRIC BILLS":
-  //     logoSrc = KanoDisco;
-  //     break;
-  //   case "PORT HARCOURT ELECTRIC BILLS":
-  //     logoSrc = PHEDDisco;
-  //     break;
-  //   case "YOLA ELECTRIC BILLS":
-  //     logoSrc = YolaDisco;
-  //     break;
-  //   default:
-  //     logoSrc = "";
-  // }
+  switch (currentService?.serviceName) {
+    case "MTN":
+      logoSrc = MTNLogo;
+      break;
+    case "9mobile":
+      logoSrc = NineMobileLogo;
+      break;
+    case "Glo":
+      logoSrc = GloLogo;
+      break;
+    case "Airtel":
+      logoSrc = AirtelLogo;
+      break;
+    default:
+      logoSrc = "";
+  }
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -81,7 +63,7 @@ const OrderPage = () => {
 
     console.log("Form data submitted:", formData);
 
-    const result = validateAirtimeOrder(formData);
+    const result = validateDataOrder(formData);
 
     if (result.errLength) {
       return toast.error(() => <Toast title="Error" body={result.errMsg} />);
@@ -93,6 +75,7 @@ const OrderPage = () => {
       amount: formData?.amount,
       currency: currentService?.currency,
       serviceName: currentService?.serviceName,
+      productName: formData?.dataPlan,
       userName: "string",
       billerCode: currentService?.billerCode,
       itemCode: currentService?.itemCode,
@@ -108,7 +91,7 @@ const OrderPage = () => {
     };
 
     dispatch(addCurrentOrder(payload));
-    router.push("/bills/airtime/summary");
+    router.push("/bills/data/summary");
   };
 
   useEffect(() => {
@@ -164,20 +147,20 @@ const OrderPage = () => {
 
                           <label
                             className="mont-font fw-500 font-xsss"
-                            htmlFor="phoneNumber"
+                            htmlFor="dataPlan"
                           >
-                            Phone Number
+                            Data Plan
                           </label>{" "}
                           <span className="text-danger">*</span>
                           <select
                             className="form-control mb-3"
-                            name="operator"
-                            // value={formData.operator}
-                            // onChange={handleInputChange}
+                            name="dataPlan"
+                            value={formData.dataPlan}
+                            onChange={handleInputChange}
                           >
-                            {/* <option value="">Select Operator</option> */}
-                            <option value="MTN">PREPAID</option>
-                            <option value="9mobile">POSTPAID</option>
+                            <option value="">Select Data Plan</option>
+                            <option value="Plan 1">Plan 1</option>
+                            <option value="Plan 2">Plan 2</option>
                           </select>
                         </div>
                         </div>
@@ -188,16 +171,15 @@ const OrderPage = () => {
                               className="mont-font fw-500 font-xsss"
                               htmlFor="phoneNumber"
                             >
-                              Meter Number
-                            </label>{" "}
-                            <span className="text-danger">*</span>
+                              Phone Number
+                            </label> <span className="text-danger">*</span>
                             <input
                               type="tel"
-                              name="meterNumber"
-                              value={formData.meterNumber}
+                              name="phoneNumber"
+                              value={formData.phoneNumber}
                               onChange={handleInputChange}
                               className="form-control"
-                              placeholder="Enter meter number"
+                              placeholder="Enter 11-digits Phone number"
                             />
                           </div>
                         </div>
@@ -249,24 +231,7 @@ const OrderPage = () => {
                       <div className="row">
                         
 
-                        <div className="col-lg-6 mb-3">
-                          <div className="form-gorup">
-                            <label
-                              className="mont-font fw-500 font-xsss"
-                              htmlFor="email"
-                            >
-                              Phone Number
-                            </label>
-                            <input
-                              type="text"
-                              name="email"
-                              value={formData.phoneNumber}
-                              onChange={handleInputChange}
-                              className="form-control"
-                              placeholder="Enter 11-digits Phone number"
-                            />
-                          </div>
-                        </div>
+                       
                       </div>
 
                      

@@ -7,9 +7,9 @@ const Sidebar = () => {
   // Define the menu items
   const menuItems = [
     { href: "/bills/airtime/select", icon: "ti-mobile", label: "Airtime Recharge", keyword: "airtime" },
-    { href: "/data", icon: "ti-signal", label: "Data Recharge", keyword: "data" },
-    { href: "/cable-tv", icon: "ti-desktop", label: "Cable TV Recharge", keyword: "cable" },
-    { href: "/electricity", icon: "ti-bolt", label: "Electricity Recharge", keyword: "electricity" },
+    { href: "/bills/data/select", icon: "ti-signal", label: "Data Recharge", keyword: "data" },
+    { href: "/bills/cable-tv/select", icon: "ti-desktop", label: "Cable TV Recharge", keyword: "cable" },
+    { href: "/bills/electricity/select", icon: "ti-bolt", label: "Electricity Recharge", keyword: "electricity" },
     { href: "/sports-betting", icon: "ti-medall", label: "Sports Betting", keyword: "sports" },
     { href: "/education", icon: "ti-book", label: "Education", keyword: "education" },
     { href: "#", icon: "ti-menu-alt", label: "More", keyword: "more" },

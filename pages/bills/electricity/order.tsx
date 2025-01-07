@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from "@/redux/store";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { validateAirtimeOrder } from "@/utilities/validations/airtimeValidations";
+import { validateAirtimeOrder, validateElectricityOrder } from "@/utilities/validations/airtimeValidations";
 import { toast } from "react-toastify";
 import Toast from "@/components/Universal/Toast";
 import { addCurrentOrder } from "@/redux/slices/orderSlice";
@@ -32,7 +32,8 @@ const OrderPage = () => {
     phoneNumber: "",
     amount: "",
     email: "",
-    meterNumber: ""
+    meterNumber: "",
+    meterType: "PREPAID"
   });
 
   let logoSrc = "";
@@ -68,7 +69,7 @@ const OrderPage = () => {
       logoSrc = "";
   }
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -81,7 +82,7 @@ const OrderPage = () => {
 
     console.log("Form data submitted:", formData);
 
-    const result = validateAirtimeOrder(formData);
+    const result = validateElectricityOrder(formData);
 
     if (result.errLength) {
       return toast.error(() => <Toast title="Error" body={result.errMsg} />);
@@ -89,10 +90,11 @@ const OrderPage = () => {
 
     const payload: ICurrentOrder = {
       country: currentService?.country,
-      customer_id: formData?.phoneNumber,
+      customer_id: formData?.meterNumber,
       amount: formData?.amount,
       currency: currentService?.currency,
       serviceName: currentService?.serviceName,
+      productName: formData?.meterType,
       userName: "string",
       billerCode: currentService?.billerCode,
       itemCode: currentService?.itemCode,
@@ -108,7 +110,7 @@ const OrderPage = () => {
     };
 
     dispatch(addCurrentOrder(payload));
-    // router.push("/bills/airtime/summary");
+    router.push("/bills/electricity/summary");
   };
 
   useEffect(() => {
@@ -166,18 +168,18 @@ const OrderPage = () => {
                             className="mont-font fw-500 font-xsss"
                             htmlFor="phoneNumber"
                           >
-                            Category
+                            Meter Type
                           </label>{" "}
                           <span className="text-danger">*</span>
                           <select
                             className="form-control mb-3"
-                            name="operator"
-                            // value={formData.operator}
-                            // onChange={handleInputChange}
+                            name="meterType"
+                            value={formData.meterType}
+                            onChange={handleInputChange}
                           >
                             {/* <option value="">Select Operator</option> */}
-                            <option value="MTN">PREPAID</option>
-                            <option value="9mobile">POSTPAID</option>
+                            <option value="PREPAID">PREPAID</option>
+                            <option value="POSTPAID">POSTPAID</option>
                           </select>
                         </div>
                         </div>
@@ -186,13 +188,13 @@ const OrderPage = () => {
                           <div className="form-gorup">
                             <label
                               className="mont-font fw-500 font-xsss"
-                              htmlFor="phoneNumber"
+                              htmlFor="meterNumber"
                             >
                               Meter Number
                             </label>{" "}
                             <span className="text-danger">*</span>
                             <input
-                              type="tel"
+                              type="number"
                               name="meterNumber"
                               value={formData.meterNumber}
                               onChange={handleInputChange}
@@ -258,8 +260,8 @@ const OrderPage = () => {
                               Phone Number
                             </label>
                             <input
-                              type="text"
-                              name="email"
+                              type="tel"
+                              name="phoneNumber"
                               value={formData.phoneNumber}
                               onChange={handleInputChange}
                               className="form-control"

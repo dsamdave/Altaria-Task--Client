@@ -14,6 +14,8 @@ export interface ICurrentOrder {
     amount: string
     currency: string | undefined
     serviceName: string | undefined
+    productName?: string | undefined
+    noOfMonths?: string | undefined
     userName: string
     billerCode: string | undefined,
     itemCode: string | undefined,

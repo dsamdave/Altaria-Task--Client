@@ -211,7 +211,7 @@
 }
 
 .bg-lightgrey-after:after {
-  height: 65%;
+  /* height: 65%; */
   background-image: url(/images/landing-banner.png);
   background-size: contain;
   z-index: -1;

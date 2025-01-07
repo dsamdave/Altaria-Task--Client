@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from "@/redux/store";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { validateAirtimeOrder } from "@/utilities/validations/airtimeValidations";
+import { validateAirtimeOrder, validateCableTVOrder } from "@/utilities/validations/airtimeValidations";
 import { toast } from "react-toastify";
 import Toast from "@/components/Universal/Toast";
 import { addCurrentOrder } from "@/redux/slices/orderSlice";
@@ -22,7 +22,9 @@ const OrderPage = () => {
     phoneNumber: "",
     amount: "",
     email: "",
-    meterNumber: "",
+    packagee: "",
+    smartCardNo: "",
+    noOfMonths: "",
   });
 
   let logoSrc = "";
@@ -41,7 +43,7 @@ const OrderPage = () => {
       logoSrc = "";
   }
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -54,7 +56,7 @@ const OrderPage = () => {
 
     console.log("Form data submitted:", formData);
 
-    const result = validateAirtimeOrder(formData);
+    const result = validateCableTVOrder(formData);
 
     if (result.errLength) {
       return toast.error(() => <Toast title="Error" body={result.errMsg} />);
@@ -62,10 +64,12 @@ const OrderPage = () => {
 
     const payload: ICurrentOrder = {
       country: currentService?.country,
-      customer_id: formData?.phoneNumber,
+      customer_id: formData?.smartCardNo,
       amount: formData?.amount,
       currency: currentService?.currency,
       serviceName: currentService?.serviceName,
+      productName:formData?.packagee,
+      noOfMonths: formData?.noOfMonths,
       userName: "string",
       billerCode: currentService?.billerCode,
       itemCode: currentService?.itemCode,
@@ -81,7 +85,7 @@ const OrderPage = () => {
     };
 
     dispatch(addCurrentOrder(payload));
-    // router.push("/bills/airtime/summary");
+    router.push("/bills/cable-tv/summary");
   };
 
   useEffect(() => {
@@ -143,13 +147,13 @@ const OrderPage = () => {
                             <span className="text-danger">*</span>
                             <select
                               className="form-control mb-3"
-                              name="operator"
-                              // value={formData.operator}
-                              // onChange={handleInputChange}
+                              name="packagee"
+                              value={formData.packagee}
+                              onChange={handleInputChange}
                             >
                               <option value="">Select a package</option>
-                              {/* <option value="MTN">PREPAID</option>
-                            <option value="9mobile">POSTPAID</option> */}
+                              <option value="Package 1">Package 1</option>
+                            <option value="Package 2">Package 2</option>
                             </select>
                           </div>
                         </div>
@@ -158,18 +162,18 @@ const OrderPage = () => {
                           <div className="form-gorup">
                             <label
                               className="mont-font fw-500 font-xsss"
-                              htmlFor="phoneNumber"
+                              htmlFor="smartCardNo"
                             >
                               Smartcard Number
                             </label>{" "}
                             <span className="text-danger">*</span>
                             <input
-                              type="tel"
-                              name="meterNumber"
-                              value={formData.meterNumber}
+                              type="number"
+                              name="smartCardNo"
+                              value={formData.smartCardNo}
                               onChange={handleInputChange}
                               className="form-control"
-                              placeholder="Enter meter number"
+                              placeholder="Enter smart card number"
                             />
                           </div>
                         </div>
@@ -187,9 +191,9 @@ const OrderPage = () => {
                             <span className="text-danger">*</span>
                             <select
                               className="form-control mb-3"
-                              name="operator"
-                              // value={formData.operator}
-                              // onChange={handleInputChange}
+                              name="noOfMonths"
+                              value={formData.noOfMonths}
+                              onChange={handleInputChange}
                             >
                               <option value="">Select number of months</option>
                               {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((each, i) => (
@@ -212,7 +216,7 @@ const OrderPage = () => {
                               type="number"
                               name="amount"
                               value={formData.amount}
-                              // onChange={handleInputChange}
+                              onChange={handleInputChange}
                               className="form-control"
                               placeholder="Default Amount"
                             />
@@ -250,8 +254,8 @@ const OrderPage = () => {
                               Phone Number
                             </label>
                             <input
-                              type="text"
-                              name="email"
+                              type="tel"
+                              name="phoneNumber"
                               value={formData.phoneNumber}
                               onChange={handleInputChange}
                               className="form-control"
