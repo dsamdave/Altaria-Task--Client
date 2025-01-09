@@ -3,7 +3,13 @@ import { useAppSelector } from "@/redux/store";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Spinner from "../Universal/Spinner";
+import Toast from "../Universal/Toast";
+import { useRouter } from "next/router";
 
+type Location = {
+  latitude: number;
+  longitude: number;
+};
 interface IResponse {
   status: boolean;
   message: string;
@@ -26,16 +32,27 @@ export interface IVariables {
   latitude: string;
   longitude: string;
 }
+export interface IBookmarkVariables {
+  eventId: string;
+}
 
 const HowItWorks = () => {
+  const router = useRouter();
+  const { currentUser } = useAppSelector((state) => state.auth);
+
   const events = useApiMutation<IResponse, IVariables>("/events");
+  const addBookmark = useApiMutation<IResponse, IBookmarkVariables>(
+    "/bookmark-event"
+  );
 
-  const [location, setLocation] = useState<{ latitude: number; longitude: number } | null>(null);
+  const [location, setLocation] = useState<{
+    latitude: number;
+    longitude: number;
+  } | null>(null);
   const [isClient, setIsClient] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
-  const [userEvents, setUserEvents] = useState<Event[]>([])
+  const [userEvents, setUserEvents] = useState<Event[]>([]);
 
-  const fetchEvents = async ( ) => {
+  const fetchEvents = async () => {
     const latitude = "40.7128";
     const longitude = "-74.0060";
 
@@ -44,136 +61,190 @@ const HowItWorks = () => {
       {
         onSuccess: (data: IResponse) => {
           toast.success("Events fetched successfully!");
-          setUserEvents(data?.data)
+          setUserEvents(data?.data);
         },
         onError: (error: any) => {
-          toast.error("fetching events failed");
+          toast.error(() => (
+            <Toast
+              title="Error"
+              body={error?.response?.data?.message || "Unknown error"}
+            />
+          ));
         },
       }
     );
   };
 
+  const handleFavorite = async (id: string) => {
+    if (!currentUser?.accessToken) {
+      return toast.error("Please log in!");
+    }
+    console.log({ id });
+    addBookmark.mutate(
+      { eventId: id },
+      {
+        onSuccess: (data: IResponse) => {
+          toast.success("Events bookmarked!");
+        },
 
-
-
-  const getLocation = () => {
-    if (!navigator.geolocation) {
-      toast.error('Geolocation is not supported by your browser.');
-      return;
-    } 
-
-    setLocation(null);
-
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        setLocation({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-        }); 
-        toast.error(null);
-        console.log('Permission granted, location fetched:', position.coords);
-      },
-      (err) => {
-        switch (err.code) {
-          case err.PERMISSION_DENIED:
-            toast.error('Permission denied. Please allow location access.');
-            break;
-          case err.POSITION_UNAVAILABLE:
-            toast.error('Location information is unavailable.');
-            break;
-          case err.TIMEOUT:
-            toast.error('The request to get your location timed out.');
-            break;
-          default:
-            toast.error('An unknown error occurred.');
-            break;
-        }
-        setLocation(null);
-        console.error('Error fetching location:', err);
+        onError: (error: any) => {
+          toast.error(() => (
+            <Toast
+              title="Error"
+              body={error?.response?.data?.message || "Unknown error"}
+            />
+          ));
+        },
       }
     );
   };
 
-  const fetchLocationFromIP = async () => {
+  const getLocation = (): Promise<Location> => {
+    return new Promise((resolve, reject) => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            resolve({ latitude, longitude });
+          },
+          (error) => {
+            // Log detailed error messages
+            switch (error.code) {
+              case error.PERMISSION_DENIED:
+                console.error("User denied the request for Geolocation.");
+                break;
+              case error.POSITION_UNAVAILABLE:
+                console.error("Location information is unavailable.");
+                break;
+              case error.TIMEOUT:
+                console.error("The request to get user location timed out.");
+                break;
+              default:
+                console.error("An unknown error occurred:", error.message);
+            }
+            reject(error);
+          },
+          {
+            timeout: 10000, // Set timeout to 10 seconds
+            maximumAge: 0, // Always get the latest location
+          }
+        );
+      } else {
+        reject(new Error("Geolocation is not supported by this browser."));
+      }
+    });
+  };
+
+  const saveLocationPermission = (): void => {
+    localStorage.setItem("locationPermission", "granted");
+  };
+
+  const saveLocationToStorage = (latitude: number, longitude: number): void => {
+    localStorage.setItem("latitude", latitude.toString());
+    localStorage.setItem("longitude", longitude.toString());
+  };
+
+  const handleAllowLocation = async (): Promise<void> => {
     try {
-      const response = await fetch('https://ipapi.co/json/');
-      const data = await response.json();
-      setLocation({ 
-        latitude: data.latitude, 
-        longitude: data.longitude,
-      });
-      console.log('IP-based location:', data);
+      const location = await getLocation();
+      console.log({ location });
+      if (location) {
+        const { latitude, longitude } = location;
+
+        saveLocationPermission();
+        saveLocationToStorage(latitude, longitude);
+        router.push("/onboarding");
+      }
     } catch (error) {
-      console.error('IP-based geolocation error:', error);
+      console.error("Error getting location:", error);
+      toast.error("Unable to retrieve location.");
     }
   };
 
-  useEffect(() => { setIsClient(true)}, []);
-  useEffect(() => { 
-    // getLocation()
-    fetchLocationFromIP() 
+  const handleDenyLocation = (): void => {
+    toast.error("Location access is required.");
+  };
 
+  useEffect(() => {
+    const checkLocationPermission = (): void => {
+      const permission = localStorage.getItem("locationPermission");
+      if (permission === "granted") {
+        router.push("/signin");
+      }
+    };
+
+    checkLocationPermission();
+  }, [router]);
+
+  useEffect(() => {
+    setIsClient(true);
   }, []);
 
-  useEffect(() => { 
-
-    if(location?.latitude && location.longitude){
-
-        // fetchEvents()
+  useEffect(() => {
+    if (location?.latitude && location.longitude) {
+      // fetchEvents()
     }
-}, [location?.latitude && location.longitude]);
+  }, [location?.latitude && location.longitude]);
 
-  useEffect(() => { 
-        fetchEvents()
-}, []);
+  useEffect(() => {
+    fetchEvents();
+  }, []);
 
   return (
     <>
-    {
-        isClient ? (
-
-    <div className="how-to-work pt-lg--7 pb-lg--7 pb-5 pt-5 bg-greylight">
-      <div className="container">
-        <div className="row">
-          <div className="col-lg-12 text-center mb-lg-5 mb-4 pb-3">
-            <h2 className="text-grey-900 fw-400 display1-size">
-              List of Events
-            </h2>
-          </div>
-
-          {
-            userEvents.length > 0 && userEvents.map((each, idx) => (
-
-          <div className="col-lg-4 mb-3" key={idx}>
-            <div className="card shadow-lg rounded-0 p-5 bg-white text-center border-0">
-            <i className="ti-package ml-auto mr-auto round-lg-btn text-white bg-current font-xxl text-center"></i>
-            <h2 className="fw-700 font-sm mt-4">{each.name}</h2>
-              <p className="font-xsss fw-500 text-grey-500 lh-26 mt-2">
-                {each?.description}
-              </p>
-              <p className="font-xsss fw-500 text-grey-500 lh-26 mt-2">
-                {each?.type}
-              </p>
-              <p className="font-xsss fw-500 text-grey-500 lh-26 mt-2">
-                {each?.address}
-              </p>
-              <p className="font-xsss fw-500 text-grey-500 lh-26 mt-2">
-                {each?.dateTime}
-              </p>
+      {isClient ? (
+        <div className="how-to-work pt-lg--7 pb-lg--7 pb-5 pt-5 bg-greylight">
+          <div className="container">
+            <div className="row">
+              <button
+                className=" btn btn-primary mb-2"
+                onClick={handleAllowLocation}
+              >
+                Allow Location
+              </button>
+              <button className=" btn btn-danger" onClick={handleDenyLocation}>
+                Deny Location
+              </button>
             </div>
           </div>
-            )) 
-          }
+          <div className="container ">
+            <div className="row">
+              <div className="col-lg-12 text-center mb-lg-5 mb-4 pb-3">
+                <h2 className="text-grey-900 mt-5 fw-400 display1-size">
+                  List of Events
+                </h2>
+              </div>
 
-        
+              {userEvents.length > 0 &&
+                userEvents.map((each, idx) => (
+                  <div className="col-lg-4 mb-3" key={idx}>
+                    <div className="card shadow-lg rounded-0 p-5 bg-white text-center border-0">
+                      <i
+                        className="shrink ti-heart ml-auto mr-auto round-lg-btn text-white bg-danger font-xxl text-center"
+                        onClick={() => handleFavorite(each?.id)}
+                      ></i>
+                      <h2 className="fw-700 font-sm mt-4">{each.name}</h2>
+                      <p className="font-xsss fw-500 text-grey-500 lh-26 mt-2">
+                        {each?.description}
+                      </p>
+                      <p className="font-xsss fw-500 text-grey-500 lh-26 mt-2">
+                        {each?.type}
+                      </p>
+                      <p className="font-xsss fw-500 text-grey-500 lh-26 mt-2">
+                        {each?.address}
+                      </p>
+                      <p className="font-xsss fw-500 text-grey-500 lh-26 mt-2">
+                        {each?.dateTime}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </div>
+
+          {(events.isPending || addBookmark.isPending) && <Spinner />}
         </div>
-      </div>
-
-      {events.isPending && <Spinner />}
-
-    </div>
-        ) : null
-    }
+      ) : null}
     </>
   );
 };

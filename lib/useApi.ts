@@ -1,10 +1,8 @@
-// src/hooks/useApi.ts
 import { useQuery, useMutation, UseQueryOptions, UseMutationOptions, QueryKey } from '@tanstack/react-query';
 import { apiClient } from '@/lib/query';
 import { AxiosError } from 'axios';
 
 
-// Custom hook for queries
 export const useApiQuery = <TData, TError = unknown>(
   key: QueryKey,
   url: string,
@@ -22,7 +20,6 @@ export const useApiQuery = <TData, TError = unknown>(
 
 
 
-// Custom hook for mutations
 export const useApiMutation = <TData, TVariables = unknown, TError = AxiosError>(
     url: string,
     options?: UseMutationOptions<TData, TError, TVariables>

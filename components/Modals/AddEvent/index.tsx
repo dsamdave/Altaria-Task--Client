@@ -7,6 +7,7 @@ import {
 import { toast } from "react-toastify";
 import Toast from "@/components/Universal/Toast";
 import Spinner from "@/components/Universal/Spinner";
+import { useAppSelector } from "@/redux/store";
 
 interface IProp {
   setAddEventModal: (addEventModal: boolean) => void;
@@ -39,6 +40,9 @@ export interface IVariables {
 }
 
 const AddEventModal: React.FC<IProp> = ({ setAddEventModal }) => {
+
+      const { currentUser } = useAppSelector((state) => state.auth);
+  
   const [formData, setFormData] = useState<IAddEventVariables>({
     name: "",
     type: "",
@@ -61,6 +65,10 @@ const AddEventModal: React.FC<IProp> = ({ setAddEventModal }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+        if(!currentUser?.accessToken){
+          return toast.error("Please log in!")
+        }
 
     const result = validateAddEvent(formData);
 
