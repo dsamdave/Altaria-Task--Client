@@ -37,32 +37,11 @@ export default function App({ Component, pageProps }: AppProps) {
   }, []);
 
 
-  // const isAuthRoute = router.pathname.startsWith("/dashboard/auth");
-  // const isDashboardRoute = router.pathname.startsWith("/dashboard/hospitaldb");
-  // const isUsersDashboardRoute = router.pathname.startsWith("/dashboard/users")
-
   return (
     <main className="color-theme-blue main-wrapper">
       
       <QueryClientProvider client={queryClient}>
         <Provider store={store}>
-          {/* {isAuthRoute ? (
-          <>
-            <Component {...pageProps} />
-          </>
-        ) : isDashboardRoute ? (
-          <DashboardLayout>
-            <Component {...pageProps} />
-          </DashboardLayout>
-        ) : isUsersDashboardRoute ? (
-          <UsersLayout>
-            <Component {...pageProps} />
-          </UsersLayout>
-        ) :  (
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        )} */}
 
           <Layout>
             <Component {...pageProps} />

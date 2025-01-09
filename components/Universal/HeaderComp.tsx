@@ -1,26 +1,37 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import LoginModal from "../Modals/LoginModal";
 import RegisterModal from "../Modals/RegisterModal";
 import ForgotPasswordnModal from "../Modals/ForgotPasswordModal";
 import Link from "next/link";
+import { useAppSelector } from "@/redux/store";
 
 const HeaderComp = () => {
+
+  const { currentUser } = useAppSelector((state) => state.auth);
+
+  const [isClient, setIsClient] = useState(false);
   const [loginModal, setLoginModal] = useState(false);
   const [registerModal, setRegisterModal] = useState(false);
   const [forgotPassModal, setForgotPassModal] = useState(false);
 
-  return (
-    <div>
+  useEffect(()=>{
+    setIsClient(true)
+  }, [])
 
+  return (
+    <>
+    {
+      isClient ? (
+    <div>
       <div className="header-wrapper">
         <div className="container">
           <div className="row">
             <div className="col-lg-8 navbar">
               <Link href="/" className="shrink logo">
                 <h1 className="fredoka-font ls-3 fw-700 text-current display1-size">
-                  OrderPay
+                  Event Task
                 </h1>
               </Link>
               <button
@@ -42,52 +53,17 @@ const HeaderComp = () => {
                       Home
                     </Link>
                   </li>
-                  <li className="nav-item dropdown">
-                    <a
-                      className="shrink nav-link dropdown-toggle"
-                      href="#"
-                      data-toggle="dropdown"
-                    >
-                      {" "}
-                      Pay Bills <i className="ti-angle-down"></i>
-                    </a>
-                    <div className="dropdown-menu">
-                      <Link className="shrink dropdown-item" href="/bills/airtime/select">
-                        Airtime
-                      </Link>
-                      <Link className="shrink dropdown-item" href="/bills/data/select">
-                        Data
-                      </Link>
-                      <Link className="shrink dropdown-item" href="/bills/cable-tv/select">
-                        Cable TV
-                      </Link>
-                      <Link className="shrink dropdown-item" href="/bills/electricity/select">
-                        Electricity
-                      </Link>
-                    </div>
-                  </li>
-
-                  <li className="nav-item">
-                    <Link href="/coming-soon" className="shrink nav-link">
-                      Decoders & Inverters
+                  <li className="nav-item" onClick={() => setLoginModal(true)}>
+                    <Link href="#" className="shrink nav-link">
+                    Login
                     </Link>
                   </li>
-                  <li className="nav-item">
-                    <Link href="/aboutus" className="shrink nav-link">
-                      About Us
+                  <li className="nav-item" onClick={() => setRegisterModal(true)}>
+                    <Link href="#" className="shrink nav-link">
+                    Register
                     </Link>
                   </li>
-
-                  <li className="nav-item">
-                    <Link href="/contact" className="shrink nav-link">
-                      Contact
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link href="/faq" className="shrink nav-link">
-                      FAQs
-                    </Link>
-                  </li>
+                  
                 </ul>
               </div>
             </div>
@@ -121,7 +97,7 @@ const HeaderComp = () => {
                 href="#"
                 className="bg-current p-3 w-100 fw-600 text-white ls-3 font-xssss d-inline-block"
               >
-                BROWSE CATEGORIES <i className="ti-menu float-right"></i>
+                Welcome  {currentUser?.email || "Dear User"}
               </Link>
             </div>
             <div className="col-md-9 text-right">
@@ -129,14 +105,12 @@ const HeaderComp = () => {
                 href="tel:(+1)866-540-3229"
                 className="pb-3 pt-3 fw-500 font-xsss text-white d-block"
               >
-                Call us toll free: (+1)866-540-3229
+                Call me +234 8188251329
               </Link>
             </div>
           </div>
         </div>
       </div>
-
-      {/* <LoginModal /> */}
 
       {loginModal && (
         <LoginModal
@@ -158,6 +132,10 @@ const HeaderComp = () => {
         />
       )}
     </div>
+
+      ) : null
+    }
+    </>
   );
 };
 

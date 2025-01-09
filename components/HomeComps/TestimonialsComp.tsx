@@ -3,10 +3,7 @@ import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';
-// import '../styles/owl-carousel.css'; // Replace with your custom CSS if needed
-import $ from 'jquery';
 
-// Dynamically load Owl Carousel to prevent SSR issues
 const OwlCarousel = dynamic(() => import('react-owl-carousel'), { ssr: false });
 
 const TestimonialsComp = () => {

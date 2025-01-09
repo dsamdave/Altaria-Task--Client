@@ -3,8 +3,7 @@ import { store } from '@/redux/store';
 import { QueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 
-  export const  baseURL = process.env.NEXT_PUBLIC_API_URL || 'https://orderpay-r1p1.onrender.com/api'
-  // export const SocketBaseURL = process.env.NEXT_PUBLIC_API_BASE_URL_SOCKET || 'https://orderpay-r1p1.onrender.com'
+  export const  baseURL = process.env.NEXT_PUBLIC_API_URL || 'https://altaria-task.onrender.com/api'
 
 
 const apiClient = axios.create({

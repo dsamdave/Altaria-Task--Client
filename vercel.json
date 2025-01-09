@@ -9,7 +9,7 @@
         },
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; img-src 'self' data: blob: res.cloudinary.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://vercel.live https://js.stripe.com; connect-src 'self' https://orderpay-r1p1.onrender.com https://vercel.live https://*.pusher.com wss://*.pusher.com https://api.cloudinary.com; style-src 'self' 'unsafe-inline'; font-src 'self'; frame-src 'self' https://js.stripe.com https://vercel.live; object-src 'none'; base-uri 'self'; form-action 'self'; block-all-mixed-content; upgrade-insecure-requests;"
+          "value": "default-src 'self'; img-src 'self' data: blob: res.cloudinary.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://vercel.live https://js.stripe.com; connect-src 'self' https://altaria-task.onrender.com https://altaria-task.onrender.com/api https://vercel.live https://*.pusher.com wss://*.pusher.com https://api.cloudinary.com; style-src 'self' 'unsafe-inline'; font-src 'self'; frame-src 'self' https://js.stripe.com https://vercel.live; object-src 'none'; base-uri 'self'; form-action 'self'; block-all-mixed-content; upgrade-insecure-requests;"
         },
         {
           "key": "Referrer-Policy",

@@ -5,14 +5,14 @@ const nextConfig = {
     domains: ['res.cloudinary.com'],
   },
   async headers() {
-    const backendUrl = 'https://orderpay-r1p1.onrender.com';
+    const backendUrl = 'https://altaria-task.onrender.com';
     const isDev = process.env.NODE_ENV === 'development';
 
     const cspValue = `
       default-src 'self';
       img-src 'self' data: blob: res.cloudinary.com;
       script-src 'self' 'unsafe-inline' ${isDev ? "'unsafe-eval'" : ''} https://vercel.live https://js.stripe.com;
-      connect-src 'self' ${backendUrl} https://vercel.live https://*.pusher.com wss://*.pusher.com https://api.cloudinary.com;
+      connect-src 'self' ${backendUrl} ${backendUrl}/api https://vercel.live https://*.pusher.com wss://*.pusher.com https://api.cloudinary.com;
       style-src 'self' 'unsafe-inline';
       font-src 'self';
       frame-src 'self' https://js.stripe.com https://vercel.live;
