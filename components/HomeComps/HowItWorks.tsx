@@ -1,3 +1,4 @@
+import dynamic from "next/dynamic";
 import { useApiMutation, useApiQuery } from "@/lib/useApi";
 import { useAppSelector } from "@/redux/store";
 import React, { useEffect, useState } from "react";
@@ -5,6 +6,10 @@ import { toast } from "react-toastify";
 import Spinner from "../Universal/Spinner";
 import Toast from "../Universal/Toast";
 import { useRouter } from "next/router";
+// import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
 
 type Location = {
   latitude: number;
@@ -35,6 +40,21 @@ export interface IVariables {
 export interface IBookmarkVariables {
   eventId: string;
 }
+
+const MapContainer = dynamic(() => import("react-leaflet").then(mod => mod.MapContainer), { ssr: false });
+const TileLayer = dynamic(() => import("react-leaflet").then(mod => mod.TileLayer), { ssr: false });
+const Marker = dynamic(() => import("react-leaflet").then(mod => mod.Marker), { ssr: false });
+const Popup = dynamic(() => import("react-leaflet").then(mod => mod.Popup), { ssr: false });
+
+
+
+
+// delete (L.Icon.Default.prototype as any)._getIconUrl;
+// L.Icon.Default.mergeOptions({
+//   iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png",
+//   iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
+//   shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
+// });
 
 const HowItWorks = () => {
   const router = useRouter();
@@ -191,11 +211,21 @@ const HowItWorks = () => {
   }, []);
 
 
+  if (!isClient) return null;
+
+  const L = require("leaflet");
+
+  // Fix Leaflet Marker icons
+  delete (L.Icon.Default.prototype as any)._getIconUrl;
+  L.Icon.Default.mergeOptions({
+    iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png",
+    iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
+    shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
+  });
   
   return (
-    <>
-      {isClient ? (
-        <div className="how-to-work pt-lg--7 pb-lg--7 pb-5 pt-5 bg-greylight">
+
+    <div className="how-to-work pt-lg--7 pb-lg--7 pb-5 pt-5 bg-greylight">
           <div className="container">
             <div className="row">
               <button
@@ -216,7 +246,7 @@ const HowItWorks = () => {
             </div>
           </div>
           <div className="container ">
-            <div className="row">
+            <div className="row mb-5">
               <div className="col-lg-12 text-center mb-lg-5 mb-4 pb-3">
                 <h2 className="text-grey-900 mt-5 fw-400 display1-size">
                   {
@@ -253,12 +283,32 @@ const HowItWorks = () => {
                   </div>
                 ))}
             </div>
+
+                {location && (
+            <MapContainer
+              center={[parseFloat(location.latitude), parseFloat(location.longitude)]}
+              zoom={13}
+              style={{ height: "500px", width: "100%" }}
+            >
+              <TileLayer
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              />
+              {userEvents.map((event) => (
+                <Marker key={event.id} position={[event.coordinates[1], event.coordinates[0]]}>
+                  <Popup>
+                    <h3>{event.name}</h3>
+                    <p>{event.description}</p>
+                    <p>{event.address}</p>
+                  </Popup>
+                </Marker>
+              ))}
+            </MapContainer>
+          )}
           </div>
 
           {(events.isPending || addBookmark.isPending) && <Spinner />}
         </div>
-      ) : null}
-    </>
   );
 };
 

@@ -40,13 +40,15 @@ export interface IVariables {
 }
 
 const AddEventModal: React.FC<IProp> = ({ setAddEventModal }) => {
+  const { currentUser } = useAppSelector((state) => state.auth);
 
-      const { currentUser } = useAppSelector((state) => state.auth);
+  const [location, setLocation] = useState<{
+    latitude: string;
+    longitude: string;
+  } | null>(null);
+    const [isClient, setIsClient] = useState<boolean>(false);
   
-      const [location, setLocation] = useState<{
-          latitude: string;
-          longitude: string;
-        } | null>(null);
+
   const [formData, setFormData] = useState<IAddEventVariables>({
     name: "",
     type: "",
@@ -70,12 +72,12 @@ const AddEventModal: React.FC<IProp> = ({ setAddEventModal }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-        if(!location?.latitude && !location?.latitude){
-          return toast.error("Please allow location!")
-        }
-        if(!currentUser?.accessToken){
-          return toast.error("Please log in!")
-        }
+    if (!location?.latitude && !location?.latitude) {
+      return toast.error("Please allow location!");
+    }
+    if (!currentUser?.accessToken) {
+      return toast.error("Please log in!");
+    }
 
     const result = validateAddEvent(formData);
 
@@ -83,26 +85,29 @@ const AddEventModal: React.FC<IProp> = ({ setAddEventModal }) => {
       return toast.error(() => <Toast title="Error" body={result.errMsg} />);
     }
 
-    addEvent.mutate({...formData, latitude: location.latitude, longitude: location.longitude }, {
-      onSuccess: (data: IResponse) => {
-        toast.success("Event Added successfully");
-        window.location.reload();
-        setAddEventModal(false);
+    addEvent.mutate(
+      {
+        ...formData,
+        latitude: location.latitude,
+        longitude: location.longitude,
       },
-      onError: (error: any) => {
-        toast.error(() => (
-          <Toast
-            title="Sign up failed:"
-            body={error?.response?.data?.message || "Unknown error"}
-          />
-        ));
-      },
-    });
+      {
+        onSuccess: (data: IResponse) => {
+          toast.success("Event Added successfully");
+
+          setAddEventModal(false);
+        },
+        onError: (error: any) => {
+          toast.error(() => (
+            <Toast
+              title="Sign up failed:"
+              body={error?.response?.data?.message || "Unknown error"}
+            />
+          ));
+        },
+      }
+    );
   };
-
-
-
-
 
   useEffect(() => {
     const checkLocationPermission = (): void => {
@@ -110,17 +115,22 @@ const AddEventModal: React.FC<IProp> = ({ setAddEventModal }) => {
       const latitude = localStorage.getItem("latitude");
       const longitude = localStorage.getItem("longitude");
       if (permission === "granted" && latitude && longitude) {
-        setLocation({ latitude, longitude })
-
+        setLocation({ latitude, longitude });
       }
     };
 
     checkLocationPermission();
-    
   }, []);
 
+    useEffect(() => {
+      setIsClient(true);
+    }, []);
 
   return (
+    <>
+    {
+      isClient ? (
+
     <div className="modal-overlay">
       <div className="mobottomdalfade" role="dialog">
         <div className="modal-dialog modal-dialog-centered" role="document">
@@ -240,6 +250,9 @@ const AddEventModal: React.FC<IProp> = ({ setAddEventModal }) => {
 
       {addEvent.isPending && <Spinner />}
     </div>
+      ) : null
+    }
+    </>
   );
 };
 
