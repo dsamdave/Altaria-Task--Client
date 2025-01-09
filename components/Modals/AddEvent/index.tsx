@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, FormEvent } from "react";
+import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { useApiMutation } from "@/lib/useApi";
 import {
   validateAddEvent,
@@ -43,6 +43,10 @@ const AddEventModal: React.FC<IProp> = ({ setAddEventModal }) => {
 
       const { currentUser } = useAppSelector((state) => state.auth);
   
+      const [location, setLocation] = useState<{
+          latitude: string;
+          longitude: string;
+        } | null>(null);
   const [formData, setFormData] = useState<IAddEventVariables>({
     name: "",
     type: "",
@@ -66,6 +70,9 @@ const AddEventModal: React.FC<IProp> = ({ setAddEventModal }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+        if(!location?.latitude && !location?.latitude){
+          return toast.error("Please allow location!")
+        }
         if(!currentUser?.accessToken){
           return toast.error("Please log in!")
         }
@@ -76,9 +83,10 @@ const AddEventModal: React.FC<IProp> = ({ setAddEventModal }) => {
       return toast.error(() => <Toast title="Error" body={result.errMsg} />);
     }
 
-    addEvent.mutate(formData, {
+    addEvent.mutate({...formData, latitude: location.latitude, longitude: location.longitude }, {
       onSuccess: (data: IResponse) => {
         toast.success("Event Added successfully");
+        window.location.reload();
         setAddEventModal(false);
       },
       onError: (error: any) => {
@@ -91,6 +99,26 @@ const AddEventModal: React.FC<IProp> = ({ setAddEventModal }) => {
       },
     });
   };
+
+
+
+
+
+  useEffect(() => {
+    const checkLocationPermission = (): void => {
+      const permission = localStorage.getItem("locationPermission");
+      const latitude = localStorage.getItem("latitude");
+      const longitude = localStorage.getItem("longitude");
+      if (permission === "granted" && latitude && longitude) {
+        setLocation({ latitude, longitude })
+
+      }
+    };
+
+    checkLocationPermission();
+    
+  }, []);
+
 
   return (
     <div className="modal-overlay">
@@ -153,7 +181,7 @@ const AddEventModal: React.FC<IProp> = ({ setAddEventModal }) => {
                         onChange={handleChange}
                       />
                     </div>
-                    <div className="form-group mb-3">
+                    {/* <div className="form-group mb-3">
                       <input
                         type="text"
                         className="form-control h60 border-2 bg-color-none text-grey-700"
@@ -162,8 +190,8 @@ const AddEventModal: React.FC<IProp> = ({ setAddEventModal }) => {
                         value={formData.latitude}
                         onChange={handleChange}
                       />
-                    </div>
-                    <div className="form-group mb-3">
+                    </div> */}
+                    {/* <div className="form-group mb-3">
                       <input
                         type="text"
                         className="form-control h60 border-2 bg-color-none text-grey-700"
@@ -172,7 +200,7 @@ const AddEventModal: React.FC<IProp> = ({ setAddEventModal }) => {
                         value={formData.longitude}
                         onChange={handleChange}
                       />
-                    </div>
+                    </div> */}
                     <div className="form-group mb-3">
                       <input
                         type="text"

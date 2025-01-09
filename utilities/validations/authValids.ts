@@ -52,12 +52,12 @@ export const validateAddEvent = (userDetails: IAddEventVariables) => {
     if(!address){
       errors.push("Please add event address.")
     } 
-    if(!latitude){
-      errors.push("Please add event latitude for now.")
-    } 
-    if(!longitude){
-      errors.push("Please add event longitude for now.")
-    } 
+    // if(!latitude){
+    //   errors.push("Please add event latitude for now.")
+    // } 
+    // if(!longitude){
+    //   errors.push("Please add event longitude for now.")
+    // } 
     
   
     return {

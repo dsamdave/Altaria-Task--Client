@@ -46,18 +46,21 @@ const HowItWorks = () => {
   );
 
   const [location, setLocation] = useState<{
-    latitude: number;
-    longitude: number;
+    latitude: string;
+    longitude: string;
   } | null>(null);
   const [isClient, setIsClient] = useState<boolean>(false);
   const [userEvents, setUserEvents] = useState<Event[]>([]);
 
-  const fetchEvents = async () => {
-    const latitude = "40.7128";
-    const longitude = "-74.0060";
+   const fetchEvents = async () => {
 
+    if(!location?.latitude && !location?.latitude){
+      return
+    }
+    console.log(location?.latitude, location?.latitude)
     events.mutate(
-      { latitude, longitude },
+      {latitude: location.latitude,
+        longitude: location.longitude},
       {
         onSuccess: (data: IResponse) => {
           toast.success("Events fetched successfully!");
@@ -153,7 +156,7 @@ const HowItWorks = () => {
 
         saveLocationPermission();
         saveLocationToStorage(latitude, longitude);
-        router.push("/onboarding");
+        toast.success("Location enabled")
       }
     } catch (error) {
       console.error("Error getting location:", error);
@@ -165,37 +168,42 @@ const HowItWorks = () => {
     toast.error("Location access is required.");
   };
 
-  useEffect(() => {
-    const checkLocationPermission = (): void => {
-      const permission = localStorage.getItem("locationPermission");
-      if (permission === "granted") {
-        router.push("/signin");
-      }
-    };
-
-    checkLocationPermission();
-  }, [router]);
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
-  useEffect(() => {
-    if (location?.latitude && location.longitude) {
-      // fetchEvents()
-    }
-  }, [location?.latitude && location.longitude]);
 
   useEffect(() => {
-    fetchEvents();
+    const checkLocationPermission = (): void => {
+      const permission = localStorage.getItem("locationPermission");
+      const latitude = localStorage.getItem("latitude");
+      const longitude = localStorage.getItem("longitude");
+      if (permission === "granted" && latitude && longitude) {
+
+        fetchEvents();
+        setLocation({ latitude, longitude })
+      }
+    };
+
+    checkLocationPermission();
+    
   }, []);
 
+
+  
   return (
     <>
       {isClient ? (
         <div className="how-to-work pt-lg--7 pb-lg--7 pb-5 pt-5 bg-greylight">
           <div className="container">
             <div className="row">
+              <button
+                className=" btn btn-secondary mb-2"
+                onClick={fetchEvents}
+              >
+                Fetch Events in your Location
+              </button>
               <button
                 className=" btn btn-primary mb-2"
                 onClick={handleAllowLocation}
@@ -211,7 +219,12 @@ const HowItWorks = () => {
             <div className="row">
               <div className="col-lg-12 text-center mb-lg-5 mb-4 pb-3">
                 <h2 className="text-grey-900 mt-5 fw-400 display1-size">
-                  List of Events
+                  {
+                    userEvents.length < 1 ? 
+                       "No Events Within your location"
+                    : "List of Events"
+                  }
+                  
                 </h2>
               </div>
 
