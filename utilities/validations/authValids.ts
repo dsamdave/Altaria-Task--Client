@@ -1,4 +1,4 @@
-import { IVariables } from "@/components/Modals/RegisterModal";
+import { IAddEventVariables, IVariables } from "@/components/Modals/RegisterModal";
 
 
 export const validateUserRegister = (userDetails: IVariables) => {
@@ -23,6 +23,42 @@ export const validateUserRegister = (userDetails: IVariables) => {
     } else if(password.length < 6) {
       errors.push("Incorrect password.")
     }
+  
+    return {
+      errMsg: errors,
+      errLength: errors.length
+    }
+  }
+
+
+export const validateAddEvent = (userDetails: IAddEventVariables) => {
+    const {   
+      name,
+      type,
+      address,
+      latitude,
+      longitude,
+      description,
+      dateTime,
+    } = userDetails;
+    const errors: string[]  = []
+  
+    if(!name){
+      errors.push("Please add event name.")
+    } 
+    if(!type){
+      errors.push("Please add event type.")
+    } 
+    if(!address){
+      errors.push("Please add event address.")
+    } 
+    if(!latitude){
+      errors.push("Please add event latitude for now.")
+    } 
+    if(!longitude){
+      errors.push("Please add event longitude for now.")
+    } 
+    
   
     return {
       errMsg: errors,

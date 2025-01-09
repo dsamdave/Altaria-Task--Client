@@ -1,20 +1,25 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import { useApiMutation } from "@/lib/useApi";
-import { validateUserRegister } from "@/utilities/validations/authValids";
+import {
+  validateAddEvent,
+  validateUserRegister,
+} from "@/utilities/validations/authValids";
 import { toast } from "react-toastify";
 import Toast from "@/components/Universal/Toast";
 import Spinner from "@/components/Universal/Spinner";
 
 interface IProp {
-  setLoginModal: (loginModal: boolean) => void;
-  setRegisterModal: (registerModal: boolean) => void;
+  setAddEventModal: (addEventModal: boolean) => void;
 }
 
-interface FormData {
-  email: string;
-  password: string;
-  phoneNumber: string;
-  confirmPassword: string;
+export interface IAddEventVariables {
+  name: string;
+  type: string;
+  address: string;
+  latitude: string;
+  longitude: string;
+  description: string;
+  dateTime: string;
 }
 
 interface IResponse {
@@ -28,32 +33,23 @@ interface IResponse {
 }
 
 export interface IVariables {
-  phoneNumber: string
-  email: string
-  password: string
-}
-export interface IAddEventVariables {
-  name: string
-  type: string
-  address: string
-  latitude: string
-  longitude: string
-  description: string
-  dateTime: string 
+  phoneNumber: string;
+  email: string;
+  password: string;
 }
 
-const RegisterModal: React.FC<IProp> = ({
-  setLoginModal,
-  setRegisterModal,
-}) => {
-  const [formData, setFormData] = useState<FormData>({
-    phoneNumber: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
+const AddEventModal: React.FC<IProp> = ({ setAddEventModal }) => {
+  const [formData, setFormData] = useState<IAddEventVariables>({
+    name: "",
+    type: "",
+    address: "",
+    latitude: "",
+    longitude: "",
+    description: "",
+    dateTime: "",
   });
 
-  const signup = useApiMutation<IResponse, IVariables>("/register");
+  const addEvent = useApiMutation<IResponse, IAddEventVariables>("/event");
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -66,16 +62,16 @@ const RegisterModal: React.FC<IProp> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const result = validateUserRegister(formData);
+    const result = validateAddEvent(formData);
 
     if (result.errLength) {
       return toast.error(() => <Toast title="Error" body={result.errMsg} />);
     }
 
-    signup.mutate(formData, {
+    addEvent.mutate(formData, {
       onSuccess: (data: IResponse) => {
-        toast.success("Registration Succesful. Please login!");
-        setLoginModal(true)
+        toast.success("Event Added successfully");
+        setAddEventModal(false);
       },
       onError: (error: any) => {
         toast.error(() => (
@@ -105,11 +101,11 @@ const RegisterModal: React.FC<IProp> = ({
                     }}
                   >
                     <h2 className="fw-600 display2-size mb-4">
-                      Register
+                      Add Event
                       {/* <br /> your account */}
                     </h2>
                     <h1
-                      onClick={() => setRegisterModal(false)}
+                      onClick={() => setAddEventModal(false)}
                       className="text-danger shrink"
                       style={{
                         cursor: "pointer",
@@ -123,63 +119,80 @@ const RegisterModal: React.FC<IProp> = ({
                       <input
                         type="text"
                         className="form-control h60 border-2 bg-color-none text-grey-700"
-                        placeholder="Phone Number"
-                        name="phoneNumber"
-                        value={formData.phoneNumber}
+                        placeholder="Event Name"
+                        name="name"
+                        value={formData.name}
                         onChange={handleChange}
                       />
                     </div>
                     <div className="form-group mb-3">
                       <input
-                        type="email"
+                        type="text"
                         className="form-control h60 border-2 bg-color-none text-grey-700"
-                        placeholder="Email"
-                        name="email"
-                        value={formData.email}
+                        placeholder="Event Type"
+                        name="type"
+                        value={formData.type}
                         onChange={handleChange}
                       />
                     </div>
-                    <div className="form-group icon-tab mb-3">
+                    <div className="form-group mb-3">
                       <input
-                        type="password"
+                        type="text"
                         className="form-control h60 border-2 bg-color-none text-grey-700"
-                        placeholder="Password"
-                      />
-                      <i className="ti-lock text-grey-700 pr-0"></i>
-                    </div>
-                    <div className="form-group icon-tab mb-3">
-                      <input
-                        type="password"
-                        className="form-control h60 border-2 bg-color-none text-grey-700"
-                        placeholder="Confirm Password"
-                        name="password"
-                        value={formData.password}
+                        placeholder="Address"
+                        name="address"
+                        value={formData.address}
                         onChange={handleChange}
                       />
-                      <i className="ti-lock text-grey-700 pr-0"></i>
+                    </div>
+                    <div className="form-group mb-3">
+                      <input
+                        type="text"
+                        className="form-control h60 border-2 bg-color-none text-grey-700"
+                        placeholder="Latitude"
+                        name="latitude"
+                        value={formData.latitude}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div className="form-group mb-3">
+                      <input
+                        type="text"
+                        className="form-control h60 border-2 bg-color-none text-grey-700"
+                        placeholder="Longitude"
+                        name="longitude"
+                        value={formData.longitude}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div className="form-group mb-3">
+                      <input
+                        type="text"
+                        className="form-control h60 border-2 bg-color-none text-grey-700"
+                        placeholder="Description"
+                        name="description"
+                        value={formData.description}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div className="form-group mb-3">
+                      <input
+                        type="text"
+                        className="form-control h60 border-2 bg-color-none text-grey-700"
+                        placeholder="Date and Time"
+                        name="dateTime"
+                        value={formData.dateTime}
+                        onChange={handleChange}
+                      />
                     </div>
 
                     <div className="col-sm-12 p-0 text-center">
                       <button
                         type="submit"
-                        className="shrink form-control h60 bg-current  text-white font-xss fw-500 border-2 border-0 p-0"
+                        className="shrink form-control h60 bg-current text-white font-xss fw-500 border-2 border-0 p-0"
                       >
-                        Create an account
+                        Submit
                       </button>
-                      <h6 className="text-grey-500 font-xsss fw-500 mt-2 mb-4 lh-32">
-                        Are you already a member?{" "}
-                        <a
-                          href="#"
-                          className="fw-700 ml-1"
-                          onClick={() => {
-                            setRegisterModal(false);
-                            setLoginModal(true);
-                          }}
-                        >
-                          Login
-                        </a>
-                      </h6>
-                   
                     </div>
                   </form>
                 </div>
@@ -189,10 +202,9 @@ const RegisterModal: React.FC<IProp> = ({
         </div>
       </div>
 
-      {signup.isPending && <Spinner />}
-
+      {addEvent.isPending && <Spinner />}
     </div>
   );
 };
 
-export default RegisterModal;
+export default AddEventModal;

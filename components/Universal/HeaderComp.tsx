@@ -6,12 +6,14 @@ import RegisterModal from "../Modals/RegisterModal";
 import ForgotPasswordnModal from "../Modals/ForgotPasswordModal";
 import Link from "next/link";
 import { useAppSelector } from "@/redux/store";
+import AddEventModal from "../Modals/AddEvent";
 
 const HeaderComp = () => {
 
   const { currentUser } = useAppSelector((state) => state.auth);
 
   const [isClient, setIsClient] = useState(false);
+  const [addEventModal, setAddEventModal] = useState(false);
   const [loginModal, setLoginModal] = useState(false);
   const [registerModal, setRegisterModal] = useState(false);
   const [forgotPassModal, setForgotPassModal] = useState(false);
@@ -61,6 +63,11 @@ const HeaderComp = () => {
                   <li className="nav-item" onClick={() => setRegisterModal(true)}>
                     <Link href="#" className="shrink nav-link">
                     Register
+                    </Link>
+                  </li>
+                  <li className="nav-item" onClick={() => setAddEventModal(true)}>
+                    <Link href="#" className="shrink nav-link">
+                    AddEvent
                     </Link>
                   </li>
                   
@@ -129,6 +136,11 @@ const HeaderComp = () => {
         <ForgotPasswordnModal
           setForgotPassModal={setForgotPassModal}
           setLoginModal={setLoginModal}
+        />
+      )}
+      {addEventModal && (
+        <AddEventModal
+          setAddEventModal={setAddEventModal}
         />
       )}
     </div>

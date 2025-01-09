@@ -123,6 +123,10 @@ const HowItWorks = () => {
     }
 }, [location?.latitude && location.longitude]);
 
+  useEffect(() => { 
+        fetchEvents()
+}, []);
+
   return (
     <>
     {
