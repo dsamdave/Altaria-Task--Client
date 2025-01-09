@@ -55,7 +55,7 @@ const HowItWorks = () => {
    const fetchEvents = async () => {
 
     if(!location?.latitude && !location?.latitude){
-      return
+      return toast.error("please allow location")
     }
     console.log(location?.latitude, location?.latitude)
     events.mutate(
